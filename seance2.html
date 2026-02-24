@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction à l'UX Design — Jour 1, Séance 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Extensions propres à la séance 2 */
+
+        /* Timeline (héritée de la séance 1) */
+        .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+        .timeline::before { content: ''; position: absolute; left: .55rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary-color), var(--border-color)); }
+        .timeline-item { position: relative; margin-bottom: 1.75rem; }
+        .timeline-dot { position: absolute; left: -1.62rem; top: .25rem; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--primary-color); border: 3px solid var(--bg-white); box-shadow: 0 0 0 2px var(--primary-color); }
+        .timeline-dot.highlight { background: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-color); }
+        .timeline-date { font-size: .73rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .2rem; }
+        .timeline-title { font-weight: 600; color: var(--text-dark); margin-bottom: .3rem; }
+        .timeline-body { color: var(--text-light); font-size: .9rem; line-height: 1.6; }
+
+        /* Table de comparaison */
+        .compare-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .88rem; }
+        .compare-table th { background: var(--gradient-primary); color: white; padding: .75rem 1rem; text-align: left; font-weight: 600; }
+        .compare-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-light); }
+        .compare-table tr:nth-child(even) td { background: var(--bg-light); }
+        .compare-table tr:hover td { background: rgba(59,130,246,.04); }
+        .compare-table td:first-child { font-weight: 600; color: var(--text-dark); }
+        @media (max-width: 768px) { .compare-table { font-size: .75rem; } .compare-table th, .compare-table td { padding: .5rem .6rem; } }
+
+        /* Liste numérotée stylée (persona, étapes) */
+        .heuristic-list { display: flex; flex-direction: column; gap: .65rem; margin: 1.5rem 0; }
+        .heuristic-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem; background: var(--bg-light); border-radius: 8px; border: 1px solid var(--border-color); transition: all .3s ease; }
+        .heuristic-item:hover { background: rgba(59,130,246,.04); border-color: var(--primary-color); transform: translateX(4px); }
+        .heuristic-num { min-width: 2.1rem; height: 2.1rem; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .82rem; flex-shrink: 0; }
+        .heuristic-content h5 { font-weight: 600; color: var(--text-dark); margin-bottom: .15rem; font-size: .95rem; }
+        .heuristic-content p { color: var(--text-light); font-size: .85rem; line-height: 1.55; margin: 0; }
+        .heuristic-example { margin-top: .3rem; font-size: .78rem; color: var(--primary-color); font-style: italic; }
+
+        /* Carte Persona */
+        .persona-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            border: 2px solid var(--primary-color);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin: 1.5rem 0;
+        }
+        .persona-card-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .persona-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            border: 3px solid rgba(255,255,255,.5);
+        }
+        .persona-card-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .persona-field label {
+            font-size: .75rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            display: block;
+            margin-bottom: .3rem;
+        }
+        .persona-field p {
+            font-size: .9rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin: 0;
+        }
+        .persona-field ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .persona-field li {
+            font-size: .85rem;
+            color: var(--text-light);
+            padding: .2rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+        .persona-field li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-size: .7rem;
+        }
+        .persona-quote {
+            background: rgba(59,130,246,.05);
+            border-left: 4px solid var(--primary-color);
+            padding: .75rem 1rem;
+            margin: 1rem 1.5rem;
+            font-style: italic;
+            color: var(--text-dark);
+            font-size: .9rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        /* Grille biais cognitifs */
+        .bias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .bias-item {
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            transition: all .3s ease;
+        }
+        .bias-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .bias-item h5 {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: .4rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .bias-item p {
+            font-size: .82rem;
+            color: var(--text-light);
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        /* Barre de progression quiz */
+        .quiz-progress-bar-wrap { background: var(--border-color); border-radius: 99px; height: 6px; margin-top: .5rem; overflow: hidden; }
+        .quiz-progress-bar-fill { height: 100%; background: var(--gradient-primary); border-radius: 99px; transition: width .4s ease; }
+
+        /* Header interne du quiz */
+        .quiz-header-band { background: var(--gradient-primary); color: white; padding: 1.25rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+        .quiz-header-band h3 { font-size: 1.05rem; font-weight: 700; margin: 0; color: white; }
+        .quiz-badge { background: rgba(255,255,255,.25); padding: .3rem .8rem; border-radius: 20px; font-size: .8rem; font-weight: 600; }
+
+        /* Résultat incorrect */
+        .quiz-result.incorrect-result { border-left-color: var(--danger-color); }
+
+        /* Card li color */
+        .card li { color: var(--text-light); font-size: .9rem; }
+        .card-gradient li { color: rgba(255,255,255,.9); border-bottom-color: rgba(255,255,255,.2); }
+
+        /* Étapes d'entretien */
+        .steps-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            margin: 1.5rem 0;
+        }
+        .step-item {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: .5rem;
+            transition: all .3s ease;
+        }
+        .step-item:hover { background: rgba(59,130,246,.04); border-color: var(--primary-color); }
+        .step-num {
+            min-width: 2.2rem;
+            height: 2.2rem;
+            background: var(--gradient-secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .85rem;
+            flex-shrink: 0;
+        }
+        .step-content h5 { font-weight: 600; color: var(--text-dark); margin-bottom: .2rem; font-size: .95rem; }
+        .step-content p { font-size: .85rem; color: var(--text-light); line-height: 1.55; margin: 0; }
+
+        /* Do / Don't columns */
+        .do-dont-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 600px) { .do-dont-grid { grid-template-columns: 1fr; } }
+        .do-box, .dont-box {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+        }
+        .do-box {
+            background: rgba(16,185,129,.06);
+            border: 1.5px solid var(--secondary-color);
+        }
+        .dont-box {
+            background: rgba(239,68,68,.06);
+            border: 1.5px solid var(--danger-color);
+        }
+        .do-box h5 { color: var(--secondary-color); font-weight: 700; margin-bottom: .6rem; font-size: .95rem; }
+        .dont-box h5 { color: var(--danger-color); font-weight: 700; margin-bottom: .6rem; font-size: .95rem; }
+        .do-box li, .dont-box li { font-size: .85rem; color: var(--text-light); list-style: none; padding: .3rem 0 .3rem 1rem; position: relative; }
+        .do-box li::before { content: '✓'; position: absolute; left: 0; color: var(--secondary-color); font-weight: 700; }
+        .dont-box li::before { content: '✗'; position: absolute; left: 0; color: var(--danger-color); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+    <div class="nav-container">
+        <h1 class="nav-title">UXDesign  #2</h1>
+        <ul class="nav-links">
+            <li><a href="#intro"           class="nav-link">Introduction</a></li>
+            <li><a href="#recherche"       class="nav-link">Recherche UX</a></li>
+            <li><a href="#methodes"        class="nav-link">Méthodes</a></li>
+            <li><a href="#entretien"       class="nav-link">Entretien</a></li>
+            <li><a href="#qcm1"            class="nav-link">QCM 1</a></li>
+            <li><a href="#persona"         class="nav-link">Persona</a></li>
+            <li><a href="#biais"           class="nav-link">Biais cognitifs</a></li>
+            <li><a href="#pour-aller-plus-loin" class="nav-link">Aller +loin</a></li>
+            <li><a href="#glossaire"       class="nav-link">Glossaire</a></li>
+            <li><a href="#qcm2"            class="nav-link">QCM 2</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="main-content">
+
+<!-- ═══════════════════════════════════════════
+     01 · INTRODUCTION
+═══════════════════════════════════════════ -->
+<section id="intro" class="section">
+    <h2 class="section-title">01 · Connaître ses utilisateurs</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎯 Pourquoi cette séance est fondamentale</h3>
+        <div class="dropdown-content">
+            <p>La séance précédente a répondu à la question <em>« Qu'est-ce que l'UX ? »</em>. Cette séance répond à une question tout aussi essentielle : <em>« Comment comprendre les personnes pour qui je conçois ? »</em></p>
+            <p><strong>Une vérité inconfortable :</strong> la grande majorité des échecs de produits numériques ne sont pas dus à des problèmes techniques, mais à une <strong>mauvaise compréhension des utilisateurs</strong>. On conçoit pour des utilisateurs imaginaires, on fait des suppositions sans les vérifier — et on se retrouve avec un produit parfait… pour personne.</p>
+            <p><strong>La recherche utilisateur, c'est quoi ?</strong> C'est l'ensemble des méthodes qui permettent de <strong>remplacer les suppositions par des faits observés</strong>. Ce n'est pas un luxe réservé aux grandes entreprises tech : c'est une condition de survie pour tout projet digital.</p>
+            <div class="alert alert-info">
+                <strong>💡 Citation fondatrice :</strong> <em>« You are not the user. »</em> — Jakob Nielsen. Cette phrase synthétise tout : l'équipe de conception n'est pas représentative des utilisateurs réels. Tester et observer est le seul moyen de contrecarrer cette illusion.
+            </div>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>❓ Sans recherche</h4>
+            <ul>
+                <li>On conçoit pour des utilisateurs imaginaires</li>
+                <li>On projette ses propres usages</li>
+                <li>On découvre les problèmes après le lancement</li>
+                <li>Les corrections coûtent ×100 plus cher</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>✅ Avec recherche</h4>
+            <ul>
+                <li>Décisions fondées sur des données réelles</li>
+                <li>Problèmes détectés avant développement</li>
+                <li>Alignement de toute l'équipe sur les besoins</li>
+                <li>Moins de retours, plus de valeur livrée</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>💰 Impact business documenté</h4>
+            <ul>
+                <li>Corriger en design : 1€ de coût</li>
+                <li>Corriger en développement : 10€</li>
+                <li>Corriger en production : 100€ <em>(IBM)</em></li>
+                <li>La recherche est le meilleur investissement UX</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>🏆 Exemples réels</h4>
+            <ul>
+                <li>Airbnb : photos professionnelles après observation terrain</li>
+                <li>Booking.com : 1 000+ tests A/B par an</li>
+                <li>Google Maps : centaines de séances d'observation</li>
+                <li>Gov.uk : services repensés avec vrais citoyens</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     02 · RECHERCHE UTILISATEUR
+═══════════════════════════════════════════ -->
+<section id="recherche" class="section">
+    <h2 class="section-title">02 · La recherche utilisateur — fondements</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🔬 Qualitative vs quantitative — une distinction clé</h3>
+        <div class="dropdown-content">
+            <p>La recherche utilisateur se divise en deux grandes familles complémentaires. Comprendre leur différence est indispensable pour choisir la méthode adaptée à chaque question.</p>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Critère</th>
+                        <th>Recherche qualitative</th>
+                        <th>Recherche quantitative</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Question posée</td>
+                        <td><em>Pourquoi ?</em> <em>Comment ?</em></td>
+                        <td><em>Combien ?</em> <em>Quelle fréquence ?</em></td>
+                    </tr>
+                    <tr>
+                        <td>Objectif</td>
+                        <td>Comprendre les motivations, émotions, contextes</td>
+                        <td>Mesurer, comparer, valider à grande échelle</td>
+                    </tr>
+                    <tr>
+                        <td>Données produites</td>
+                        <td>Verbatims, observations, comportements riches</td>
+                        <td>Statistiques, taux, métriques, pourcentages</td>
+                    </tr>
+                    <tr>
+                        <td>Taille d'échantillon</td>
+                        <td>Petit (5–15 participants suffisent)</td>
+                        <td>Grand (100+ recommandé pour fiabilité)</td>
+                    </tr>
+                    <tr>
+                        <td>Méthodes typiques</td>
+                        <td>Entretiens, observations, tests utilisateurs</td>
+                        <td>Sondages, analytics, tests A/B, eye-tracking</td>
+                    </tr>
+                    <tr>
+                        <td>Moments d'usage</td>
+                        <td>Découverte, exploration de problèmes nouveaux</td>
+                        <td>Validation, mesure d'impact, priorisation</td>
+                    </tr>
+                    <tr>
+                        <td>Forces</td>
+                        <td>Richesse, profondeur, détection de l'inattendu</td>
+                        <td>Fiabilité statistique, scalabilité, objectivité</td>
+                    </tr>
+                    <tr>
+                        <td>Limites</td>
+                        <td>Non généralisable, interprétation subjective</td>
+                        <td>Ne dit pas le <em>pourquoi</em>, manque de contexte</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="alert alert-warning">
+                <strong>⚠️ Erreur fréquente :</strong> Opposer les deux approches. En pratique, les meilleures équipes UX combinent les deux : la qualitative pour comprendre <em>pourquoi</em> les utilisateurs se comportent d'une certaine façon, et la quantitative pour mesurer <em>combien</em> de personnes sont affectées et évaluer l'impact des solutions.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🔄 Recherche générative vs recherche évaluative</h3>
+        <div class="dropdown-content">
+            <p>Au-delà de la distinction qualitative/quantitative, il est utile de distinguer <strong>à quel moment du projet</strong> la recherche intervient :</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>🔍 Recherche générative</h4>
+                    <ul>
+                        <li><strong>Quand :</strong> En amont, avant de concevoir</li>
+                        <li><strong>But :</strong> Comprendre le problème à résoudre</li>
+                        <li>Explorer les besoins, contextes, douleurs</li>
+                        <li>Identifier des opportunités de design</li>
+                        <li><strong>Méthodes :</strong> Entretiens, observations, diary studies</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🧪 Recherche évaluative</h4>
+                    <ul>
+                        <li><strong>Quand :</strong> Pendant et après la conception</li>
+                        <li><strong>But :</strong> Évaluer ce qui a été conçu</li>
+                        <li>Tester si la solution répond au problème</li>
+                        <li>Identifier les irritants et les lacunes</li>
+                        <li><strong>Méthodes :</strong> Tests utilisateurs, évaluation heuristique, A/B</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <strong>✅ À retenir :</strong> Une bonne pratique UX implique les deux types tout au long du projet. La recherche n'est pas une phase unique et terminée — c'est une activité continue.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     03 · LES MÉTHODES DE RECHERCHE
+═══════════════════════════════════════════ -->
+<section id="methodes" class="section">
+    <h2 class="section-title">03 · Les principales méthodes de recherche UX</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🗂️ Vue d'ensemble des méthodes</h3>
+        <div class="dropdown-content">
+            <p>Il existe des dizaines de méthodes de recherche UX. Voici les plus courantes, regroupées par type :</p>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>🎙️ Entretien utilisateur</h4>
+            <ul>
+                <li><strong>Type :</strong> Qualitatif · Génératif</li>
+                <li>Conversation structurée ou semi-dirigée</li>
+                <li>Explore motivations, habitudes, contexte de vie</li>
+                <li>5 à 8 participants suffisent</li>
+                <li>Durée : 30 à 60 minutes</li>
+                <li><strong>Livrable :</strong> Verbatims, insights, patterns</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>👁️ Observation terrain</h4>
+            <ul>
+                <li><strong>Type :</strong> Qualitatif · Génératif</li>
+                <li>Observer les utilisateurs dans leur environnement réel</li>
+                <li>Révèle ce que les gens font vs ce qu'ils disent</li>
+                <li>Idéal pour détecter des comportements non verbalisés</li>
+                <li>Contextual inquiry : observation + entretien simultanés</li>
+                <li><strong>Livrable :</strong> Notes de terrain, photos, insights</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>📊 Sondage / Questionnaire</h4>
+            <ul>
+                <li><strong>Type :</strong> Quantitatif · Évaluatif</li>
+                <li>Collecte de données à grande échelle</li>
+                <li>Mesure de satisfaction, NPS, fréquence d'usage</li>
+                <li>100+ répondants pour être représentatif</li>
+                <li>Attention aux questions biaisées</li>
+                <li><strong>Outils :</strong> Google Forms, Typeform, SurveyMonkey</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>🖥️ Test utilisateur</h4>
+            <ul>
+                <li><strong>Type :</strong> Qualitatif · Évaluatif</li>
+                <li>Un utilisateur réalise des tâches sur le produit</li>
+                <li>Règle des 5 : 5 participants détectent ~85 % des problèmes</li>
+                <li>Think-aloud protocol : l'utilisateur verbalise sa pensée</li>
+                <li>Peut se faire sur wireframe, prototype ou produit final</li>
+                <li><strong>Livrable :</strong> Rapport de tests, vidéos commentées</li>
+            </ul>
+        </div>
+        <div class="card card-primary">
+            <h4>📈 Analytics comportementaux</h4>
+            <ul>
+                <li><strong>Type :</strong> Quantitatif · Évaluatif</li>
+                <li>Données d'usage réelles et continues</li>
+                <li>Taux d'abandon, flux de navigation, heatmaps</li>
+                <li>Dit <em>quoi</em> mais pas <em>pourquoi</em></li>
+                <li><strong>Outils :</strong> Google Analytics, Hotjar, Mixpanel</li>
+                <li><strong>Livrable :</strong> Rapports, dashboards, alertes</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>🃏 Card Sorting</h4>
+            <ul>
+                <li><strong>Type :</strong> Qualitatif/Quantitatif · Génératif</li>
+                <li>Les utilisateurs groupent des contenus en catégories</li>
+                <li>Révèle comment les utilisateurs organisent mentalement l'information</li>
+                <li>Idéal pour concevoir l'architecture de l'information</li>
+                <li><strong>Outils :</strong> Optimal Workshop, cartes papier</li>
+                <li><strong>Livrable :</strong> Dendrogramme, matrice de similarité</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">⏱️ Choisir la bonne méthode selon les contraintes</h3>
+        <div class="dropdown-content">
+            <p>En réalité, le choix d'une méthode dépend de trois variables : la <strong>question à répondre</strong>, le <strong>budget/temps disponible</strong> et la <strong>phase du projet</strong>. Voici un guide rapide de décision :</p>
+            <table class="compare-table">
+                <thead>
+                    <tr><th>Si vous voulez...</th><th>Méthode recommandée</th><th>Durée minimale</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Comprendre les besoins profonds d'utilisateurs</td><td>Entretiens utilisateurs</td><td>1 à 2 semaines</td></tr>
+                    <tr><td>Observer des comportements réels en contexte</td><td>Observation terrain</td><td>2 à 4 jours</td></tr>
+                    <tr><td>Mesurer la satisfaction à grande échelle</td><td>Sondage en ligne</td><td>3 à 5 jours</td></tr>
+                    <tr><td>Identifier rapidement les problèmes d'une interface</td><td>Test utilisateur (méthode couloir)</td><td>½ journée</td></tr>
+                    <tr><td>Concevoir une navigation intuitive</td><td>Card sorting</td><td>1 journée</td></tr>
+                    <tr><td>Trouver les pages où les utilisateurs abandonnent</td><td>Analytics + heatmaps</td><td>2 à 3 jours d'analyse</td></tr>
+                    <tr><td>Évaluer sans utilisateurs (budget nul)</td><td>Évaluation heuristique</td><td>1 journée (expert)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     04 · L'ENTRETIEN UTILISATEUR
+═══════════════════════════════════════════ -->
+<section id="entretien" class="section">
+    <h2 class="section-title">04 · L'entretien utilisateur — méthode et pratique</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎙️ Qu'est-ce qu'un entretien utilisateur ?</h3>
+        <div class="dropdown-content">
+            <p>L'entretien utilisateur est la méthode la plus utilisée en UX Research. C'est une <strong>conversation orientée vers la compréhension</strong> — non pas vers la vente, le conseil ou l'opinion. L'objectif est d'<strong>écouter et comprendre</strong>, pas de valider ses propres hypothèses.</p>
+            <p>Contrairement à ce que l'on pourrait croire, un bon entretien n'est pas une liste de questions à cocher. C'est une <strong>conversation dirigée</strong> qui permet à l'utilisateur de raconter ses expériences, ses habitudes et ses difficultés dans ses propres mots.</p>
+            <div class="alert alert-info">
+                <strong>💡 Principe essentiel :</strong> Vous cherchez à comprendre ce que l'utilisateur <em>fait</em> et <em>ressent</em> réellement — pas ce qu'il pense que vous voulez entendre. La neutralité du chercheur est fondamentale.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📋 Préparer un guide d'entretien</h3>
+        <div class="dropdown-content">
+            <p>Un <strong>guide d'entretien</strong> n'est pas un script rigide, mais un canevas souple qui structure la conversation sans la verrouiller. Voici comment le construire :</p>
+
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num">01</div>
+                    <div class="heuristic-content">
+                        <h5>Définir l'objectif de recherche</h5>
+                        <p>Avant toute chose : que cherchez-vous à apprendre ? Formulez 1 à 3 questions de recherche claires. Exemple : <em>« Comprendre comment les étudiants cherchent un logement lors de leur alternance. »</em></p>
+                        <p class="heuristic-example">⚠️ Erreur : ne pas avoir d'objectif clair → on parle de tout et on apprend rien.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">02</div>
+                    <div class="heuristic-content">
+                        <h5>Construire les thèmes, pas les questions</h5>
+                        <p>Listez d'abord les <strong>grands thèmes</strong> à explorer (contexte de vie, habitudes, outils utilisés, frustrations, besoins). Les questions spécifiques viennent ensuite, plus ouvertes que précises.</p>
+                        <p class="heuristic-example">Thème → « Habitudes de recherche de logement » → Question → « Pouvez-vous me raconter la dernière fois que vous avez cherché un logement ? »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">03</div>
+                    <div class="heuristic-content">
+                        <h5>Commencer par le contexte et la mise en confiance</h5>
+                        <p>Les premières minutes sont cruciales. Présentez-vous, expliquez l'objectif de façon neutre, confirmez la confidentialité, demandez l'autorisation d'enregistrer. Posez des questions simples et non menaçantes pour démarrer.</p>
+                        <p class="heuristic-example">Exemple d'ouverture : « Pouvez-vous me parler un peu de vous et de votre quotidien en ce moment ? »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">04</div>
+                    <div class="heuristic-content">
+                        <h5>Utiliser les questions ouvertes et le passé narratif</h5>
+                        <p>Préférez <em>« Racontez-moi… »</em> à <em>« Pensez-vous que… ? »</em> Les questions narratives ancrées dans le passé récent génèrent les récits les plus riches : <em>« La dernière fois que vous avez fait X, que s'est-il passé ? »</em></p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">05</div>
+                    <div class="heuristic-content">
+                        <h5>Prévoir les relances</h5>
+                        <p>Avoir sous la main des relances universelles pour approfondir : <em>« Pouvez-vous m'en dire plus ? »</em>, <em>« Qu'est-ce que vous avez ressenti à ce moment-là ? »</em>, <em>« Pourquoi c'était important pour vous ? »</em></p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">06</div>
+                    <div class="heuristic-content">
+                        <h5>Terminer par la question ouverte finale</h5>
+                        <p>Finir toujours par : <em>« Y a-t-il quelque chose que je ne vous ai pas demandé et que vous trouveriez important que je sache ? »</em> Cette question produit souvent les insights les plus inattendus.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">✅ Les bonnes pratiques — faire et ne pas faire</h3>
+        <div class="dropdown-content">
+            <div class="do-dont-grid">
+                <div class="do-box">
+                    <h5>✅ À faire</h5>
+                    <ul>
+                        <li>Poser des questions ouvertes (comment, pourquoi, racontez…)</li>
+                        <li>Pratiquer le silence confortable (laisser du temps pour répondre)</li>
+                        <li>Reformuler sans interpréter : « Si je comprends bien, vous dites que… »</li>
+                        <li>Toujours creuser avec « Pourquoi ? » jusqu'à 5 fois</li>
+                        <li>Demander des exemples concrets et récents</li>
+                        <li>Prendre des notes sur le non-verbal et les hésitations</li>
+                        <li>Tester son guide d'entretien sur un collègue d'abord</li>
+                        <li>Remercier sincèrement et expliquer la suite</li>
+                    </ul>
+                </div>
+                <div class="dont-box">
+                    <h5>❌ À éviter</h5>
+                    <ul>
+                        <li>Poser des questions fermées (oui/non)</li>
+                        <li>Poser des questions suggestives : « Vous trouvez ça pratique, non ? »</li>
+                        <li>Valider ses propres hypothèses : « On pensait que… est-ce que c'est vrai ? »</li>
+                        <li>Enchaîner deux questions d'un coup</li>
+                        <li>Proposer des solutions pendant l'entretien</li>
+                        <li>Exprimer sa surprise ou son approbation : « Oh vraiment ! »</li>
+                        <li>Parler de soi ou de ses propres expériences</li>
+                        <li>Regarder uniquement ses notes sans contact visuel</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <strong>⚠️ Le piège classique : la question hypothétique</strong> <em>« Achèteriez-vous ce produit ? »</em> Les gens répondent souvent oui pour être agréables — mais ça ne prédit pas leur comportement réel. Préférez toujours ancrer dans le passé : <em>« La dernière fois que vous avez acheté ce type de produit, que s'est-il passé ? »</em>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">🔢 Combien d'entretiens faut-il mener ?</h3>
+        <div class="dropdown-content">
+            <p>La règle des 5 de Nielsen s'applique aussi aux entretiens exploratoires : avec <strong>5 participants d'un même segment</strong>, vous identifiez la plupart des patterns significatifs. Mais cela suppose un groupe homogène.</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>5 participants</h4>
+                    <ul>
+                        <li>1 seul type d'utilisateur</li>
+                        <li>Question de recherche précise</li>
+                        <li>Recherche rapide, budget limité</li>
+                        <li>Suffisant pour prototypage rapide</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>8–12 participants</h4>
+                    <ul>
+                        <li>2–3 types d'utilisateurs distincts</li>
+                        <li>Saturation théorique atteinte</li>
+                        <li>Standard pour une recherche rigoureuse</li>
+                        <li>Permet des comparaisons entre segments</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>15–25 participants</h4>
+                    <ul>
+                        <li>Produit à fort enjeu ou forte diversité</li>
+                        <li>Plusieurs marchés ou pays</li>
+                        <li>Recherche académique ou grand public</li>
+                        <li>Permet une analyse narrative robuste</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <strong>✅ Règle pratique :</strong> Continuez les entretiens tant que vous entendez de nouvelles informations. Quand les 3 derniers participants répètent ce que vous avez déjà entendu, vous avez atteint la <strong>saturation des données</strong> — vous pouvez vous arrêter.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     05 · QCM 1 — FONDAMENTAUX
+═══════════════════════════════════════════ -->
+<section id="qcm1" class="section">
+    <h2 class="section-title">05 · QCM — Vérification mi-parcours</h2>
+
+    <div class="alert alert-info" style="margin-bottom:1.5rem;">
+        <strong>ℹ️ QCM 1 — Niveau fondamental.</strong> 5 questions tirées au sort dans une banque de 8, portant sur la recherche utilisateur, les méthodes et la conduite d'entretiens (sections 01 à 04). Les réponses sont mélangées à chaque lancement.
+    </div>
+
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>📝 Recherche utilisateur &amp; entretiens</h3>
+            <span class="quiz-badge">5 questions · niveau fondamental</span>
+        </div>
+        <div id="qcm1-question" class="quiz-question">
+            <p id="qcm1-question-text"></p>
+            <div id="qcm1-answers" class="quiz-answers"></div>
+            <button id="qcm1-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm1-result" class="quiz-result" style="display:none;">
+            <div id="qcm1-explanation" class="explanation"></div>
+            <button id="qcm1-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm1-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm1-progress">Question 1/5</span>
+            <span id="qcm1-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm1-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     06 · LE PERSONA
+═══════════════════════════════════════════ -->
+<section id="persona" class="section">
+    <h2 class="section-title">06 · Le Persona — donner un visage aux utilisateurs</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">👤 Qu'est-ce qu'un persona ?</h3>
+        <div class="dropdown-content">
+            <p>Un <strong>persona</strong> est une représentation fictive mais réaliste d'un type d'utilisateur, construite à partir de données de recherche réelles. Ce n'est pas un stéréotype ni une invention — c'est une <strong>synthèse d'observations de terrain</strong>.</p>
+            <p>L'idée est née avec Alan Cooper dans son livre <em>The Inmates Are Running the Asylum</em> (1999) : face à des ingénieurs qui concevaient pour eux-mêmes, il a introduit les personas comme outil pour maintenir la présence mentale de l'utilisateur dans toutes les décisions de conception.</p>
+            <div class="alert alert-info">
+                <strong>💡 Persona ≠ profil marketing :</strong> Un persona marketing décrit une cible commerciale (tranche d'âge, revenus, intérêts). Un persona UX décrit des <em>comportements, motivations, obstacles et objectifs</em> — il répond à la question « Comment cette personne interagit-elle avec notre produit et pourquoi ? »
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🏗️ Anatomie d'un persona complet</h3>
+        <div class="dropdown-content">
+            <p>Un bon persona est à la fois <strong>suffisamment précis pour être crédible</strong> et <strong>suffisamment générique pour représenter un groupe</strong>. Voici ses composantes essentielles :</p>
+
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>🪪 Identité de base</h4>
+                    <ul>
+                        <li>Prénom + photo (pour humaniser)</li>
+                        <li>Âge, situation familiale</li>
+                        <li>Localisation, niveau d'études</li>
+                        <li>Profession et secteur</li>
+                        <li>Niveau de maîtrise tech (débutant→expert)</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🎯 Objectifs &amp; motivations</h4>
+                    <ul>
+                        <li>Objectifs principaux (ce qu'il veut accomplir)</li>
+                        <li>Motivations profondes (pourquoi c'est important)</li>
+                        <li>Valeurs personnelles qui guident ses choix</li>
+                        <li>Succès = à quoi ressemble un résultat idéal ?</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>😤 Frustrations &amp; obstacles</h4>
+                    <ul>
+                        <li>Douleurs actuelles (pain points)</li>
+                        <li>Obstacles rencontrés dans sa tâche</li>
+                        <li>Ce qui l'énerve ou le décourage</li>
+                        <li>Craintes liées au produit ou domaine</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>🔧 Comportements &amp; contexte</h4>
+                    <ul>
+                        <li>Appareils utilisés et fréquence d'usage</li>
+                        <li>Contexte d'utilisation (lieu, moment, état d'esprit)</li>
+                        <li>Alternatives actuelles qu'il utilise</li>
+                        <li>Canaux d'information préférés</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="margin-top:1.5rem;">La plupart des templates incluent également une <strong>citation représentative</strong> — une phrase qui résume la vision du monde du persona — et un <strong>scénario narratif</strong> court décrivant une journée ou une situation typique.</p>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📄 Exemple de persona — Léa, 23 ans</h3>
+        <div class="dropdown-content">
+            <p>Voici un exemple de persona pour un service d'aide à la recherche de logement étudiant :</p>
+
+            <!-- Persona card -->
+            <div class="persona-card">
+                <div class="persona-card-header">
+                    <div class="persona-avatar">👩‍💻</div>
+                    <div>
+                        <h3 style="color:white;margin:0;font-size:1.3rem;">Léa Moreau</h3>
+                        <p style="color:rgba(255,255,255,.8);margin:0;font-size:.9rem;">23 ans · Étudiante en alternance — Master Marketing Digital · Paris</p>
+                        <p style="color:rgba(255,255,255,.7);margin:.3rem 0 0;font-size:.8rem;">Niveau tech : ⭐⭐⭐⭐☆ (Bonne maîtrise numérique)</p>
+                    </div>
+                </div>
+                <blockquote class="persona-quote">
+                    « J'ai besoin de tout optimiser pour jongler entre mes cours, mon entreprise et ma vie perso. Si une appli ne me fait pas gagner du temps, je l'abandonne. »
+                </blockquote>
+                <div class="persona-card-body">
+                    <div class="persona-field">
+                        <label>🎯 Objectifs principaux</label>
+                        <ul>
+                            <li>Trouver un logement proche de son entreprise et bien desservi</li>
+                            <li>Obtenir une réponse rapide (elle gère 30 candidatures à la fois)</li>
+                            <li>Comprendre exactement ce qu'elle signe (charges, durée, dépôt)</li>
+                        </ul>
+                    </div>
+                    <div class="persona-field">
+                        <label>😤 Frustrations</label>
+                        <ul>
+                            <li>Annonces avec photos floues ou trompeuses</li>
+                            <li>Dossiers à préparer 10 fois en format papier</li>
+                            <li>Réponses jamais reçues après candidature</li>
+                            <li>Frais cachés découverts au dernier moment</li>
+                        </ul>
+                    </div>
+                    <div class="persona-field">
+                        <label>🔧 Comportements</label>
+                        <ul>
+                            <li>Cherche 90 % du temps sur mobile (métro)</li>
+                            <li>Utilise SeLoger, Leboncoin et Facebook</li>
+                            <li>Partage les bonnes annonces sur WhatsApp</li>
+                            <li>Lit les avis avant de contacter un propriétaire</li>
+                        </ul>
+                    </div>
+                    <div class="persona-field">
+                        <label>💡 Motivations profondes</label>
+                        <ul>
+                            <li>Autonomie et indépendance (quitte ses parents)</li>
+                            <li>Réduire le stress lié à sa vie d'alternante</li>
+                            <li>Sentiment de contrôle sur sa situation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>✅ Ce qui rend ce persona efficace :</strong> Les frustrations sont spécifiques et actionnables (pas juste « manque de temps »), les comportements sont concrets (mobile dans le métro, WhatsApp), et la citation capture un état d'esprit qui guide les décisions de conception.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">⚠️ Les erreurs classiques avec les personas</h3>
+        <div class="dropdown-content">
+            <div class="bias-grid">
+                <div class="bias-item">
+                    <h5>🚫 Le persona inventé</h5>
+                    <p>Créer un persona sans avoir mené d'entretiens ni d'observations. Ce sont les opinions de l'équipe déguisées en utilisateurs — dangereux et trompeur.</p>
+                </div>
+                <div class="bias-item">
+                    <h5>📚 Le persona bibliothèque</h5>
+                    <p>Créer 15 personas très détaillés que personne ne lit jamais. Mieux vaut 2–3 personas bien ciblés et réellement utilisés lors des décisions.</p>
+                </div>
+                <div class="bias-item">
+                    <h5>👤 Le persona démographique</h5>
+                    <p>Définir le persona par ses caractéristiques socio-démographiques (« femme, 35 ans, cadre ») plutôt que par ses comportements et motivations.</p>
+                </div>
+                <div class="bias-item">
+                    <h5>🏆 Le persona idéal</h5>
+                    <p>Créer un persona qui correspond à l'utilisateur que l'on voudrait avoir — au lieu de décrire les utilisateurs réels avec leurs vrais comportements et limitations.</p>
+                </div>
+                <div class="bias-item">
+                    <h5>📁 Le persona oublié</h5>
+                    <p>Créer de beaux personas dans un document que l'on range et n'ouvre plus jamais. Un persona doit être affiché et référencé à chaque décision de conception.</p>
+                </div>
+                <div class="bias-item">
+                    <h5>🔧 Le persona technique</h5>
+                    <p>Décrire l'utilisateur du point de vue technique (niveau d'accès système, fonctionnalités utilisées) plutôt que de son point de vue humain (vie, objectifs, émotions).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     07 · BIAIS COGNITIFS EN RECHERCHE UX
+═══════════════════════════════════════════ -->
+<section id="biais" class="section">
+    <h2 class="section-title">07 · Les biais cognitifs à éviter en recherche UX</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🧠 Pourquoi les biais sont dangereux en recherche ?</h3>
+        <div class="dropdown-content">
+            <p>Notre cerveau utilise des raccourcis cognitifs pour traiter l'information rapidement — les <strong>biais cognitifs</strong>. En recherche UX, ces biais peuvent <strong>fausser vos données, vos conclusions et vos personas</strong> sans que vous vous en rendiez compte. Les connaître est la première étape pour les contrôler.</p>
+        </div>
+    </div>
+
+    <div class="bias-grid">
+        <div class="bias-item">
+            <h5>🔍 Biais de confirmation</h5>
+            <p><strong>Quoi :</strong> Tendance à rechercher, interpréter et mémoriser les informations qui confirment nos hypothèses préexistantes.<br><strong>En UX :</strong> On « entend » ce qu'on voulait entendre dans les entretiens, on ignore les données contradictoires.<br><strong>Remède :</strong> Formuler des hypothèses explicitement à l'avance ; demander à un tiers de relire les verbatims.</p>
+        </div>
+        <div class="bias-item">
+            <h5>🤝 Biais de complaisance (Acquiescence)</h5>
+            <p><strong>Quoi :</strong> Les participants ont tendance à dire ce qu'ils pensent que l'intervieweur veut entendre.<br><strong>En UX :</strong> L'utilisateur dit que le prototype est « très bien » pour ne pas vexer le concepteur qui est présent.<br><strong>Remède :</strong> Séparer le concepteur du chercheur ; utiliser des formulations neutres.</p>
+        </div>
+        <div class="bias-item">
+            <h5>🦋 Effet Hawthorne</h5>
+            <p><strong>Quoi :</strong> Les gens se comportent différemment quand ils savent qu'ils sont observés.<br><strong>En UX :</strong> L'utilisateur en test fait plus attention, prend plus son temps qu'en situation réelle.<br><strong>Remède :</strong> Observer en contexte naturel ; laisser le temps à la personne de s'installer.</p>
+        </div>
+        <div class="bias-item">
+            <h5>⚓ Biais d'ancrage</h5>
+            <p><strong>Quoi :</strong> La première information reçue influence de façon disproportionnée les jugements suivants.<br><strong>En UX :</strong> Si vous montrez un prototype avec des prix, les utilisateurs évaluent tout en référence à ces prix.<br><strong>Remède :</strong> Varier l'ordre de présentation ; ne pas montrer de version A avant la version B.</p>
+        </div>
+        <div class="bias-item">
+            <h5>🕐 Biais de rappel</h5>
+            <p><strong>Quoi :</strong> Les souvenirs récents ou saillants sont surreprésentés dans les réponses.<br><strong>En UX :</strong> Un utilisateur se souvient mieux de la dernière expérience difficile que de toutes les fois où tout s'est bien passé.<br><strong>Remède :</strong> Ancrer les questions dans des événements spécifiques ; demander des exemples concrets.</p>
+        </div>
+        <div class="bias-item">
+            <h5>👓 Biais de l'expert</h5>
+            <p><strong>Quoi :</strong> Les experts du domaine surestiment ce que les utilisateurs ordinaires comprennent et savent faire.<br><strong>En UX :</strong> L'équipe produit pense que tout est « évident » alors que les utilisateurs réels sont perdus.<br><strong>Remède :</strong> Impliquer de vrais utilisateurs novices ; observer sans intervenir ni guider.</p>
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        <strong>⚠️ À retenir :</strong> La conscience de ces biais ne les fait pas disparaître, mais elle permet de mettre en place des garde-fous méthodologiques. La meilleure protection reste de travailler en équipe, de trianguler les méthodes et de rester humble face à ses propres certitudes.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     08 · POUR ALLER PLUS LOIN
+═══════════════════════════════════════════ -->
+<section id="pour-aller-plus-loin" class="section">
+    <h2 class="section-title">08 · Pour aller plus loin</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📚 Livres de référence</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>Just Enough Research</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Erika Hall (2013, rééd. 2019)</li>
+                        <li>La référence pratique de la recherche UX</li>
+                        <li>Comment faire de la recherche avec peu de ressources</li>
+                        <li>Lecture essentielle pour tout designer</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>The Mom Test</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Rob Fitzpatrick (2019)</li>
+                        <li>Comment poser des questions qui ne biaisent pas</li>
+                        <li>Orienté startup, très accessible</li>
+                        <li>Lecture rapide, pragmatique et amusante</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>Designing with the Mind in Mind</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Jeff Johnson (2014)</li>
+                        <li>Psychologie cognitive appliquée au design</li>
+                        <li>Comprendre comment le cerveau traite l'information</li>
+                        <li>Indispensable pour justifier ses choix UX</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>Interviewing Users</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Steve Portigal (2013)</li>
+                        <li>La Bible des entretiens utilisateurs</li>
+                        <li>Techniques, exemples, pièges à éviter</li>
+                        <li>Idéal pour progresser rapidement en entretien</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🌐 Ressources en ligne</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>Nielsen Norman Group</h4>
+                    <ul>
+                        <li><strong>nngroup.com</strong></li>
+                        <li>Articles sur chaque méthode de recherche</li>
+                        <li>Règle des 5 utilisateurs (article fondateur)</li>
+                        <li>Guides sur les entretiens et les personas</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>UX Research Field Guide</h4>
+                    <ul>
+                        <li><strong>dovetailapp.com/research</strong></li>
+                        <li>Guide complet des méthodes de recherche</li>
+                        <li>Templates d'entretiens et de personas gratuits</li>
+                        <li>Exemples concrets de livrables</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>Templates Figma Communauté</h4>
+                    <ul>
+                        <li>Rechercher « Persona template » sur Figma Community</li>
+                        <li>Centaines de templates gratuits et personnalisables</li>
+                        <li>Formats pour entretiens, affinity maps, user journeys</li>
+                        <li>Directement utilisables en projet</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>Optimal Workshop</h4>
+                    <ul>
+                        <li><strong>optimalworkshop.com</strong></li>
+                        <li>Outils gratuits de card sorting et tree testing</li>
+                        <li>Utilisable directement en cours pratique</li>
+                        <li>Génère des visualisations automatiques</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <strong>✅ Recommandation pratique :</strong> Commencez par lire <em>The Mom Test</em> (2h de lecture) pour comprendre comment poser de bonnes questions. Puis utilisez les templates Figma Community pour créer vos premiers personas en projet.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     09 · GLOSSAIRE
+═══════════════════════════════════════════ -->
+<section id="glossaire" class="section">
+    <h2 class="section-title">09 · Glossaire</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📖 10 termes essentiels à retenir</h3>
+        <div class="dropdown-content">
+            <p>Ces dix concepts enrichissent le vocabulaire professionnel en UX Research. Ils complètent le glossaire de la séance 1.</p>
+
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">UXR</div>
+                    <div class="heuristic-content">
+                        <h5>UX Research (UXR)</h5>
+                        <p>Discipline qui consiste à étudier les utilisateurs et leurs comportements afin d'informer les décisions de conception. Elle regroupe toutes les méthodes permettant de comprendre les besoins, motivations et obstacles des utilisateurs réels.</p>
+                        <p class="heuristic-example">Distinction : UX Designer conçoit ; UX Researcher comprend et informe la conception.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">QUAL</div>
+                    <div class="heuristic-content">
+                        <h5>Recherche qualitative</h5>
+                        <p>Méthodes de recherche qui produisent des données non numériques, riches et contextuelles (verbatims, observations, comportements). Répond aux questions <em>Pourquoi ?</em> et <em>Comment ?</em> avec un petit nombre de participants.</p>
+                        <p class="heuristic-example">Méthodes : entretiens semi-directifs, observations ethnographiques, focus groups, diary studies.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">QUANT</div>
+                    <div class="heuristic-content">
+                        <h5>Recherche quantitative</h5>
+                        <p>Méthodes produisant des données numériques mesurables et comparables. Répond aux questions <em>Combien ?</em> et <em>Quelle fréquence ?</em> avec un grand nombre de participants pour garantir la représentativité.</p>
+                        <p class="heuristic-example">Méthodes : sondages, analytics web, tests A/B, eye-tracking, tests de performance.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">P</div>
+                    <div class="heuristic-content">
+                        <h5>Persona</h5>
+                        <p>Représentation fictive mais réaliste d'un type d'utilisateur, construite à partir de données de recherche réelles. Outil de communication qui maintient la présence de l'utilisateur dans les décisions de conception.</p>
+                        <p class="heuristic-example">Popularisé par Alan Cooper dans <em>The Inmates Are Running the Asylum</em> (1999).</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">PP</div>
+                    <div class="heuristic-content">
+                        <h5>Pain point (point de douleur)</h5>
+                        <p>Obstacle, frustration ou difficulté rencontrée par l'utilisateur lors de l'accomplissement d'une tâche. Les pain points sont la matière première des problèmes à résoudre en UX Design.</p>
+                        <p class="heuristic-example">Exemple : devoir ressaisir son adresse à chaque commande, ne pas savoir si un article est en stock.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">VB</div>
+                    <div class="heuristic-content">
+                        <h5>Verbatim</h5>
+                        <p>Citation exacte, mot pour mot, d'un participant lors d'un entretien ou d'un test utilisateur. Les verbatims sont la preuve concrète des insights — ils sont plus convaincants que les paraphrases et permettent d'éviter les réinterprétations.</p>
+                        <p class="heuristic-example">Exemple de verbatim : <em>« Je cherche toujours deux fois parce que j'ai peur d'avoir raté quelque chose. »</em></p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">IS</div>
+                    <div class="heuristic-content">
+                        <h5>Insight</h5>
+                        <p>Révélation significative sur les comportements, motivations ou besoins des utilisateurs, tirée de l'analyse des données de recherche. Un insight n'est pas un fait brut — c'est une interprétation qui ouvre une opportunité de design.</p>
+                        <p class="heuristic-example">Fait : « 70 % des utilisateurs abandonnent à l'étape 3. » → Insight : « Les utilisateurs abandonnent car ils ne comprennent pas pourquoi on leur demande leur numéro de téléphone à cette étape. »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">SD</div>
+                    <div class="heuristic-content">
+                        <h5>Saturation des données</h5>
+                        <p>Point à partir duquel les entretiens ou observations supplémentaires n'apportent plus de nouvelles informations. Indicateur que la recherche a été menée de façon suffisamment approfondie pour couvrir les principaux patterns.</p>
+                        <p class="heuristic-example">Signe : les 3 derniers participants répètent exactement ce que les précédents ont dit.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">TA</div>
+                    <div class="heuristic-content">
+                        <h5>Think-aloud (pensée à voix haute)</h5>
+                        <p>Protocole de test utilisateur où le participant est invité à verbaliser ses pensées, réactions et doutes en temps réel pendant qu'il utilise le produit. Permet de comprendre le raisonnement derrière chaque action.</p>
+                        <p class="heuristic-example">Consigne type : <em>« Dites tout ce qui vous passe par la tête, même si ça vous semble anodin. »</em></p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">CI</div>
+                    <div class="heuristic-content">
+                        <h5>Contextual Inquiry</h5>
+                        <p>Méthode de recherche combinant observation terrain et entretien simultané. Le chercheur observe l'utilisateur dans son environnement naturel tout en lui posant des questions en temps réel sur ce qu'il fait.</p>
+                        <p class="heuristic-example">Développée par Beyer et Holtzblatt (1998). Idéale pour comprendre des workflows complexes en contexte professionnel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     10 · QCM 2 — AVANCÉ
+═══════════════════════════════════════════ -->
+<section id="qcm2" class="section">
+    <h2 class="section-title">10 · QCM — Bilan final</h2>
+
+    <div class="alert alert-info" style="margin-bottom:1.5rem;">
+        <strong>ℹ️ QCM 2 — Niveau avancé.</strong> 5 questions de synthèse tirées au sort dans une banque de 8, mobilisant plusieurs concepts à la fois. Ces questions requièrent de mettre en relation des notions vues tout au long de la séance.
+    </div>
+
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>🎓 Synthèse — Recherche UX, biais &amp; posture</h3>
+            <span class="quiz-badge">5 questions · niveau avancé</span>
+        </div>
+        <div id="qcm2-question" class="quiz-question">
+            <p id="qcm2-question-text"></p>
+            <div id="qcm2-answers" class="quiz-answers"></div>
+            <button id="qcm2-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm2-result" class="quiz-result" style="display:none;">
+            <div id="qcm2-explanation" class="explanation"></div>
+            <button id="qcm2-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm2-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm2-progress">Question 1/5</span>
+            <span id="qcm2-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm2-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+    <p>Introduction à l'UX Design — Jour 1, Séance 2 · Connaître ses utilisateurs</p>
+    <p style="margin-top:.5rem;opacity:.6;font-size:.85rem;">EEMI · Bachelor CDPD — B1 · Année académique 2024-2025</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════
+//  BANQUE QCM 1 — 8 QUESTIONS FONDAMENTALES
+//  Périmètre : sections 01–04
+//  Pourquoi la recherche · qual/quant · méthodes ·
+//  conduite et formulation d'entretiens
+//  Réponses équilibrées en longueur (anti-indice)
+// ════════════════════════════════════════════════════
+const bank1 = [
+    {
+        question: "Quelle citation de Nielsen résume le risque de concevoir sans recherche utilisateur ?",
+        answers: [
+            "« Less is more. » — l'interface doit rester minimaliste à tout prix",
+            "« You are not the user. » — les concepteurs ne représentent pas les vrais utilisateurs",
+            "« Form follows function. » — la forme doit toujours servir l'usage avant tout",
+            "« Design is how it works. » — la conception est avant tout une question fonctionnelle"
+        ],
+        correct: 1,
+        explanation: "« You are not the user. » (Nielsen) rappelle que l'équipe produit n'est pas représentative des utilisateurs réels. Ses habitudes, connaissances et comportements sont biaisés par l'expertise. La recherche utilisateur est le seul moyen de dépasser cette illusion et de concevoir pour les personnes réelles."
+    },
+    {
+        question: "Quelle est la principale différence entre recherche qualitative et recherche quantitative ?",
+        answers: [
+            "La qualitative répond au Pourquoi avec un petit groupe ; la quantitative mesure à grande échelle",
+            "La qualitative est plus fiable car elle produit des données précises et chiffrées",
+            "La quantitative répond au Pourquoi ; la qualitative mesure la fréquence des comportements",
+            "La qualitative exige obligatoirement plus de cent participants pour être considérée valide"
+        ],
+        correct: 0,
+        explanation: "La recherche qualitative explore en profondeur motivations et comportements (Pourquoi ? Comment ?) avec un petit échantillon (5–15 personnes). La quantitative mesure à grande échelle (Combien ? Quelle fréquence ?) avec 100+ répondants. Les deux sont complémentaires : l'une comprend, l'autre mesure."
+    },
+    {
+        question: "Quelle méthode de recherche vise à comprendre les besoins avant de concevoir ?",
+        answers: [
+            "La recherche évaluative, qui mesure l'impact de décisions de conception déjà prises",
+            "Le test A/B, qui compare deux versions finales d'une même interface en production",
+            "La recherche générative, qui explore besoins et contextes en amont de la conception",
+            "L'évaluation heuristique, qui inspecte l'interface selon des principes d'utilisabilité"
+        ],
+        correct: 2,
+        explanation: "La recherche générative intervient en amont du projet pour explorer besoins, comportements et contextes. La recherche évaluative intervient pendant et après pour tester si les solutions répondent aux problèmes identifiés. Les deux types sont nécessaires dans un processus UX rigoureux."
+    },
+    {
+        question: "Selon la règle des 5 de Nielsen, que permettent 5 participants sur un même segment ?",
+        answers: [
+            "D'atteindre la représentativité statistique nécessaire pour généraliser les résultats",
+            "D'identifier environ 85 % des problèmes d'utilisabilité significatifs du segment",
+            "De satisfaire les conditions légales pour publier un rapport de recherche UX",
+            "De remplacer entièrement toute forme de recherche quantitative complémentaire"
+        ],
+        correct: 1,
+        explanation: "Jakob Nielsen a démontré que 5 utilisateurs d'un même segment suffisent pour identifier environ 85 % des problèmes d'utilisabilité significatifs. Au-delà, le rendement marginal décroît rapidement. Si le produit cible plusieurs segments distincts, il faut 5 participants par segment."
+    },
+    {
+        question: "Quelle formulation est la plus efficace lors d'un entretien utilisateur ?",
+        answers: [
+            "« Pensez-vous que notre application est simple à prendre en main ? »",
+            "« Notre fonctionnalité vous semble-t-elle utile et bien conçue pour vous ? »",
+            "« Racontez-moi la dernière fois que vous avez effectué cette tâche. »",
+            "« Achèteriez-vous ce service si le prix vous semblait tout à fait raisonnable ? »"
+        ],
+        correct: 2,
+        explanation: "La question idéale est ouverte, narrative et ancrée dans le passé récent. 'Racontez-moi la dernière fois que...' invite l'utilisateur à partager une expérience concrète avec ses propres mots et émotions. Les autres formulations sont suggestives ou hypothétiques — elles ne prédisent pas le comportement réel."
+    },
+    {
+        question: "Pourquoi les questions hypothétiques (« Achèteriez-vous... ») sont-elles à éviter ?",
+        answers: [
+            "Parce qu'elles allongent inutilement la durée globale de l'entretien utilisateur",
+            "Parce qu'elles violent les règles éthiques encadrant la recherche qualitative",
+            "Parce que les réponses déclarées sur des comportements futurs prédisent mal le réel",
+            "Parce qu'elles sont trop complexes à analyser lors du dépouillement des données"
+        ],
+        correct: 2,
+        explanation: "Les gens déclarent souvent ce qu'ils feraient par politesse ou optimisme, sans que cela prédise leur comportement réel. Il vaut mieux ancrer les questions dans le passé concret : « La dernière fois que vous avez fait X, que s'est-il passé ? ». Le comportement passé est un bien meilleur prédicteur que les intentions futures."
+    },
+    {
+        question: "À quoi sert la question finale « Y a-t-il quelque chose que je n'ai pas abordé ? »",
+        answers: [
+            "À allonger l'entretien pour maximiser le volume de données collectées",
+            "À vérifier que l'interviewé a bien compris l'ensemble des questions posées",
+            "À faire émerger des insights inattendus absents du guide d'entretien initial",
+            "À recueillir les coordonnées du participant pour assurer un suivi ultérieur"
+        ],
+        correct: 2,
+        explanation: "Cette question finale donne la parole à l'utilisateur sur ses propres termes. Elle révèle souvent des informations surprenantes que le guide structuré n'aurait pas capturées. Les insights les plus précieux — ceux qui remettent en question des hypothèses fondamentales — émergent fréquemment dans cette dernière minute d'entretien."
+    },
+    {
+        question: "Quelle méthode combine observation terrain et entretien en temps réel ?",
+        answers: [
+            "Le focus group, qui réunit plusieurs utilisateurs autour d'un même thème de discussion",
+            "Le card sorting, qui demande aux participants d'organiser des contenus en catégories",
+            "La contextual inquiry, qui observe et interroge l'utilisateur dans son contexte naturel",
+            "Le test A/B, qui soumet deux variantes d'interface à deux groupes distincts"
+        ],
+        correct: 2,
+        explanation: "La contextual inquiry (Beyer & Holtzblatt, 1998) combine observation et entretien en situation réelle. Le chercheur observe l'utilisateur dans son environnement naturel tout en lui posant des questions en temps réel. Idéale pour comprendre des workflows complexes que les entretiens seuls ne révèlent pas."
+    }
+];
+
+// ════════════════════════════════════════════════════
+//  BANQUE QCM 2 — 8 QUESTIONS AVANCÉES
+//  Périmètre : sections 06–07 + synthèse globale
+//  Personas (erreurs, usage) · biais cognitifs ·
+//  mise en situation croisant l'ensemble du cours
+//  Réponses équilibrées en longueur (anti-indice)
+// ════════════════════════════════════════════════════
+const bank2 = [
+    {
+        question: "Qu'est-ce qu'un persona UX, par opposition à un profil marketing ?",
+        answers: [
+            "Un persona UX décrit uniquement l'âge, le revenu et les habitudes d'achat",
+            "Un persona UX est fondé sur des comportements et motivations issus de recherches réelles",
+            "Un persona UX est un document technique listant les droits d'accès au système",
+            "Un persona UX est une projection libre de l'équipe sans contrainte de données"
+        ],
+        correct: 1,
+        explanation: "Un persona UX est une représentation fictive mais réaliste construite à partir d'entretiens et d'observations. Il décrit comportements, motivations, objectifs et obstacles — pas uniquement des données démographiques. Introduit par Alan Cooper (1999), il maintient l'utilisateur réel au centre de toutes les décisions de conception."
+    },
+    {
+        question: "Une équipe crée 12 personas détaillés lors d'un sprint. Six mois plus tard, personne ne les consulte. Quelle erreur commettent-ils ?",
+        answers: [
+            "Ils ont créé des personas sans photo, ce qui les rend difficiles à mémoriser",
+            "Ils ont produit trop de personas sans les ancrer dans les décisions quotidiennes",
+            "Ils ont utilisé des citations fictives au lieu de verbatims issus d'entretiens",
+            "Ils ont confondu persona UX et profil marketing dans le même document"
+        ],
+        correct: 1,
+        explanation: "Le 'persona bibliothèque' est une erreur classique : créer de nombreux personas détaillés que personne ne consulte jamais. Un persona n'a de valeur que s'il est réellement utilisé lors des décisions. La bonne pratique : 2–3 personas bien ciblés, affichés dans l'espace de travail et référencés lors de chaque arbitrage produit."
+    },
+    {
+        question: "Un client veut créer des personas sans mener d'entretiens. Quelle est la conséquence principale ?",
+        answers: [
+            "Les personas seront moins visuels et moins agréables à présenter en réunion",
+            "Les personas reflèteront les opinions de l'équipe déguisées en connaissance utilisateur",
+            "Les personas nécessiteront une validation externe par un cabinet de conseil",
+            "Les personas devront être mis à jour beaucoup plus souvent que d'habitude"
+        ],
+        correct: 1,
+        explanation: "Un persona sans données de terrain est la projection des hypothèses de l'équipe déguisée en connaissance utilisateur. Il donne une fausse confiance et oriente les décisions dans la mauvaise direction. La règle absolue : un persona sans recherche réelle n'est pas un outil UX, c'est un biais cognitif formalisé."
+    },
+    {
+        question: "Un chercheur écarte systématiquement les verbatims qui contredisent son hypothèse. Quel biais illustre cela ?",
+        answers: [
+            "L'effet Hawthorne, car les participants adaptent leur comportement à l'observation",
+            "Le biais de confirmation, car il ne retient que ce qui valide ses croyances initiales",
+            "Le biais d'ancrage, car la première réponse influence toutes les suivantes",
+            "Le biais de rappel, car les souvenirs récents sont surreprésentés dans les réponses"
+        ],
+        correct: 1,
+        explanation: "Le biais de confirmation pousse à rechercher, interpréter et mémoriser les informations qui confirment nos hypothèses préexistantes. C'est le biais le plus dangereux en UX Research. Les remèdes : formuler ses hypothèses avant la collecte, faire relire les verbatims par un tiers, et traiter activement les données contradictoires."
+    },
+    {
+        question: "Un participant se comporte avec plus de soin en test qu'en usage quotidien réel. Quel phénomène explique cela ?",
+        answers: [
+            "Le biais de confirmation, car il veut valider les choix du concepteur présent",
+            "Le biais de complaisance, car il cherche à satisfaire les attentes de l'équipe",
+            "L'effet Hawthorne, car le fait d'être observé modifie naturellement son comportement",
+            "Le biais d'ancrage, car la version précédente a influencé toute sa perception"
+        ],
+        correct: 2,
+        explanation: "L'effet Hawthorne désigne le phénomène par lequel les individus modifient leur comportement lorsqu'ils savent être observés. En test utilisateur, cela se traduit par plus d'attention et de prudence que dans la réalité. Les remèdes : laisser le temps d'installation, observer en contexte naturel autant que possible."
+    },
+    {
+        question: "Lors d'un entretien avec prototype, l'utilisateur dit « c'est très bien, j'aime beaucoup ». Quel biais suspecter en premier ?",
+        answers: [
+            "Le biais d'ancrage, car le premier écran a conditionné son jugement global",
+            "La complaisance (acquiescence), car il répond positivement pour ne pas vexer",
+            "Le biais de confirmation, car il projette ses habitudes antérieures sur l'interface",
+            "L'effet Hawthorne, car il se comporte différemment sous le regard du chercheur"
+        ],
+        correct: 1,
+        explanation: "Le biais de complaisance est la tendance à donner des réponses positives pour ne pas décevoir l'intervieweur, surtout quand le concepteur est présent. Remèdes : séparer le rôle du chercheur de celui du concepteur, et utiliser des formulations neutres : 'Qu'avez-vous pensé de cette étape ?' plutôt que 'C'était clair, non ?'."
+    },
+    {
+        question: "Quelle distinction fondamentale sépare un verbatim d'un insight ?",
+        answers: [
+            "Un verbatim est plus long qu'un insight, qui doit toujours rester très concis",
+            "Un verbatim est la citation brute d'un participant ; un insight est l'interprétation actionnable",
+            "Un insight est collecté pendant l'entretien ; le verbatim est rédigé après analyse",
+            "Il n'y a aucune différence réelle : les deux termes désignent le même type de données"
+        ],
+        correct: 1,
+        explanation: "Un verbatim est la citation exacte, mot pour mot, d'un participant. Un insight est l'interprétation significative extraite des données — il identifie un pattern ou une opportunité de design. Ex : verbatim = 'Je cherche toujours deux fois par peur de rater quelque chose' ; insight = 'Les utilisateurs manquent de confiance dans les résultats, ce qui génère de la friction.'"
+    },
+    {
+        question: "Objectif : comprendre pourquoi les utilisateurs abandonnent l'onboarding. Quelle approche choisir ?",
+        answers: [
+            "Un sondage à 500 répondants, car il garantit une fiabilité statistique supérieure",
+            "Des entretiens qualitatifs, car ils révèlent les motivations et le contexte de l'abandon",
+            "Un sondage avec questions ouvertes, car il cumule volume et richesse qualitative",
+            "Les deux méthodes en simultané, car aucune n'est suffisante utilisée seule"
+        ],
+        correct: 1,
+        explanation: "Pour comprendre 'pourquoi' les utilisateurs abandonnent, la recherche qualitative est la plus adaptée. Les entretiens révèlent motivations, frictions et contextes que les chiffres seuls ne peuvent pas expliquer. Le sondage mesurerait le 'combien' mais pas le 'pourquoi'. Les deux se complètent — mais si l'objectif est la compréhension, commencer par le qualitatif."
+    }
+];
+
+// ════════════════════════════════════════════════════
+//  UTILITAIRE : Fisher-Yates shuffle
+// ════════════════════════════════════════════════════
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// ════════════════════════════════════════════════════
+//  ÉGALISATION DES HAUTEURS DE BOUTONS
+//  Empêche d'identifier la bonne réponse à sa longueur
+// ════════════════════════════════════════════════════
+function equalizeAnswerHeights(containerId) {
+    const btns = document.querySelectorAll('#' + containerId + ' .quiz-answer');
+    // Réinitialiser pour recalculer
+    btns.forEach(b => { b.style.minHeight = ''; });
+    // Trouver la hauteur maximale après rendu
+    let maxH = 0;
+    btns.forEach(b => { maxH = Math.max(maxH, b.offsetHeight); });
+    btns.forEach(b => { b.style.minHeight = maxH + 'px'; });
+}
+
+// ════════════════════════════════════════════════════
+//  FABRIQUE DE QUIZ — crée un quiz indépendant
+//  prefix  : identifiant DOM ('qcm1' ou 'qcm2')
+//  bank    : tableau de questions source
+//  count   : nombre de questions à tirer
+//  msgs    : messages du score final (optionnel)
+// ════════════════════════════════════════════════════
+function createQuiz(prefix, bank, count, msgs) {
+    const state = { questions: [], current: 0, score: 0, answered: 0, selected: null };
+
+    const $ = id => document.getElementById(prefix + '-' + id);
+
+    function init() {
+        state.questions = shuffleArray(bank).slice(0, count).map(q => {
+            const correctText = q.answers[q.correct];
+            const shuffled    = shuffleArray(q.answers);
+            return { ...q, answers: shuffled, correct: shuffled.indexOf(correctText) };
+        });
+        state.current = 0; state.score = 0; state.answered = 0; state.selected = null;
+        $('question').style.display = 'block';
+        $('result').style.display   = 'none';
+        $('final').style.display    = 'none';
+        show();
+    }
+
+    function show() {
+        const q = state.questions[state.current];
+        $('question-text').textContent = q.question;
+        $('submit').disabled = true;
+        state.selected = null;
+
+        const container = $('answers');
+        container.innerHTML = '';
+        q.answers.forEach((ans, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-answer';
+            btn.textContent = ans;
+            btn.setAttribute('tabindex', '0');
+            btn.onclick = () => select(i);
+            container.appendChild(btn);
+        });
+        // Appliquer l'égalisation après insertion dans le DOM
+        requestAnimationFrame(() => equalizeAnswerHeights(prefix + '-answers'));
+        updateBar();
+    }
+
+    function select(index) {
+        state.selected = index;
+        document.querySelectorAll('#' + prefix + '-answers .quiz-answer').forEach((b, i) => {
+            b.classList.toggle('selected', i === index);
+        });
+        $('submit').disabled = false;
+    }
+
+    function submit() {
+        if (state.selected === null) return;
+        const q = state.questions[state.current];
+        const ok = state.selected === q.correct;
+        state.answered++;
+        if (ok) state.score++;
+
+        document.querySelectorAll('#' + prefix + '-answers .quiz-answer').forEach((b, i) => {
+            b.onclick = null;
+            if (i === q.correct)             b.classList.add('correct');
+            else if (i === state.selected)   b.classList.add('incorrect');
+        });
+
+        const resultDiv = $('result');
+        resultDiv.className = 'quiz-result' + (ok ? '' : ' incorrect-result');
+        $('explanation').innerHTML = '<strong>' + (ok ? '✅ Correct !' : '❌ Incorrect') + '</strong><br><br>' + q.explanation;
+
+        const isLast = state.current >= state.questions.length - 1;
+        $('next').textContent = isLast ? 'Voir mon score final' : 'Question suivante';
+        $('question').style.display = 'none';
+        resultDiv.style.display = 'block';
+        updateBar();
+    }
+
+    function next() {
+        state.current++;
+        if (state.current < state.questions.length) {
+            $('question').style.display = 'block';
+            $('result').style.display   = 'none';
+            show();
+        } else {
+            finalScore();
+        }
+    }
+
+    function finalScore() {
+        const pct = Math.round((state.score / state.answered) * 100);
+        const m   = msgs || {
+            high:  { emoji: '🎉', color: '#10b981', text: 'Excellent ! Tous les concepts sont bien maîtrisés.' },
+            mid:   { emoji: '👍', color: '#3b82f6', text: 'Bien joué ! Quelques points à revoir.' },
+            low:   { emoji: '📚', color: '#f59e0b', text: 'Bon début — relisez les sections concernées.' },
+            fail:  { emoji: '💪', color: '#ef4444', text: 'Relisez attentivement le cours avant de retenter.' }
+        };
+        const lvl = pct >= 80 ? m.high : pct >= 60 ? m.mid : pct >= 40 ? m.low : m.fail;
+
+        $('question').style.display = 'none';
+        $('result').style.display   = 'none';
+        const fin = $('final');
+        fin.style.display = 'block';
+        fin.innerHTML = `
+            <div style="text-align:center;padding:2rem;">
+                <div style="font-size:3.5rem;margin-bottom:1rem;">${lvl.emoji}</div>
+                <h3 style="color:${lvl.color};margin-bottom:.75rem;font-size:1.5rem;">Quiz terminé !</h3>
+                <p style="font-size:2rem;font-weight:700;margin-bottom:.5rem;">${state.score} / ${state.answered}</p>
+                <p style="font-size:1.1rem;color:#6b7280;margin-bottom:.5rem;">${pct} % de bonnes réponses</p>
+                <div style="width:100%;max-width:280px;background:#e5e7eb;border-radius:99px;height:10px;margin:1rem auto 1.5rem;">
+                    <div style="height:100%;width:${pct}%;background:${lvl.color};border-radius:99px;"></div>
+                </div>
+                <p style="color:#6b7280;margin-bottom:2rem;font-size:1rem;">${lvl.text}</p>
+                <button class="quiz-btn" onclick="quiz${prefix.replace('qcm','')}.init()">🔄 Recommencer</button>
+            </div>`;
+        updateBar();
+    }
+
+    function updateBar() {
+        const total = state.questions.length;
+        const cur   = Math.min(state.current + 1, total);
+        $('progress').textContent = 'Question ' + cur + '/' + total;
+        $('score').textContent    = 'Score : ' + state.score + '/' + state.answered;
+        $('bar').style.width      = ((state.answered / total) * 100) + '%';
+    }
+
+    // API publique
+    return { init, submit, next };
+}
+
+// ════════════════════════════════════════════════════
+//  INSTANCIATION DES DEUX QUIZ
+// ════════════════════════════════════════════════════
+let quiz1, quiz2;
+
+// ════════════════════════════════════════════════════
+//  NAVIGATION ACTIVE AU SCROLL
+// ════════════════════════════════════════════════════
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.getElementById(link.getAttribute('href').substring(1));
+            if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        });
+    });
+    function updateActive() {
+        let current = '';
+        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 100) current = s.id; });
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+}
+
+// ════════════════════════════════════════════════════
+//  DROPDOWNS
+// ════════════════════════════════════════════════════
+function initDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(dd => {
+        dd.querySelector('.dropdown-title').addEventListener('click', () => dd.classList.toggle('active'));
+    });
+}
+
+// ════════════════════════════════════════════════════
+//  ANIMATIONS SCROLL (IntersectionObserver)
+// ════════════════════════════════════════════════════
+function initScrollAnimations() {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.section').forEach(s => observer.observe(s));
+}
+
+// ════════════════════════════════════════════════════
+//  ACCESSIBILITÉ CLAVIER
+// ════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+    const isAnswer = e.target.classList.contains('quiz-answer');
+    if (isAnswer) {
+        const parent  = e.target.closest('.quiz-answers');
+        const answers = [...parent.querySelectorAll('.quiz-answer')];
+        const idx     = answers.indexOf(e.target);
+        if (e.key === 'ArrowDown' && idx < answers.length - 1) { e.preventDefault(); answers[idx + 1].focus(); }
+        if (e.key === 'ArrowUp'   && idx > 0)                  { e.preventDefault(); answers[idx - 1].focus(); }
+        if (e.key === 'Enter' || e.key === ' ')                 { e.preventDefault(); e.target.click(); }
+    }
+    if (e.key === 'Escape') document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+});
+
+// ════════════════════════════════════════════════════
+//  POINT D'ENTRÉE
+// ════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    initNavigation();
+    initDropdowns();
+    initScrollAnimations();
+
+    // Quiz 1 — intermédiaire (5 questions sur 8)
+    quiz1 = createQuiz('qcm1', bank1, 5);
+    document.getElementById('qcm1-submit').addEventListener('click', () => quiz1.submit());
+    document.getElementById('qcm1-next').addEventListener('click', () => quiz1.next());
+    quiz1.init();
+
+    // Quiz 2 — avancé (5 questions sur 8)
+    quiz2 = createQuiz('qcm2', bank2, 5);
+    document.getElementById('qcm2-submit').addEventListener('click', () => quiz2.submit());
+    document.getElementById('qcm2-next').addEventListener('click', () => quiz2.next());
+    quiz2.init();
+
+    console.log('✅ UX Design — Séance 2 chargé');
+});
+</script>
+</body>
+</html>
