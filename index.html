@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction à l'UX Design — Jour 1, Séance 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Extensions propres à ce cours — n'écrasent rien dans styles.css */
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+        .timeline::before { content: ''; position: absolute; left: .55rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary-color), var(--border-color)); }
+        .timeline-item { position: relative; margin-bottom: 1.75rem; }
+        .timeline-dot { position: absolute; left: -1.62rem; top: .25rem; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--primary-color); border: 3px solid var(--bg-white); box-shadow: 0 0 0 2px var(--primary-color); }
+        .timeline-dot.highlight { background: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-color); }
+        .timeline-date { font-size: .73rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .2rem; }
+        .timeline-title { font-weight: 600; color: var(--text-dark); margin-bottom: .3rem; }
+        .timeline-body { color: var(--text-light); font-size: .9rem; line-height: 1.6; }
+
+        /* Table de comparaison */
+        .compare-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .88rem; }
+        .compare-table th { background: var(--gradient-primary); color: white; padding: .75rem 1rem; text-align: left; font-weight: 600; }
+        .compare-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-light); }
+        .compare-table tr:nth-child(even) td { background: var(--bg-light); }
+        .compare-table tr:hover td { background: rgba(59,130,246,.04); }
+        .compare-table td:first-child { font-weight: 600; color: var(--text-dark); }
+        @media (max-width: 768px) { .compare-table { font-size: .75rem; } .compare-table th, .compare-table td { padding: .5rem .6rem; } }
+
+        /* Liste heuristiques */
+        .heuristic-list { display: flex; flex-direction: column; gap: .65rem; margin: 1.5rem 0; }
+        .heuristic-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem; background: var(--bg-light); border-radius: 8px; border: 1px solid var(--border-color); transition: all .3s ease; }
+        .heuristic-item:hover { background: rgba(59,130,246,.04); border-color: var(--primary-color); transform: translateX(4px); }
+        .heuristic-num { min-width: 2.1rem; height: 2.1rem; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .82rem; flex-shrink: 0; }
+        .heuristic-content h5 { font-weight: 600; color: var(--text-dark); margin-bottom: .15rem; font-size: .95rem; }
+        .heuristic-content p { color: var(--text-light); font-size: .85rem; line-height: 1.55; margin: 0; }
+        .heuristic-example { margin-top: .3rem; font-size: .78rem; color: var(--primary-color); font-style: italic; }
+
+        /* Barre de progression quiz */
+        .quiz-progress-bar-wrap { background: var(--border-color); border-radius: 99px; height: 6px; margin-top: .5rem; overflow: hidden; }
+        .quiz-progress-bar-fill { height: 100%; background: var(--gradient-primary); border-radius: 99px; transition: width .4s ease; }
+
+        /* Header interne du quiz */
+        .quiz-header-band { background: var(--gradient-primary); color: white; padding: 1.25rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+        .quiz-header-band h3 { font-size: 1.05rem; font-weight: 700; margin: 0; color: white; }
+        .quiz-badge { background: rgba(255,255,255,.25); padding: .3rem .8rem; border-radius: 20px; font-size: .8rem; font-weight: 600; }
+
+        /* Résultat incorrect */
+        .quiz-result.incorrect-result { border-left-color: var(--danger-color); }
+
+        /* Card li color */
+        .card li { color: var(--text-light); font-size: .9rem; }
+        .card-gradient li { color: rgba(255,255,255,.9); border-bottom-color: rgba(255,255,255,.2); }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+    <div class="nav-container">
+        <h1 class="nav-title">UX Design — Séance 1</h1>
+        <ul class="nav-links">
+            <li><a href="#intro"         class="nav-link">Introduction</a></li>
+            <li><a href="#histoire"      class="nav-link">Histoire</a></li>
+            <li><a href="#distinctions"  class="nav-link">UX / UI / Web</a></li>
+            <li><a href="#metiers"       class="nav-link">Métiers</a></li>
+            <li><a href="#enjeux"        class="nav-link">Enjeux &amp; ROI</a></li>
+            <li><a href="#heuristiques"  class="nav-link">Heuristiques</a></li>
+            <li><a href="#qcm"           class="nav-link">QCM</a></li>
+            <li><a href="#pour-aller-plus-loin" class="nav-link">Aller +loin</a></li>
+            <li><a href="#glossaire"     class="nav-link">Glossaire</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="main-content">
+
+<!-- ═══════════════════════════════════════════
+     01 · INTRODUCTION
+═══════════════════════════════════════════ -->
+<section id="intro" class="section">
+    <h2 class="section-title">01 · Qu'est-ce que l'UX Design ?</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎯 Définition et périmètre</h3>
+        <div class="dropdown-content">
+            <p><strong>Définition :</strong> Le terme <strong>User Experience Design</strong> — ou <strong>UX Design</strong> — désigne la discipline qui vise à concevoir des produits et services offrant des expériences utiles, utilisables et désirables aux personnes qui les utilisent. Il ne s'agit pas d'une réflexion purement esthétique, mais d'une approche centrée sur l'humain qui repose sur la recherche, l'analyse et l'itération.</p>
+            <p><strong>Référence fondatrice :</strong> Le terme a été popularisé par <strong>Don Norman</strong> et <strong>Jakob Nielsen</strong> (Nielsen Norman Group, 1998) : <em>« L'expérience utilisateur englobe tous les aspects de l'interaction d'un utilisateur final avec une entreprise, ses services et ses produits. »</em></p>
+            <p><strong>À retenir :</strong> L'UX couvre l'ensemble du parcours — les émotions <em>avant</em> (anticipation, attentes), <em>pendant</em> (facilité d'usage) et <em>après</em> l'utilisation (fidélité, recommandation). C'est cette vision holistique qui la distingue d'une simple approche graphique.</p>
+            <div class="alert alert-info">
+                <strong>💡 Principe clé :</strong> L'UX n'est pas une couche de vernis appliquée en fin de projet. C'est une manière de concevoir qui commence avant même d'ouvrir un outil de design — dès la compréhension des besoins utilisateurs.
+            </div>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>🎯 Utilité</h4>
+            <ul>
+                <li><strong>Le produit répond-il à un besoin réel ?</strong></li>
+                <li>Résout-il un problème qui existe vraiment ?</li>
+                <li>La valeur ajoutée est-elle perceptible ?</li>
+                <li>L'utilisateur accomplit-il son objectif ?</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>⚙️ Utilisabilité</h4>
+            <ul>
+                <li><strong>Le produit est-il facile à utiliser ?</strong></li>
+                <li>Les tâches s'accomplissent-elles sans friction ?</li>
+                <li>Les erreurs sont-elles rares et récupérables ?</li>
+                <li>L'interface est-elle apprise rapidement ?</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>✨ Désirabilité</h4>
+            <ul>
+                <li><strong>Le produit suscite-t-il une émotion positive ?</strong></li>
+                <li>L'utilisateur a-t-il envie de l'utiliser ?</li>
+                <li>Le recommande-t-il spontanément ?</li>
+                <li>L'identité visuelle est-elle cohérente ?</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>🔭 Accessibilité &amp; Crédibilité</h4>
+            <ul>
+                <li>Accessible à tous les profils d'utilisateurs</li>
+                <li>Inclusion numérique et WCAG</li>
+                <li>Le produit inspire-t-il confiance ?</li>
+                <li>Sécurité perçue et transparence</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">🔄 L'UX dans un projet digital</h3>
+        <div class="dropdown-content">
+            <p><strong>Place de l'UX :</strong> L'UX Design intervient à toutes les phases d'un projet digital, de la définition du problème jusqu'au suivi post-lancement. Contrairement à une idée reçue, il ne s'agit pas uniquement de concevoir des interfaces.</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>🔍 Phase Découverte</h4>
+                    <ul><li>Recherche utilisateur</li><li>Entretiens et observations</li><li>Analyse des besoins</li><li>Définition du problème</li></ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>📐 Phase Conception</h4>
+                    <ul><li>Personas et user journeys</li><li>Architecture de l'information</li><li>Wireframes</li><li>Prototypes</li></ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>🧪 Phase Validation</h4>
+                    <ul><li>Tests utilisateurs</li><li>Évaluation heuristique</li><li>Itérations</li><li>Mesure des KPIs UX</li></ul>
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <strong>⚠️ Erreur courante :</strong> Confondre UX Design et design graphique. Un beau visuel ne garantit pas une bonne expérience utilisateur. L'esthétique est importante, mais elle ne peut pas compenser une architecture mal pensée ou des fonctionnalités inadaptées aux besoins réels.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     02 · HISTOIRE & ORIGINES
+═══════════════════════════════════════════ -->
+<section id="histoire" class="section">
+    <h2 class="section-title">02 · Histoire &amp; origines</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📅 D'où vient l'UX Design ?</h3>
+        <div class="dropdown-content">
+            <p>Contrairement à ce que l'on pourrait croire, l'UX Design n'est pas né avec Internet. Ses racines plongent dans plusieurs décennies de recherche en ergonomie, en psychologie cognitive et en facteurs humains.</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Années 1940–1960</div>
+                    <div class="timeline-title">Ergonomie militaire et facteurs humains</div>
+                    <div class="timeline-body">Née pendant la Seconde Guerre mondiale, l'ergonomie cherche à adapter les équipements aux capacités humaines. Les premiers cockpits mal conçus causent des accidents évitables. Cette prise de conscience fonde les principes du <em>Human-Centered Design</em>.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">1970–1980</div>
+                    <div class="timeline-title">Émergence de l'IHM (Interaction Homme-Machine)</div>
+                    <div class="timeline-body">Les laboratoires <strong>Xerox PARC</strong> inventent l'interface graphique (GUI), la souris et le bureau virtuel. L'IHM devient un champ de recherche académique. On commence à étudier comment les humains comprennent et utilisent les interfaces.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot highlight"></div>
+                    <div class="timeline-date">1988</div>
+                    <div class="timeline-title">Don Norman et <em>The Design of Everyday Things</em></div>
+                    <div class="timeline-body">Le psychologue <strong>Don Norman</strong> publie l'ouvrage fondateur qui popularise les concepts d'<strong>affordance</strong>, de <strong>feedback</strong> et de <strong>modèle mental</strong>. Chez Apple, il crée ensuite le titre « User Experience Architect » — première apparition du terme UX dans un intitulé professionnel.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">1990–2000</div>
+                    <div class="timeline-title">Le web et Jakob Nielsen</div>
+                    <div class="timeline-body">L'explosion du World Wide Web crée un besoin urgent de concevoir des interfaces accessibles au grand public. <strong>Jakob Nielsen</strong> formalise les tests d'utilisabilité et publie ses <strong>10 heuristiques</strong> (1994). Le Nielsen Norman Group démocratise les pratiques UX.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot highlight"></div>
+                    <div class="timeline-date">2007</div>
+                    <div class="timeline-title">L'iPhone redéfinit les standards d'interaction</div>
+                    <div class="timeline-body">Le lancement de l'iPhone révolutionne le design d'interface : écran tactile, gestes multi-points, design intuitif sans manuel. Les entreprises technologiques font de l'UX un avantage concurrentiel stratégique.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2010 → aujourd'hui</div>
+                    <div class="timeline-title">L'UX Design mature et pluridisciplinaire</div>
+                    <div class="timeline-body">L'UX intègre désormais l'analyse comportementale, les design systems, les tests A/B, l'accessibilité WCAG et les questions éthiques (dark patterns). Le titre de <strong>Product Designer</strong> hybride UX et UI dans la plupart des organisations.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-success">
+        <strong>📚 Référence incontournable :</strong> <em>The Design of Everyday Things</em> de Don Norman (1988, rééd. 2013) reste le livre de référence absolue de la discipline. Lisible par tous les niveaux, il explique pourquoi tant d'objets et d'interfaces sont difficiles à utiliser — et comment y remédier.
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     03 · UX / UI / WEBDESIGN
+═══════════════════════════════════════════ -->
+<section id="distinctions" class="section">
+    <h2 class="section-title">03 · UX, UI et Webdesign — quelles différences ?</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🔍 Comparaison des trois disciplines</h3>
+        <div class="dropdown-content">
+            <p>Ces trois termes sont souvent utilisés indifféremment, y compris dans les offres d'emploi. Il est pourtant essentiel de comprendre leurs distinctions pour communiquer avec précision dans un contexte professionnel.</p>
+            <table class="compare-table">
+                <thead>
+                    <tr><th>Critère</th><th>UX Design</th><th>UI Design</th><th>Webdesign</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Question centrale</td><td>Comment l'utilisateur vit-il l'expérience ?</td><td>À quoi ressemble l'interface ?</td><td>Comment construire et afficher le site ?</td></tr>
+                    <tr><td>Champ d'action</td><td>Recherche, wireframes, tests, parcours</td><td>Visuels, couleurs, typographie, composants</td><td>HTML/CSS, mise en page, animations</td></tr>
+                    <tr><td>Approche</td><td>Qualitative, centrée sur l'humain</td><td>Visuelle, créative, cohérence graphique</td><td>Technique, performance, compatibilité</td></tr>
+                    <tr><td>Livrable type</td><td>Persona, User Journey Map, wireframe low-fi</td><td>Mockup hi-fi, design system, prototype</td><td>Site fonctionnel, intégration front-end</td></tr>
+                    <tr><td>Outils emblématiques</td><td>Miro, papier + crayon, Maze, Hotjar</td><td>Figma, Adobe XD, Sketch</td><td>VS Code, Webflow, WordPress</td></tr>
+                    <tr><td>Compétences clés</td><td>Empathie, analyse, communication</td><td>Sens esthétique, typographie, couleur</td><td>Langages web, performance, accessibilité</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <strong>💡 Règle fondamentale :</strong> <strong>L'UX précède l'UI.</strong> On ne dessine pas une interface avant de comprendre qui l'utilisera, dans quel contexte et pour accomplir quelle tâche. Respecter cet ordre est l'un des principes fondateurs du design centré utilisateur.
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">🏢 Dans la pratique professionnelle</h3>
+        <div class="dropdown-content">
+            <p><strong>En petite structure (startup, PME) :</strong> Ces trois rôles sont souvent cumulés par une seule personne, parfois appelée « Designer produit » ou « UX/UI Designer ». La polyvalence est une nécessité économique.</p>
+            <p><strong>En grande organisation :</strong> Ces rôles correspondent à des équipes distinctes. Un UX Researcher ne fait pas du UI, et un UI Designer ne code pas.</p>
+            <p><strong>Pour les alternants :</strong> Les intitulés de poste varient considérablement. L'essentiel est de comprendre <em>quelles activités</em> le poste implique — indépendamment du titre.</p>
+            <div class="alert alert-warning">
+                <strong>⚠️ Attention aux offres d'emploi :</strong> Un poste « UX/UI Designer » peut désigner un graphiste, un intégrateur ou un vrai designer de produit. Analysez les missions décrites plutôt que l'intitulé seul.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     04 · LES MÉTIERS
+═══════════════════════════════════════════ -->
+<section id="metiers" class="section">
+    <h2 class="section-title">04 · Les métiers de l'UX</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">👥 Cartographie des rôles</h3>
+        <div class="dropdown-content">
+            <p>L'UX Design recouvre un spectre de métiers plus large qu'il n'y paraît. Selon la taille de l'organisation et la maturité UX, ces rôles peuvent être portés par une seule personne ou répartis entre plusieurs spécialistes.</p>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>🔍 UX Researcher</h4>
+            <ul>
+                <li><strong>Mission :</strong> Conduire la recherche utilisateur</li>
+                <li>Entretiens, observations, tests utilisateurs</li>
+                <li>Sondages et analyses comportementales</li>
+                <li>Transformation des données en insights</li>
+                <li><strong>Profil :</strong> Psychologie, sciences sociales</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>🎨 UX Designer</h4>
+            <ul>
+                <li><strong>Mission :</strong> Concevoir l'expérience</li>
+                <li>Personas, user journeys, wireframes</li>
+                <li>Prototypes basse et moyenne fidélité</li>
+                <li>Coordination avec développeurs et PO</li>
+                <li><strong>Profil :</strong> Design, ergonomie, gestion de projet</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>🖌️ UI Designer</h4>
+            <ul>
+                <li><strong>Mission :</strong> Concevoir l'interface visuelle</li>
+                <li>Mockups haute fidélité, design system</li>
+                <li>Typographie, couleurs, composants</li>
+                <li>Cohérence visuelle de la marque</li>
+                <li><strong>Profil :</strong> Arts graphiques, communication visuelle</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>🚀 Product Designer</h4>
+            <ul>
+                <li><strong>Mission :</strong> Rôle hybride UX + UI + stratégie</li>
+                <li>Vision produit globale</li>
+                <li>Interface PM, dev, marketing</li>
+                <li>Très courant en startup et scale-up</li>
+                <li><strong>Profil :</strong> Polyvalent, sens business</li>
+            </ul>
+        </div>
+        <div class="card card-primary">
+            <h4>🗂️ Architecte de l'information</h4>
+            <ul>
+                <li><strong>Mission :</strong> Organiser contenus et navigation</li>
+                <li>Arborescences et taxonomies</li>
+                <li>Card sorting et tree testing</li>
+                <li>Clé sur les projets à gros volume</li>
+                <li><strong>Profil :</strong> Bibliothéconomie, cognition</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>✍️ UX Writer</h4>
+            <ul>
+                <li><strong>Mission :</strong> Rédiger les textes d'interface</li>
+                <li>Boutons, messages d'erreur, onboarding</li>
+                <li>Microcopy cohérente avec la marque</li>
+                <li>Domaine en forte croissance depuis 2018</li>
+                <li><strong>Profil :</strong> Journalisme, lettres, communication</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     05 · ENJEUX & ROI
+═══════════════════════════════════════════ -->
+<section id="enjeux" class="section">
+    <h2 class="section-title">05 · Enjeux &amp; ROI de l'UX</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📊 L'UX, un levier économique mesurable</h3>
+        <div class="dropdown-content">
+            <p>L'UX Design n'est pas un luxe réservé aux entreprises technologiques. Il constitue un levier économique documenté pour toute organisation dont les services impliquent une interaction humaine — ce qui, en 2025, concerne la quasi-totalité des secteurs.</p>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>💰 ROI documenté</h4>
+            <ul>
+                <li><strong>×228 %</strong> de retour moyen pour chaque € investi en UX <em>(Forrester)</em></li>
+                <li><strong>×100</strong> : coût d'un bug corrigé en production vs. en design <em>(IBM)</em></li>
+                <li><strong>×2</strong> : croissance des leaders design vs. leurs concurrents sur 10 ans <em>(McKinsey 2018)</em></li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>📈 Conversion &amp; fidélisation</h4>
+            <ul>
+                <li>Réduction des abandons dans les tunnels d'achat</li>
+                <li>Amélioration du taux d'activation (onboarding)</li>
+                <li>Augmentation de la rétention utilisateur</li>
+                <li>Recommandation spontanée (NPS élevé)</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>🎧 Réduction des coûts support</h4>
+            <ul>
+                <li>Chaque ticket = symptôme d'un problème UX</li>
+                <li>Interface claire = moins de demandes d'aide</li>
+                <li>Moins d'erreurs = moins de corrections</li>
+                <li>Économies directes sur le support client</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>⚖️ Conformité &amp; accessibilité</h4>
+            <ul>
+                <li>European Accessibility Act (2025) : obligations légales</li>
+                <li>RGAA / WCAG 2.1 : critères d'accessibilité</li>
+                <li>UX dès la conception = conformité facilitée</li>
+                <li>Audience élargie à tous les profils</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">🏆 Exemples d'entreprises ayant misé sur l'UX</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>✈️ Airbnb</h4>
+                    <ul><li>Startup en difficulté en 2009</li><li>Investissement UX sur les photos et le parcours de réservation</li><li>Revenus multipliés par 3 en quelques semaines</li><li>Devenu référence mondiale de l'UX</li></ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🎵 Spotify</h4>
+                    <ul><li>Découverte musicale rendue intuitive</li><li>Interface adaptée au contexte (running, cuisine…)</li><li>Wrapped : UX émotionnelle et virale</li><li>Rétention utilisateur exceptionnelle</li></ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>🔍 Google</h4>
+                    <ul><li>Page d'accueil minimaliste (1 champ)</li><li>Vitesse perçue comme valeur UX fondamentale</li><li>Tests A/B sur des millions d'utilisateurs</li><li>Culture UX intégrée à tous les produits</li></ul>
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <strong>⚠️ Contre-exemple Snapchat (2019) :</strong> Redesign sans test utilisateur préalable. Résultat : pétition de 1,2 million de signatures et perte de 1,3 milliard de dollars de capitalisation boursière en une semaine. L'UX mal faite coûte autant que l'UX absente.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     06 · LES 10 HEURISTIQUES
+═══════════════════════════════════════════ -->
+<section id="heuristiques" class="section">
+    <h2 class="section-title">06 · Les 10 heuristiques de Jakob Nielsen</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📏 Qu'est-ce qu'une heuristique ?</h3>
+        <div class="dropdown-content">
+            <p>Publiées en <strong>1994</strong> et affinées jusqu'en 2020, les 10 heuristiques de Nielsen constituent la grille d'évaluation de référence pour toute interface. Ce sont des <strong>principes généraux</strong> — non des règles absolues — qui permettent d'identifier rapidement les problèmes d'utilisabilité.</p>
+            <p>Une <strong>évaluation heuristique</strong> est une inspection menée par un ou plusieurs experts qui parcourent l'interface en identifiant les violations de ces principes. Cette méthode est rapide, peu coûteuse et permet d'identifier environ <strong>80 % des problèmes majeurs</strong> sans mobiliser d'utilisateurs réels.</p>
+            <div class="alert alert-success">
+                <strong>✅ Application pratique :</strong> Vous utiliserez cette grille dans l'atelier de la séance pour analyser des interfaces réelles. Mémorisez les numéros et noms — vous vous y référerez tout au long de votre parcours professionnel.
+            </div>
+        </div>
+    </div>
+
+    <div class="heuristic-list">
+        <div class="heuristic-item">
+            <div class="heuristic-num">01</div>
+            <div class="heuristic-content">
+                <h5>Visibilité de l'état du système</h5>
+                <p>Le système doit toujours informer l'utilisateur de ce qui se passe, via un retour d'information approprié dans un délai raisonnable.</p>
+                <p class="heuristic-example">Ex : barre de progression lors d'un téléchargement, indicateur de chargement, confirmation après envoi de formulaire.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">02</div>
+            <div class="heuristic-content">
+                <h5>Correspondance avec le monde réel</h5>
+                <p>Le système doit parler le langage des utilisateurs — mots, phrases et concepts familiers — plutôt qu'un jargon interne.</p>
+                <p class="heuristic-example">Ex : icône corbeille pour « supprimer », terme « Panier » plutôt que « Buffer d'achat », calendrier pour saisir une date.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">03</div>
+            <div class="heuristic-content">
+                <h5>Contrôle et liberté de l'utilisateur</h5>
+                <p>Les utilisateurs effectuent souvent des actions par erreur. Ils doivent disposer d'une sortie de secours clairement identifiée sans processus complexe.</p>
+                <p class="heuristic-example">Ex : annuler un envoi d'email, bouton « Retour », raccourci Ctrl+Z, confirmation avant suppression définitive.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">04</div>
+            <div class="heuristic-content">
+                <h5>Cohérence et standards</h5>
+                <p>Les utilisateurs ne devraient pas se demander si différents mots, situations ou actions signifient la même chose. Respecter les conventions réduit la charge cognitive.</p>
+                <p class="heuristic-example">Ex : logo en haut à gauche = retour accueil ; bouton primaire toujours de la même couleur ; icônes standardisées.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">05</div>
+            <div class="heuristic-content">
+                <h5>Prévention des erreurs</h5>
+                <p>Concevoir avec soin pour éviter les erreurs en premier lieu, plutôt que de simplement fournir de bons messages d'erreur. Éliminer les conditions propices à l'erreur.</p>
+                <p class="heuristic-example">Ex : désactiver le bouton « Envoyer » si le formulaire est incomplet ; confirmation avant suppression irréversible.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">06</div>
+            <div class="heuristic-content">
+                <h5>Reconnaissance plutôt que rappel</h5>
+                <p>Minimiser la charge mémorielle en rendant les objets, actions et options visibles. L'utilisateur ne doit pas avoir à mémoriser des informations d'une étape à l'autre.</p>
+                <p class="heuristic-example">Ex : fil d'Ariane, afficher les options disponibles, historique de recherche.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">07</div>
+            <div class="heuristic-content">
+                <h5>Flexibilité et efficacité d'utilisation</h5>
+                <p>Des accélérateurs invisibles des novices permettent aux experts d'accélérer leur interaction. Le système doit convenir aux deux profils.</p>
+                <p class="heuristic-example">Ex : raccourcis clavier, commandes vocales, personnalisation de l'interface, gestes avancés sur mobile.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">08</div>
+            <div class="heuristic-content">
+                <h5>Esthétique et design minimaliste</h5>
+                <p>Les dialogues ne doivent pas contenir d'information non pertinente. Chaque unité d'information supplémentaire entre en compétition avec les informations importantes.</p>
+                <p class="heuristic-example">Ex : page d'accueil Google (un seul champ), interface de lecture Kindle, formulaires épurés.</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">09</div>
+            <div class="heuristic-content">
+                <h5>Aide au diagnostic et à la récupération des erreurs</h5>
+                <p>Les messages d'erreur doivent être exprimés en langage courant, indiquer précisément le problème et suggérer une solution constructive.</p>
+                <p class="heuristic-example">Ex : « Le mot de passe doit contenir au moins 8 caractères » plutôt que « Erreur 403 ».</p>
+            </div>
+        </div>
+        <div class="heuristic-item">
+            <div class="heuristic-num">10</div>
+            <div class="heuristic-content">
+                <h5>Aide et documentation</h5>
+                <p>Même si une interface idéale n'a pas besoin de documentation, il peut être nécessaire d'en fournir. Toute aide doit être facile à rechercher, orientée vers la tâche et concise.</p>
+                <p class="heuristic-example">Ex : FAQ contextuelle, info-bulles, tooltips, pages d'aide bien structurées et recherchables.</p>
+            </div>
+        </div>
+    </div>
+
+   
+</section>
+
+<!-- ═══════════════════════════════════════════
+     07 · QCM
+═══════════════════════════════════════════ -->
+<section id="qcm" class="section">
+    <h2 class="section-title">07 · QCM — Autoévaluation</h2>
+
+  
+
+    <div class="quiz-container">
+
+        <div class="quiz-header-band">
+            <h3>📝 Introduction à l'UX Design</h3>
+            <span class="quiz-badge">6 questions · randomisées</span>
+        </div>
+
+        <!-- Zone question -->
+        <div id="qcm-question" class="quiz-question">
+            <p id="qcm-question-text"></p>
+            <div id="qcm-answers" class="quiz-answers"></div>
+            <button id="qcm-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+
+        <!-- Zone résultat -->
+        <div id="qcm-result" class="quiz-result" style="display:none;">
+            <div id="qcm-explanation" class="explanation"></div>
+            <button id="qcm-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+
+        <!-- Zone score final -->
+        <div id="qcm-final" style="display:none;"></div>
+
+        <!-- Pied de quiz -->
+        <div class="quiz-progress">
+            <span id="qcm-progress">Question 1/6</span>
+            <span id="qcm-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm-bar" style="width:0%"></div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     08 · POUR ALLER PLUS LOIN
+═══════════════════════════════════════════ -->
+<section id="pour-aller-plus-loin" class="section">
+    <h2 class="section-title">08 · Pour aller plus loin</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📚 Livres de référence</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>The Design of Everyday Things</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Don Norman (1988, rééd. 2013)</li>
+                        <li>Le livre fondateur de la discipline</li>
+                        <li>Affordances, feedback, modèles mentaux</li>
+                        <li>Accessible sans prérequis technique</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>Don't Make Me Think</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Steve Krug (2000, rééd. 2014)</li>
+                        <li>La Bible de l'utilisabilité web</li>
+                        <li>Lecture rapide, très pragmatique</li>
+                        <li>Idéal pour débuter les tests utilisateurs</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>Hooked — Comment créer un produit qui accroche</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Nir Eyal (2014)</li>
+                        <li>Le modèle « Hook » : déclencheur, action, récompense, investissement</li>
+                        <li>Indispensable pour comprendre l'engagement produit</li>
+                        <li>Lecture critique recommandée sur l'éthique</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>Sprint — Résoudre les problèmes en 5 jours</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> Jake Knapp (Google Ventures, 2016)</li>
+                        <li>Méthodologie Design Sprint en 5 jours</li>
+                        <li>Prototyper et tester une idée sans développer</li>
+                        <li>Utilisé par Google, Airbnb, Slack</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🌐 Ressources en ligne</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>Nielsen Norman Group</h4>
+                    <ul>
+                        <li><strong>nngroup.com</strong></li>
+                        <li>Articles, rapports et vidéos de référence</li>
+                        <li>Accès gratuit à des centaines d'articles</li>
+                        <li>La source la plus citée en UX professionnel</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>Laws of UX</h4>
+                    <ul>
+                        <li><strong>lawsofux.com</strong></li>
+                        <li>Lois psychologiques appliquées au design</li>
+                        <li>Loi de Fitts, loi de Hick, effet Von Restorff…</li>
+                        <li>Chaque loi illustrée avec exemples concrets</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>UX Collective</h4>
+                    <ul>
+                        <li><strong>uxdesign.cc</strong></li>
+                        <li>Articles de praticiens du monde entier</li>
+                        <li>Méthodes, outils, retours d'expérience</li>
+                        <li>Newsletter hebdomadaire très suivie</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>Figma Community &amp; YouTube</h4>
+                    <ul>
+                        <li>Figma Community : templates et design systems gratuits</li>
+                        <li>Chaîne YouTube Figma : tutoriels officiels</li>
+                        <li>Chaîne AJ&amp;Smart : Design Sprint et ateliers</li>
+                        <li>Chaîne Femke : Product Design en entreprise</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <strong>✅ Recommandation pratique :</strong> Commencez par <em>Don't Make Me Think</em> (lecture en une journée) et <em>lawsofux.com</em> (consultable en 30 minutes). Ces deux ressources donnent une base opérationnelle immédiatement applicable en projet.
+            </div>
+        </div>
+    </div>
+
+    
+</section>
+
+<!-- ═══════════════════════════════════════════
+     09 · GLOSSAIRE
+═══════════════════════════════════════════ -->
+<section id="glossaire" class="section">
+    <h2 class="section-title">09 · Glossaire</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📖 10 termes essentiels à retenir</h3>
+        <div class="dropdown-content">
+            <p>Ces dix concepts forment le socle du vocabulaire professionnel en UX Design. Maîtriser leur définition précise est indispensable pour communiquer avec clarté dans un contexte d'équipe produit.</p>
+
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.7rem;min-width:2.6rem;height:2.6rem;">UX</div>
+                    <div class="heuristic-content">
+                        <h5>User Experience (UX)</h5>
+                        <p>Ensemble des perceptions, émotions et comportements d'un utilisateur avant, pendant et après l'utilisation d'un produit ou service. L'UX ne se limite pas à l'interface — elle englobe l'intégralité du parcours utilisateur.</p>
+                        <p class="heuristic-example">Popularisé par Don Norman (Nielsen Norman Group, 1998).</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">UI</div>
+                    <div class="heuristic-content">
+                        <h5>User Interface (UI)</h5>
+                        <p>Couche visuelle et interactive d'un produit numérique — boutons, typographie, couleurs, icônes, espacement. L'UI Design traduit l'architecture UX en un objet graphique cohérent et esthétique.</p>
+                        <p class="heuristic-example">Exemple : le design system de Figma est un outil UI ; les décisions derrière l'organisation des panneaux sont de l'UX.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.58rem;min-width:2.6rem;height:2.6rem;">AFF</div>
+                    <div class="heuristic-content">
+                        <h5>Affordance</h5>
+                        <p>Propriété d'un objet ou d'un élément d'interface qui suggère naturellement comment il doit être utilisé, sans qu'aucune instruction ne soit nécessaire. Une bonne affordance réduit la courbe d'apprentissage.</p>
+                        <p class="heuristic-example">Ex : un bouton avec ombre portée « invite à cliquer » ; une poignée de porte invite à tirer ou pousser. Concept de James Gibson popularisé par Don Norman.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.58rem;min-width:2.6rem;height:2.6rem;">PER</div>
+                    <div class="heuristic-content">
+                        <h5>Persona</h5>
+                        <p>Représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur. Un persona synthétise les comportements, motivations, frustrations et objectifs d'un groupe d'utilisateurs cibles pour orienter les décisions de conception.</p>
+                        <p class="heuristic-example">Ex : « Marie, 34 ans, responsable RH, utilise l'outil sur mobile en déplacement et cherche avant tout la rapidité. »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.55rem;min-width:2.6rem;height:2.6rem;">UJM</div>
+                    <div class="heuristic-content">
+                        <h5>User Journey Map</h5>
+                        <p>Représentation visuelle du parcours d'un utilisateur pour accomplir un objectif — de la prise de conscience jusqu'à l'après-usage. Elle cartographie les étapes, les points de contact, les émotions et les opportunités d'amélioration.</p>
+                        <p class="heuristic-example">Ex : le parcours d'un candidat depuis la découverte d'une offre d'emploi jusqu'à sa première journée en entreprise.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.58rem;min-width:2.6rem;height:2.6rem;">WF</div>
+                    <div class="heuristic-content">
+                        <h5>Wireframe</h5>
+                        <p>Maquette schématique en niveaux de gris représentant la structure et l'organisation d'une page ou d'un écran, sans couleurs ni éléments graphiques définitifs. Le wireframe se concentre sur la hiérarchie de l'information et les fonctionnalités, pas sur l'esthétique.</p>
+                        <p class="heuristic-example">Niveaux : low-fidelity (croquis papier) → mid-fidelity (wireframe numérique) → high-fidelity (prototype cliquable).</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.58rem;min-width:2.6rem;height:2.6rem;">HCD</div>
+                    <div class="heuristic-content">
+                        <h5>Human-Centered Design (HCD)</h5>
+                        <p>Approche de conception qui place les besoins, comportements et contextes des utilisateurs au centre de chaque décision. Le HCD est le cadre philosophique dont l'UX Design est une application concrète.</p>
+                        <p class="heuristic-example">Formalisé par l'IDEO et la norme ISO 9241-210. Principe fondateur : « commencer par comprendre les personnes avant de concevoir pour elles. »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.55rem;min-width:2.6rem;height:2.6rem;">A/B</div>
+                    <div class="heuristic-content">
+                        <h5>Test A/B</h5>
+                        <p>Méthode d'expérimentation qui consiste à soumettre deux variantes d'une interface (version A et version B) à deux groupes d'utilisateurs distincts pour mesurer laquelle obtient les meilleures performances selon des métriques définies.</p>
+                        <p class="heuristic-example">Ex : tester deux formulations d'un bouton CTA (« S'inscrire » vs « Essayer gratuitement ») pour mesurer l'impact sur le taux de conversion.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.55rem;min-width:2.6rem;height:2.6rem;">DP</div>
+                    <div class="heuristic-content">
+                        <h5>Dark Pattern</h5>
+                        <p>Technique de design délibérément conçue pour tromper ou manipuler l'utilisateur à son insu — souvent au profit de l'entreprise. Les dark patterns exploitent les biais cognitifs et violent les principes éthiques du design centré utilisateur.</p>
+                        <p class="heuristic-example">Ex : case pré-cochée pour un abonnement payant, bouton « Non merci » minuscule et grisé, processus de désinscription délibérément complexe.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="font-size:.55rem;min-width:2.6rem;height:2.6rem;">DS</div>
+                    <div class="heuristic-content">
+                        <h5>Design System</h5>
+                        <p>Bibliothèque centralisée de composants d'interface (boutons, formulaires, cartes, typographies, couleurs…) accompagnée de règles d'utilisation. Un design system garantit la cohérence visuelle et accélère la production sur l'ensemble des produits d'une organisation.</p>
+                        <p class="heuristic-example">Ex : Material Design (Google), Human Interface Guidelines (Apple), Polaris (Shopify). Outil de référence : Figma.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>💡 Conseil :</strong> Ces dix termes reviennent dans la quasi-totalité des offres d'emploi et des entretiens en UX. Entraînez-vous à les définir à voix haute et à donner un exemple concret pour chacun — c'est la méthode la plus efficace pour les ancrer durablement.
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    <p>© Gabistam 2025 — Introduction à l'UX Design · Séance 1 · Bachelor CDPD B1 — EEMI · Tous droits réservés</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════
+//  BANQUE DE 12 QUESTIONS
+// ════════════════════════════════════════════════════
+const questionBank = [
+    {
+        question: "Quelle définition de l'UX Design est la plus complète ?",
+        answers: [
+            "La discipline qui crée des interfaces graphiques esthétiques",
+            "L'ensemble des perceptions et comportements d'un utilisateur lors de l'utilisation d'un produit ou service",
+            "La technique qui améliore le référencement d'un site web",
+            "Le processus de développement d'applications mobiles"
+        ],
+        correct: 1,
+        explanation: "L'UX Design (User Experience Design) englobe tous les aspects de l'interaction d'un utilisateur avec un produit ou service — ses perceptions avant, pendant et après l'utilisation. Ce n'est pas uniquement une discipline graphique : c'est une approche holistique centrée sur l'humain. Don Norman et Jakob Nielsen en ont posé les bases théoriques dès 1998."
+    },
+    {
+        question: "Quelles sont les trois dimensions fondamentales de l'expérience utilisateur selon Peter Morville ?",
+        answers: [
+            "Rapidité, compatibilité et sécurité",
+            "Utilité, utilisabilité et désirabilité",
+            "Design, développement et déploiement",
+            "Accessibilité, lisibilité et interactivité"
+        ],
+        correct: 1,
+        explanation: "Peter Morville (2004) définit trois piliers de l'UX : l'Utilité (le produit répond-il à un besoin réel ?), l'Utilisabilité (est-il facile et agréable à utiliser ?) et la Désirabilité (suscite-t-il une émotion positive ?). À ces trois dimensions s'ajoutent la Valeur, la Trouvabilité, l'Accessibilité et la Crédibilité dans son célèbre « nid d'abeille UX »."
+    },
+    {
+        question: "Qui a popularisé le terme « User Experience » en créant le premier poste d'UX Architect chez Apple ?",
+        answers: [
+            "Steve Jobs",
+            "Tim Berners-Lee",
+            "Don Norman",
+            "Bill Gates"
+        ],
+        correct: 2,
+        explanation: "Don Norman, psychologue et ingénieur, a popularisé le terme « User Experience » en créant chez Apple le titre de « User Experience Architect » — première apparition du terme dans un intitulé de poste professionnel. Il est aussi l'auteur de The Design of Everyday Things (1988), qui introduit les concepts d'affordance, de feedback et de modèle mental."
+    },
+    {
+        question: "Quelle est la différence principale entre l'UX Design et l'UI Design ?",
+        answers: [
+            "L'UX Design traite des couleurs et typographies, l'UI des wireframes",
+            "L'UX Design se concentre sur l'expérience globale et les besoins utilisateurs ; l'UI sur l'aspect visuel de l'interface",
+            "L'UX Design est réservé aux applications mobiles, l'UI aux sites web",
+            "Il n'y a aucune différence réelle entre les deux disciplines"
+        ],
+        correct: 1,
+        explanation: "L'UX Design couvre la recherche utilisateur, les wireframes, les tests et le parcours global — répondant à « Comment l'utilisateur vit-il l'expérience ? ». L'UI Design se concentre sur l'aspect visuel : couleurs, typographie, composants — répondant à « À quoi ressemble l'interface ? ». L'UX précède toujours l'UI dans un processus rigoureux."
+    },
+    {
+        question: "Selon Forrester Research, quel est le retour sur investissement moyen pour chaque euro investi dans l'UX ?",
+        answers: [
+            "Environ 28 % de retour",
+            "Environ 228 % de retour",
+            "Environ 28 euros de retour",
+            "Environ 2 % de retour"
+        ],
+        correct: 1,
+        explanation: "Forrester Research a documenté un ROI moyen de 228 % pour chaque euro investi en UX Design. IBM a par ailleurs établi que corriger un problème en production coûte environ 100 fois plus cher qu'en phase de design. McKinsey (2018) montre que les leaders en design affichent une croissance deux fois supérieure à leurs concurrents sur 10 ans."
+    },
+    {
+        question: "Qu'est-ce qu'une évaluation heuristique en UX ?",
+        answers: [
+            "Un test utilisateur en laboratoire avec une cinquantaine de participants",
+            "Une inspection menée par des experts qui évaluent une interface selon des principes généraux",
+            "Un sondage quantitatif envoyé aux clients",
+            "Une analyse automatique du code source de l'interface"
+        ],
+        correct: 1,
+        explanation: "Une évaluation heuristique est une inspection conduite par des experts UX qui parcourent l'interface en identifiant les violations des principes d'utilisabilité (comme les 10 heuristiques de Nielsen). Cette méthode est rapide, peu coûteuse, et permet d'identifier environ 80 % des problèmes majeurs sans mobiliser d'utilisateurs réels."
+    },
+    {
+        question: "Quelle heuristique de Nielsen stipule que le système doit toujours informer l'utilisateur de ce qui se passe ?",
+        answers: [
+            "Heuristique 4 — Cohérence et standards",
+            "Heuristique 1 — Visibilité de l'état du système",
+            "Heuristique 8 — Esthétique et design minimaliste",
+            "Heuristique 5 — Prévention des erreurs"
+        ],
+        correct: 1,
+        explanation: "La première heuristique — « Visibilité de l'état du système » — exige que le système fournisse toujours un retour d'information sur ce qui se passe. Exemples : barre de progression lors d'un téléchargement, indicateur de chargement, message de confirmation après envoi. Sans ce retour, l'utilisateur ignore si son action a été prise en compte."
+    },
+    {
+        question: "Dans quel contexte le terme « UX Design » a-t-il émergé pour la première fois comme titre professionnel ?",
+        answers: [
+            "Dans une startup de la Silicon Valley en 2005",
+            "Dans les laboratoires Xerox PARC dans les années 1970",
+            "Chez Apple dans les années 1990, sous l'impulsion de Don Norman",
+            "Au MIT lors d'une conférence académique en 2001"
+        ],
+        correct: 2,
+        explanation: "Don Norman a créé le titre de « User Experience Architect » chez Apple dans les années 1990. Avant cela, les préoccupations liées à l'expérience utilisateur existaient en ergonomie et en IHM, mais sans ce label spécifique."
+    },
+    {
+        question: "Quelle heuristique de Nielsen recommande de ne pas surcharger l'interface d'informations inutiles ?",
+        answers: [
+            "Heuristique 6 — Reconnaissance plutôt que rappel",
+            "Heuristique 10 — Aide et documentation",
+            "Heuristique 8 — Esthétique et design minimaliste",
+            "Heuristique 3 — Contrôle et liberté de l'utilisateur"
+        ],
+        correct: 2,
+        explanation: "L'heuristique 8 — « Esthétique et design minimaliste » — stipule que chaque information supplémentaire entre en compétition avec les informations importantes. L'exemple parfait est la page d'accueil de Google : un seul champ de recherche. Cette heuristique ne prône pas l'austérité, mais exige que chaque élément affiché soit utile."
+    },
+    {
+        question: "Quel rôle UX est particulièrement centré sur l'organisation des contenus et de la navigation ?",
+        answers: [
+            "UX Writer",
+            "UI Designer",
+            "Architecte de l'information",
+            "Product Manager"
+        ],
+        correct: 2,
+        explanation: "L'Architecte de l'information est spécialisé dans l'organisation des contenus, les arborescences de navigation, les taxonomies et les systèmes d'étiquetage. Ce rôle est particulièrement crucial sur les projets à fort volume de contenus (e-commerce, portails). Les techniques typiques incluent le card sorting et le tree testing."
+    },
+    {
+        question: "Quel principe détermine l'ordre d'intervention de l'UX et de l'UI dans un projet ?",
+        answers: [
+            "L'UI précède toujours l'UX car l'esthétique guide la stratégie produit",
+            "L'UX précède toujours l'UI : on comprend les besoins avant de dessiner",
+            "L'ordre n'a pas d'importance si l'équipe est expérimentée",
+            "Le développement précède toujours les deux phases de design"
+        ],
+        correct: 1,
+        explanation: "L'UX précède toujours l'UI. On ne dessine pas une interface avant de comprendre qui l'utilisera, dans quel contexte et pour accomplir quelle tâche. Ignorer cet ordre est l'une des premières causes d'échec des projets digitaux. Le processus rigoureux suit : recherche → persona → user journey → wireframes (UX) → design visuel (UI) → développement."
+    },
+    {
+        question: "Qu'est-ce qu'une « affordance » en UX Design ?",
+        answers: [
+            "Le coût total d'un projet UX",
+            "La capacité d'un objet ou élément d'interface à suggérer lui-même son utilisation",
+            "Un test de performance réalisé sur une interface",
+            "La version finale d'un prototype haute fidélité"
+        ],
+        correct: 1,
+        explanation: "L'affordance (terme de James Gibson popularisé par Don Norman) désigne la propriété d'un objet ou d'un élément d'interface qui suggère lui-même comment il doit être utilisé. Un bouton en relief donne envie de cliquer, une poignée de porte invite à tirer ou pousser. En UX, créer de bonnes affordances réduit la courbe d'apprentissage et le nombre d'erreurs."
+    }
+];
+
+// ════════════════════════════════════════════════════
+//  ÉTAT DU QUIZ
+// ════════════════════════════════════════════════════
+let qcm = {
+    questions: [],
+    current: 0,
+    score: 0,
+    answered: 0,
+    selected: null
+};
+
+// ════════════════════════════════════════════════════
+//  UTILITAIRE : Fisher-Yates shuffle
+// ════════════════════════════════════════════════════
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// ════════════════════════════════════════════════════
+//  INITIALISATION : tire 6 questions, mélange réponses
+// ════════════════════════════════════════════════════
+function initQCM() {
+    // Tirer 6 questions aléatoires dans la banque de 12
+    const picked = shuffleArray(questionBank).slice(0, 6);
+
+    // Pour chaque question : mélanger les réponses et mettre à jour l'index correct
+    qcm.questions = picked.map(q => {
+        const correctText = q.answers[q.correct];
+        const shuffledAnswers = shuffleArray(q.answers);
+        return {
+            ...q,
+            answers: shuffledAnswers,
+            correct: shuffledAnswers.indexOf(correctText)
+        };
+    });
+
+    qcm.current  = 0;
+    qcm.score    = 0;
+    qcm.answered = 0;
+    qcm.selected = null;
+
+    // Réafficher les blocs dans l'état initial
+    document.getElementById('qcm-question').style.display = 'block';
+    document.getElementById('qcm-result').style.display   = 'none';
+    document.getElementById('qcm-final').style.display    = 'none';
+
+    displayQuestion();
+}
+
+// ════════════════════════════════════════════════════
+//  AFFICHAGE D'UNE QUESTION
+// ════════════════════════════════════════════════════
+function displayQuestion() {
+    const q = qcm.questions[qcm.current];
+
+    document.getElementById('qcm-question-text').textContent = q.question;
+    document.getElementById('qcm-submit').disabled = true;
+    qcm.selected = null;
+
+    const container = document.getElementById('qcm-answers');
+    container.innerHTML = '';
+
+    q.answers.forEach((answer, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-answer';
+        btn.textContent = answer;
+        btn.setAttribute('tabindex', '0');
+        btn.onclick = () => selectAnswer(i);
+        container.appendChild(btn);
+    });
+
+    updateFooter();
+}
+
+// ════════════════════════════════════════════════════
+//  SÉLECTION D'UNE RÉPONSE
+// ════════════════════════════════════════════════════
+function selectAnswer(index) {
+    qcm.selected = index;
+    document.querySelectorAll('#qcm-answers .quiz-answer').forEach((btn, i) => {
+        btn.classList.toggle('selected', i === index);
+    });
+    document.getElementById('qcm-submit').disabled = false;
+}
+
+// ════════════════════════════════════════════════════
+//  VALIDATION DE LA RÉPONSE
+// ════════════════════════════════════════════════════
+function submitAnswer() {
+    if (qcm.selected === null) return;
+
+    const q = qcm.questions[qcm.current];
+    const isCorrect = qcm.selected === q.correct;
+
+    qcm.answered++;
+    if (isCorrect) qcm.score++;
+
+    // Colorier correct / incorrect
+    document.querySelectorAll('#qcm-answers .quiz-answer').forEach((btn, i) => {
+        btn.onclick = null; // désactiver les clics
+        if (i === q.correct) btn.classList.add('correct');
+        else if (i === qcm.selected) btn.classList.add('incorrect');
+    });
+
+    // Afficher l'explication
+    const resultDiv = document.getElementById('qcm-result');
+    resultDiv.className = 'quiz-result' + (isCorrect ? '' : ' incorrect-result');
+
+    document.getElementById('qcm-explanation').innerHTML =
+        '<strong>' + (isCorrect ? '✅ Correct !' : '❌ Incorrect') + '</strong>' +
+        '<br><br>' + q.explanation;
+
+    const isLast = qcm.current >= qcm.questions.length - 1;
+    document.getElementById('qcm-next').textContent = isLast ? 'Voir mon score final' : 'Question suivante';
+
+    document.getElementById('qcm-question').style.display = 'none';
+    resultDiv.style.display = 'block';
+
+    updateFooter();
+}
+
+// ════════════════════════════════════════════════════
+//  QUESTION SUIVANTE
+// ════════════════════════════════════════════════════
+function nextQuestion() {
+    qcm.current++;
+    if (qcm.current < qcm.questions.length) {
+        document.getElementById('qcm-question').style.display = 'block';
+        document.getElementById('qcm-result').style.display   = 'none';
+        displayQuestion();
+    } else {
+        showFinalScore();
+    }
+}
+
+// ════════════════════════════════════════════════════
+//  SCORE FINAL
+// ════════════════════════════════════════════════════
+function showFinalScore() {
+    const pct = Math.round((qcm.score / qcm.answered) * 100);
+    let emoji, msg, color;
+
+    if (pct >= 83) {
+        emoji = '🎉'; color = '#10b981';
+        msg = 'Excellent ! Vous maîtrisez parfaitement les fondamentaux de l\'UX Design.';
+    } else if (pct >= 66) {
+        emoji = '👍'; color = '#3b82f6';
+        msg = 'Bien joué ! Quelques points à revoir pour atteindre l\'excellence.';
+    } else if (pct >= 50) {
+        emoji = '📚'; color = '#f59e0b';
+        msg = 'C\'est un bon début ! Relisez les sections concernées et retentez le quiz.';
+    } else {
+        emoji = '💪'; color = '#ef4444';
+        msg = 'Il est recommandé de relire attentivement le cours avant de recommencer.';
+    }
+
+    document.getElementById('qcm-question').style.display = 'none';
+    document.getElementById('qcm-result').style.display   = 'none';
+
+    const finalDiv = document.getElementById('qcm-final');
+    finalDiv.style.display = 'block';
+    finalDiv.innerHTML = `
+        <div style="text-align:center;padding:2rem;">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">${emoji}</div>
+            <h3 style="color:${color};margin-bottom:.75rem;font-size:1.5rem;">Quiz terminé !</h3>
+            <p style="font-size:2rem;font-weight:700;margin-bottom:.5rem;">${qcm.score} / ${qcm.answered}</p>
+            <p style="font-size:1.1rem;color:#6b7280;margin-bottom:.5rem;">${pct} % de bonnes réponses</p>
+            <div style="width:100%;max-width:280px;background:#e5e7eb;border-radius:99px;height:10px;margin:1rem auto 1.5rem;">
+                <div style="height:100%;width:${pct}%;background:${color};border-radius:99px;"></div>
+            </div>
+            <p style="color:#6b7280;margin-bottom:2rem;font-size:1rem;">${msg}</p>
+            <button class="quiz-btn" onclick="initQCM()">🔄 Recommencer avec de nouvelles questions</button>
+        </div>`;
+
+    updateFooter();
+}
+
+// ════════════════════════════════════════════════════
+//  MISE À JOUR DU PIED DE QUIZ
+// ════════════════════════════════════════════════════
+function updateFooter() {
+    const total = qcm.questions.length;
+    const cur   = Math.min(qcm.current + 1, total);
+    document.getElementById('qcm-progress').textContent = 'Question ' + cur + '/' + total;
+    document.getElementById('qcm-score').textContent    = 'Score : ' + qcm.score + '/' + qcm.answered;
+    document.getElementById('qcm-bar').style.width      = ((qcm.answered / total) * 100) + '%';
+}
+
+// ════════════════════════════════════════════════════
+//  NAVIGATION ACTIVE AU SCROLL
+// ════════════════════════════════════════════════════
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.getElementById(link.getAttribute('href').substring(1));
+            if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        });
+    });
+
+    function updateActive() {
+        let current = '';
+        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 100) current = s.id; });
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+}
+
+// ════════════════════════════════════════════════════
+//  DROPDOWNS
+// ════════════════════════════════════════════════════
+function initDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(dd => {
+        dd.querySelector('.dropdown-title').addEventListener('click', () => dd.classList.toggle('active'));
+    });
+}
+
+// ════════════════════════════════════════════════════
+//  ANIMATIONS SCROLL (IntersectionObserver)
+// ════════════════════════════════════════════════════
+function initScrollAnimations() {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.section').forEach(s => observer.observe(s));
+}
+
+// ════════════════════════════════════════════════════
+//  ACCESSIBILITÉ CLAVIER
+// ════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+    if (e.target.classList.contains('quiz-answer')) {
+        const answers = [...document.querySelectorAll('#qcm-answers .quiz-answer')];
+        const idx = answers.indexOf(e.target);
+        if (e.key === 'ArrowDown' && idx < answers.length - 1) { e.preventDefault(); answers[idx + 1].focus(); }
+        if (e.key === 'ArrowUp'   && idx > 0)                  { e.preventDefault(); answers[idx - 1].focus(); }
+        if (e.key === 'Enter' || e.key === ' ')                 { e.preventDefault(); e.target.click(); }
+    }
+    if (e.key === 'Escape') document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+});
+
+// ════════════════════════════════════════════════════
+//  POINT D'ENTRÉE
+// ════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    initNavigation();
+    initDropdowns();
+    initScrollAnimations();
+
+    document.getElementById('qcm-submit').addEventListener('click', submitAnswer);
+    document.getElementById('qcm-next').addEventListener('click', nextQuestion);
+
+    initQCM();
+    console.log('✅ UX Design — Séance 1 chargé');
+});
+</script>
+</body>
+</html>
