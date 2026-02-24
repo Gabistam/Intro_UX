@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Introduction à l'UX Design — Jour 1, Séance 1</title>
+    <script>(function(){var t=localStorage.getItem('ux-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -71,6 +72,10 @@
             <li><a href="#pour-aller-plus-loin" class="nav-link">Aller +loin</a></li>
             <li><a href="#glossaire"     class="nav-link">Glossaire</a></li>
         </ul>
+        <button class="dark-toggle" id="dark-toggle" aria-label="Basculer le mode sombre">
+            <span class="toggle-icon">🌙</span>
+            <span class="toggle-label">Dark</span>
+        </button>
     </div>
 </nav>
 
@@ -1165,6 +1170,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('qcm-next').addEventListener('click', nextQuestion);
 
     initQCM();
+    // ── Dark mode ──
+    (function() {
+        const btn   = document.getElementById('dark-toggle');
+        const icon  = btn.querySelector('.toggle-icon');
+        const label = btn.querySelector('.toggle-label');
+        const apply = dark => {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent  = dark ? '☀️' : '🌙';
+            label.textContent = dark ? 'Light' : 'Dark';
+        };
+        const saved = localStorage.getItem('ux-theme') === 'dark';
+        apply(saved);
+        btn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            apply(!isDark);
+            localStorage.setItem('ux-theme', !isDark ? 'dark' : 'light');
+        });
+    })();
+
     console.log('✅ UX Design — Séance 1 chargé');
 });
 </script>

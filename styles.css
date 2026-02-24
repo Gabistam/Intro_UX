@@ -653,3 +653,190 @@ html {
 .alert li {
     margin-bottom: 0.25rem;
 }
+
+/* ════════════════════════════════════════════════════
+   BOUTON DARK MODE
+════════════════════════════════════════════════════ */
+.dark-toggle {
+    background: none;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: .3rem .8rem;
+    cursor: pointer;
+    font-size: .85rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    transition: border-color .3s ease, color .3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: inherit;
+}
+.dark-toggle:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+.dark-toggle .toggle-icon { font-size: 1rem; line-height: 1; }
+
+/* ════════════════════════════════════════════════════
+   DARK MODE
+════════════════════════════════════════════════════ */
+
+/* 1. Redéfinition des variables sur html */
+[data-theme="dark"] {
+    --text-dark:    #f1f5f9;
+    --text-light:   #94a3b8;
+    --bg-light:     #0f172a;
+    --bg-white:     #1e293b;
+    --border-color: #334155;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.6), 0 2px 4px -2px rgb(0 0 0 / 0.5);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.7), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+}
+
+/* 2. Fond global + texte de base */
+[data-theme="dark"] body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+}
+
+/* 3. Navbar */
+[data-theme="dark"] .navbar {
+    background: rgba(15, 23, 42, 0.97);
+    border-bottom-color: #334155;
+}
+[data-theme="dark"] .nav-link { color: #94a3b8; }
+[data-theme="dark"] .nav-link:hover,
+[data-theme="dark"] .nav-link.active { color: #93c5fd; background: rgba(59,130,246,.15); }
+
+/* 4. Sections et cartes */
+[data-theme="dark"] .section {
+    background: #1e293b;
+    border-color: #334155;
+}
+[data-theme="dark"] .section-title { color: #f1f5f9; }
+[data-theme="dark"] .card {
+    background: #1e293b;
+    border-color: #334155;
+}
+[data-theme="dark"] .card h4 { color: #f1f5f9; }
+[data-theme="dark"] .card li  { color: #94a3b8; border-bottom-color: #334155; }
+[data-theme="dark"] .card p   { color: #94a3b8; }
+
+/* 5. Dropdowns */
+[data-theme="dark"] .dropdown { border-color: #334155; }
+[data-theme="dark"] .dropdown-content {
+    background: #1e293b;
+    border-top-color: #334155;
+}
+[data-theme="dark"] .dropdown-content p,
+[data-theme="dark"] .dropdown-content li { color: #94a3b8; }
+
+/* 6. Alertes — fond sombre + texte lisible */
+[data-theme="dark"] .alert-info {
+    background: rgba(59,130,246,.12);
+    border-left-color: #3b82f6;
+    color: #93c5fd;
+}
+[data-theme="dark"] .alert-warning {
+    background: rgba(245,158,11,.12);
+    border-left-color: #f59e0b;
+    color: #fcd34d;
+}
+[data-theme="dark"] .alert-success {
+    background: rgba(16,185,129,.12);
+    border-left-color: #10b981;
+    color: #6ee7b7;
+}
+
+/* 7. Quiz */
+[data-theme="dark"] .quiz-container {
+    background: #1e293b;
+    border-color: #334155;
+}
+[data-theme="dark"] .quiz-question p { color: #f1f5f9; }
+[data-theme="dark"] .quiz-answer {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .quiz-answer:hover {
+    background: rgba(59,130,246,.12);
+    border-color: #3b82f6;
+}
+[data-theme="dark"] .quiz-answer.selected {
+    background: rgba(59,130,246,.2);
+    border-color: #3b82f6;
+    color: #93c5fd;
+}
+[data-theme="dark"] .quiz-answer.correct  { background: rgba(16,185,129,.2);  border-color: #10b981; color: #6ee7b7; }
+[data-theme="dark"] .quiz-answer.incorrect { background: rgba(239,68,68,.2);  border-color: #ef4444; color: #fca5a5; }
+[data-theme="dark"] .quiz-result   { background: #0f172a; color: #f1f5f9; }
+[data-theme="dark"] .quiz-result.incorrect-result { border-left-color: #ef4444; }
+[data-theme="dark"] .quiz-progress { background: #0f172a; color: #94a3b8; }
+[data-theme="dark"] .explanation   { color: #f1f5f9; }
+
+/* 8. Tables */
+[data-theme="dark"] .compare-table th { /* gradient conservé — OK */ }
+[data-theme="dark"] .compare-table td {
+    color: #94a3b8;
+    border-bottom-color: #334155;
+}
+[data-theme="dark"] .compare-table td:first-child { color: #f1f5f9; }
+[data-theme="dark"] .compare-table tr:nth-child(even) td { background: #0f172a; }
+[data-theme="dark"] .compare-table tr:hover td { background: rgba(59,130,246,.08); }
+
+/* 9. Heuristiques, étapes, biais */
+[data-theme="dark"] .heuristic-item,
+[data-theme="dark"] .step-item,
+[data-theme="dark"] .bias-item {
+    background: #0f172a;
+    border-color: #334155;
+}
+[data-theme="dark"] .heuristic-content h5,
+[data-theme="dark"] .step-content h5,
+[data-theme="dark"] .bias-item h5 { color: #f1f5f9; }
+[data-theme="dark"] .heuristic-content p,
+[data-theme="dark"] .step-content p,
+[data-theme="dark"] .bias-item p   { color: #94a3b8; }
+[data-theme="dark"] .heuristic-item:hover,
+[data-theme="dark"] .step-item:hover { background: rgba(59,130,246,.08); }
+
+/* 10. Do / Don't */
+[data-theme="dark"] .do-box   { background: rgba(16,185,129,.08); }
+[data-theme="dark"] .dont-box { background: rgba(239,68,68,.08);  }
+[data-theme="dark"] .do-box li, [data-theme="dark"] .dont-box li { color: #94a3b8; }
+
+/* 11. Persona card */
+[data-theme="dark"] .persona-card { border-color: #3b82f6; background: #1e293b; }
+[data-theme="dark"] .persona-card-body { background: #1e293b; }
+[data-theme="dark"] .persona-field p,
+[data-theme="dark"] .persona-field li  { color: #94a3b8; }
+[data-theme="dark"] .persona-quote { background: rgba(59,130,246,.08); color: #f1f5f9; }
+
+/* 12. Checklist */
+[data-theme="dark"] .checklist-container { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .checklist-item { background: #0f172a; border-color: #334155; }
+[data-theme="dark"] .checklist-item:hover { background: rgba(59,130,246,.08); }
+[data-theme="dark"] .checklist-item span { color: #94a3b8; }
+
+/* 13. Footer */
+[data-theme="dark"] .footer { background: #020617; color: #94a3b8; }
+
+/* 14. Textes généraux dans les sections */
+[data-theme="dark"] p { color: #94a3b8; }
+[data-theme="dark"] strong { color: #f1f5f9; }
+[data-theme="dark"] h1, [data-theme="dark"] h2,
+[data-theme="dark"] h3, [data-theme="dark"] h4,
+[data-theme="dark"] h5 { color: #f1f5f9; }
+
+/* 15. Bouton dark toggle lui-même en dark */
+[data-theme="dark"] .dark-toggle {
+    border-color: #334155;
+    color: #94a3b8;
+}
+[data-theme="dark"] .dark-toggle:hover {
+    border-color: #93c5fd;
+    color: #93c5fd;
+}
