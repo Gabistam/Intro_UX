@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction à l'UX Design — Jour 2, Séance 4</title>
+    <script>(function(){var t=localStorage.getItem('ux-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ══ Shared base ══ */
+        .compare-table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:.88rem; }
+        .compare-table th { background:var(--gradient-primary); color:white; padding:.75rem 1rem; text-align:left; font-weight:600; }
+        .compare-table td { padding:.75rem 1rem; border-bottom:1px solid var(--border-color); vertical-align:top; color:var(--text-light); }
+        .compare-table tr:nth-child(even) td { background:var(--bg-light); }
+        .compare-table tr:hover td { background:rgba(59,130,246,.04); }
+        .compare-table td:first-child { font-weight:600; color:var(--text-dark); }
+        @media(max-width:768px){ .compare-table { font-size:.75rem; } .compare-table th,.compare-table td { padding:.5rem .6rem; } }
+
+        .heuristic-list { display:flex; flex-direction:column; gap:.65rem; margin:1.5rem 0; }
+        .heuristic-item { display:flex; gap:1rem; align-items:flex-start; padding:1rem; background:var(--bg-light); border-radius:8px; border:1px solid var(--border-color); transition:all .3s ease; }
+        .heuristic-item:hover { background:rgba(59,130,246,.04); border-color:var(--primary-color); transform:translateX(4px); }
+        .heuristic-num { min-width:2.1rem; height:2.1rem; background:var(--gradient-primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.82rem; flex-shrink:0; }
+        .heuristic-content h5 { font-weight:600; color:var(--text-dark); margin-bottom:.15rem; font-size:.95rem; }
+        .heuristic-content p  { color:var(--text-light); font-size:.85rem; line-height:1.55; margin:0; }
+        .heuristic-example    { margin-top:.3rem; font-size:.78rem; color:var(--primary-color); font-style:italic; }
+
+        .quiz-progress-bar-wrap { background:var(--border-color); border-radius:99px; height:6px; margin-top:.5rem; overflow:hidden; }
+        .quiz-progress-bar-fill { height:100%; background:var(--gradient-primary); border-radius:99px; transition:width .4s ease; }
+        .quiz-header-band { background:var(--gradient-primary); color:white; padding:1.25rem 1.5rem; border-radius:8px; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; }
+        .quiz-header-band h3 { font-size:1.05rem; font-weight:700; margin:0; color:white; }
+        .quiz-badge { background:rgba(255,255,255,.25); padding:.3rem .8rem; border-radius:20px; font-size:.8rem; font-weight:600; }
+        .quiz-result.incorrect-result { border-left-color:var(--danger-color); }
+        .card li { color:var(--text-light); font-size:.9rem; }
+        .card-gradient li { color:rgba(255,255,255,.9); }
+
+        /* ══ Card sorting interactive ══ */
+        .card-sort-arena {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:1.5rem;
+            margin:1.5rem 0;
+        }
+        @media(max-width:640px){ .card-sort-arena { grid-template-columns:1fr; } }
+        .sort-pool {
+            background:var(--bg-light);
+            border:2px dashed var(--border-color);
+            border-radius:12px;
+            padding:1rem;
+            min-height:120px;
+        }
+        .sort-pool h5 {
+            font-size:.75rem; font-weight:800; text-transform:uppercase;
+            letter-spacing:.07em; margin-bottom:.75rem; color:var(--text-dark);
+        }
+        .sort-pool.drop-over { border-color:var(--primary-color); background:rgba(59,130,246,.06); }
+        .sort-cards-grid { display:flex; flex-wrap:wrap; gap:.5rem; min-height:40px; }
+        .sort-card {
+            background:white; border:1px solid var(--border-color);
+            border-radius:6px; padding:.4rem .8rem;
+            font-size:.8rem; font-weight:600; color:var(--text-dark);
+            cursor:grab; user-select:none;
+            box-shadow:0 1px 3px rgba(0,0,0,.08);
+            transition:all .2s ease;
+        }
+        .sort-card:hover { border-color:var(--primary-color); box-shadow:0 2px 8px rgba(59,130,246,.2); transform:translateY(-1px); }
+        .sort-card.dragging { opacity:.45; cursor:grabbing; }
+
+        /* ══ Architecture arborescence ══ */
+        .tree-wrap {
+            overflow-x:auto;
+            padding:1.25rem;
+            background:var(--bg-light);
+            border-radius:12px;
+            border:1px solid var(--border-color);
+            margin:1.5rem 0;
+        }
+        .tree { list-style:none; padding:0; margin:0; }
+        .tree li { position:relative; padding-left:1.6rem; margin:.3rem 0; }
+        .tree li::before {
+            content:'';
+            position:absolute; left:.3rem; top:50%;
+            width:.9rem; height:1px;
+            background:var(--border-color);
+        }
+        .tree > li::before { display:none; }
+        .tree li::after {
+            content:'';
+            position:absolute; left:.3rem; top:0; bottom:50%;
+            width:1px;
+            background:var(--border-color);
+        }
+        .tree > li::after { display:none; }
+        .tree-node {
+            display:inline-flex; align-items:center; gap:.5rem;
+            padding:.35rem .75rem; border-radius:6px;
+            font-size:.82rem; font-weight:600;
+            border:1px solid var(--border-color);
+            background:white;
+        }
+        .tree-node.root  { background:var(--gradient-primary); color:white; border-color:transparent; font-size:.9rem; }
+        .tree-node.cat   { background:rgba(59,130,246,.1); color:var(--primary-color); border-color:var(--primary-color); }
+        .tree-node.sub   { background:var(--bg-light); color:var(--text-dark); }
+        .tree-node.leaf  { background:white; color:var(--text-light); font-weight:400; }
+        .tree ul { padding-left:1rem; border-left:1px solid var(--border-color); margin:.2rem 0 .2rem .3rem; }
+
+        /* ══ Wireframe components ══ */
+        .wireframe-showcase {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+            gap:1.25rem;
+            margin:1.5rem 0;
+        }
+        .wireframe-frame {
+            border:2px solid var(--border-color);
+            border-radius:10px;
+            overflow:hidden;
+            background:white;
+            box-shadow:var(--shadow-md);
+        }
+        .wf-topbar {
+            background:#374151;
+            padding:.45rem .75rem;
+            display:flex; align-items:center; gap:.4rem;
+        }
+        .wf-dot { width:.55rem; height:.55rem; border-radius:50%; }
+        .wf-title { color:rgba(255,255,255,.7); font-size:.7rem; margin-left:.4rem; font-weight:600; letter-spacing:.04em; }
+        .wf-body { padding:1rem; }
+        /* Low-fi wireframe skeleton */
+        .wf-block { background:#e5e7eb; border-radius:3px; margin:.5rem 0; }
+        .wf-text  { background:#e5e7eb; border-radius:2px; margin:.3rem 0; height:.65rem; }
+        .wf-img   { background:#d1d5db; border-radius:4px; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-size:.7rem; font-weight:600; }
+        .wf-btn   {
+            display:inline-block; padding:.4rem 1rem;
+            background:var(--primary-color); color:white; border-radius:4px;
+            font-size:.7rem; font-weight:700; margin-top:.5rem;
+        }
+        .wf-btn.outline { background:transparent; border:1.5px solid var(--primary-color); color:var(--primary-color); }
+        .wf-nav { display:flex; gap:.5rem; padding:.5rem .75rem; border-bottom:1px solid var(--border-color); background:var(--bg-light); }
+        .wf-nav-item { font-size:.7rem; font-weight:600; color:var(--text-light); padding:.2rem .5rem; border-radius:4px; }
+        .wf-nav-item.active { background:var(--primary-color); color:white; }
+        .wf-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+        .wf-card-mini { background:var(--bg-light); border:1px solid var(--border-color); border-radius:4px; padding:.5rem; }
+
+        /* Comparatif fidélité */
+        .fidelity-compare {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:1.25rem;
+            margin:1.5rem 0;
+        }
+        @media(max-width:640px){ .fidelity-compare { grid-template-columns:1fr; } }
+        .fidelity-col { border-radius:10px; overflow:hidden; border:1px solid var(--border-color); }
+        .fidelity-header { padding:.75rem 1rem; font-weight:700; font-size:.85rem; color:white; text-align:center; }
+        .fidelity-header.lofi  { background:#6b7280; }
+        .fidelity-header.midfi { background:var(--primary-color); }
+        .fidelity-header.hifi  { background:var(--accent-color); }
+        .fidelity-body { padding:1rem; background:var(--bg-light); }
+        .fidelity-body ul { list-style:none; padding:0; margin:0; }
+        .fidelity-body li { font-size:.8rem; color:var(--text-light); padding:.3rem 0; border-bottom:1px solid var(--border-color); }
+        .fidelity-body li:last-child { border-bottom:none; }
+        .fidelity-body li::before { content:'· '; color:var(--primary-color); font-weight:700; }
+
+        /* ══ WCAG accessibilité ══ */
+        .wcag-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+            gap:1rem;
+            margin:1.5rem 0;
+        }
+        .wcag-item {
+            padding:1rem 1.1rem;
+            border-radius:8px;
+            border:1px solid var(--border-color);
+            background:var(--bg-white);
+        }
+        .wcag-item:hover { border-color:var(--primary-color); box-shadow:var(--shadow-sm); }
+        .wcag-badge {
+            display:inline-block; padding:.15rem .55rem;
+            border-radius:4px; font-size:.68rem; font-weight:800;
+            text-transform:uppercase; letter-spacing:.05em; margin-bottom:.6rem;
+        }
+        .badge-a    { background:rgba(16,185,129,.15); color:#065f46; }
+        .badge-aa   { background:rgba(59,130,246,.15); color:#1e40af; }
+        .badge-aaa  { background:rgba(139,92,246,.15); color:#5b21b6; }
+        .wcag-item h5 { font-size:.9rem; font-weight:700; color:var(--text-dark); margin-bottom:.4rem; }
+        .wcag-item p  { font-size:.82rem; color:var(--text-light); line-height:1.55; margin:0; }
+
+        /* Contraste checker visuel */
+        .contrast-demo {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:1rem;
+            margin:1.5rem 0;
+        }
+        .contrast-box {
+            border-radius:8px; padding:1.25rem; display:flex;
+            flex-direction:column; gap:.5rem; border:1px solid var(--border-color);
+        }
+        .contrast-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+        .contrast-text  { font-size:1rem; font-weight:600; line-height:1.4; }
+        .contrast-ratio { font-size:.75rem; font-weight:600; padding:.2rem .5rem; border-radius:4px; display:inline-block; margin-top:.2rem; }
+        .ratio-fail { background:rgba(239,68,68,.15); color:#b91c1c; }
+        .ratio-aa   { background:rgba(59,130,246,.15); color:#1e40af; }
+        .ratio-aaa  { background:rgba(16,185,129,.15); color:#065f46; }
+
+        /* Do / Don't */
+        .do-dont {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:1.25rem;
+            margin:1.5rem 0;
+        }
+        @media(max-width:560px){ .do-dont { grid-template-columns:1fr; } }
+        .do-col, .dont-col { border-radius:10px; overflow:hidden; }
+        .do-header   { background:rgba(16,185,129,.12); border-bottom:2px solid #10b981; padding:.65rem 1rem; font-weight:700; font-size:.85rem; color:#065f46; }
+        .dont-header { background:rgba(239,68,68,.1);  border-bottom:2px solid #ef4444; padding:.65rem 1rem; font-weight:700; font-size:.85rem; color:#b91c1c; }
+        .do-body, .dont-body { padding:.75rem 1rem; background:var(--bg-light); }
+        .do-body   li::before { content:'✅ '; }
+        .do-body   li, .dont-body li { font-size:.83rem; color:var(--text-light); padding:.35rem 0; list-style:none; border-bottom:1px solid var(--border-color); line-height:1.5; }
+        .do-body   li:last-child, .dont-body li:last-child { border-bottom:none; }
+        .dont-body li::before { content:'❌ '; }
+
+        /* 8 règles Shneiderman */
+        .shneiderman-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+            gap:1rem;
+            margin:1.5rem 0;
+        }
+        .shn-item {
+            border-radius:8px; border:1px solid var(--border-color);
+            overflow:hidden;
+        }
+        .shn-header {
+            padding:.6rem .9rem; font-weight:700; font-size:.82rem; color:white;
+            display:flex; align-items:center; gap:.5rem;
+        }
+        .shn-body { padding:.75rem .9rem; background:var(--bg-light); }
+        .shn-body p { font-size:.82rem; color:var(--text-light); margin:0 0 .4rem; line-height:1.5; }
+        .shn-example { font-size:.76rem; color:var(--primary-color); font-style:italic; }
+
+        /* Livrable checklist */
+        .livrable-list { list-style:none; padding:0; margin:1rem 0; }
+        .livrable-list li {
+            display:flex; align-items:flex-start; gap:.75rem;
+            padding:.65rem .9rem; border-radius:6px;
+            background:var(--bg-light); border:1px solid var(--border-color);
+            margin-bottom:.4rem; font-size:.88rem; color:var(--text-dark);
+        }
+        .livrable-list li::before {
+            content:'✓'; flex-shrink:0; width:1.3rem; height:1.3rem;
+            background:var(--secondary-color); color:white; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size:.7rem; margin-top:.05rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+    <div class="nav-container">
+        <h1 class="nav-title">UX Design — Séance 4</h1>
+        <ul class="nav-links">
+            <li><a href="#intro"         class="nav-link">Introduction</a></li>
+            <li><a href="#ai"            class="nav-link">Architecture info.</a></li>
+            <li><a href="#card-sorting"  class="nav-link">Card Sorting</a></li>
+            <li><a href="#qcm1"          class="nav-link">QCM 1</a></li>
+            <li><a href="#wireframes"    class="nav-link">Wireframes</a></li>
+            <li><a href="#shneiderman"   class="nav-link">8 règles d'or</a></li>
+            <li><a href="#accessibilite" class="nav-link">Accessibilité</a></li>
+            <li><a href="#erreurs"       class="nav-link">Erreurs</a></li>
+            <li><a href="#glossaire"     class="nav-link">Glossaire</a></li>
+            <li><a href="#qcm2"          class="nav-link">QCM 2</a></li>
+        </ul>
+        <button class="dark-toggle" id="dark-toggle" aria-label="Basculer le mode sombre">
+            <span class="toggle-icon">🌙</span>
+            <span class="toggle-label">Dark</span>
+        </button>
+    </div>
+</nav>
+
+<main class="main-content">
+
+<!-- ═══════════════════════════════════════════
+     01 · INTRODUCTION
+═══════════════════════════════════════════ -->
+<section id="intro" class="section">
+    <h2 class="section-title">01 · Du parcours à la conception — structurer avant de dessiner</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🧱 Où en sommes-nous dans le processus UX ?</h3>
+        <div class="dropdown-content">
+            <p>Vous avez maintenant une compréhension solide de vos utilisateurs (personas, séance 2) et vous avez cartographié leur parcours (User Journey Map, séance 3). Il est tentant de passer directement à la conception visuelle. Mais il manque une étape cruciale : <strong>structurer l'information avant de dessiner quoi que ce soit.</strong></p>
+            <p>Cette séance couvre les deux disciplines qui font le pont entre la recherche et la conception visuelle : l'<em>Architecture de l'Information</em> (comment organiser le contenu) et les <em>Wireframes</em> (comment en esquisser la structure). Elle introduit aussi l'<em>Accessibilité</em> — à intégrer dès cette étape, pas en fin de projet.</p>
+            <div class="alert alert-info">
+                <strong>💡 La règle d'or :</strong> « Structure d'abord, esthétique ensuite. » Les wireframes sont intentionnellement sans couleur, sans typographie choisie, sans images réelles. On règle l'architecture avant de décorer la maison.
+            </div>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>🎯 Objectifs de la séance</h4>
+            <ul>
+                <li>Comprendre l'architecture de l'information et le card sorting</li>
+                <li>Distinguer les niveaux de fidélité des wireframes</li>
+                <li>Réaliser ses premiers wireframes papier annotés</li>
+                <li>Intégrer les critères d'ergonomie et d'accessibilité WCAG dès la conception</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>🔗 Progression du cours</h4>
+            <ul>
+                <li><strong>S1 :</strong> Qu'est-ce que l'UX ? Histoire et enjeux</li>
+                <li><strong>S2 :</strong> Recherche utilisateur et personas</li>
+                <li><strong>S3 :</strong> Empathy Map et User Journey Map</li>
+                <li><strong>S4 :</strong> Architecture de l'info + Wireframes + Accessibilité ←</li>
+                <li><strong>S5–6 :</strong> Prototypage, tests utilisateurs, présentation finale</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>⚠️ Sans structuration préalable</h4>
+            <ul>
+                <li>Les utilisateurs se perdent dans une navigation incohérente</li>
+                <li>L'équipe perd du temps à refaire le design de fond en comble</li>
+                <li>Les fonctionnalités sont mal priorisées et mal placées</li>
+                <li>L'accessibilité est impossible à corriger après coup</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>✅ Avec architecture et wireframes</h4>
+            <ul>
+                <li>Vision claire et partagée de la structure avant d'investir en design</li>
+                <li>Tests utilisateurs possibles tôt, à moindre coût</li>
+                <li>Révisions moins coûteuses qu'en haute fidélité</li>
+                <li>Accessibilité intégrée nativement dès le départ</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     02 · ARCHITECTURE DE L'INFORMATION
+═══════════════════════════════════════════ -->
+<section id="ai" class="section">
+    <h2 class="section-title">02 · Architecture de l'information (IA)</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🏗️ Définition et enjeux</h3>
+        <div class="dropdown-content">
+            <p>L'<strong>Architecture de l'Information (IA)</strong> est la discipline qui consiste à organiser, structurer et étiqueter le contenu d'un système (site web, application, intranet) de façon à ce que les utilisateurs puissent trouver ce dont ils ont besoin et accomplir leurs tâches facilement.</p>
+            <p>Le terme a été popularisé par Richard Saul Wurman dans les années 1970, puis théorisé pour le web par Peter Morville et Louis Rosenfeld dans leur ouvrage de référence <em>Information Architecture for the World Wide Web</em> (1998).</p>
+            <div class="alert alert-info">
+                <strong>💡 Analogie :</strong> L'architecture de l'information, c'est le plan d'une bibliothèque avant d'y mettre les livres. Peu importe la beauté du bâtiment — si les livres sont rangés sans logique, personne ne trouve rien. L'IA décide de l'organisation des rayons, de la signalétique, et de la logique de classement.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🔲 Les 4 composantes fondamentales</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>📂 Systèmes d'organisation</h4>
+                    <ul>
+                        <li>Comment le contenu est <strong>regroupé et catégorisé</strong></li>
+                        <li>Classification alphabétique, chronologique, thématique, par audience</li>
+                        <li>Ambiguïté inhérente : un même contenu peut appartenir à plusieurs catégories</li>
+                        <li>Teste par card sorting (voir section suivante)</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🏷️ Systèmes d'étiquetage</h4>
+                    <ul>
+                        <li>Les <strong>mots, termes et intitulés</strong> utilisés pour nommer le contenu et la navigation</li>
+                        <li>Utiliser le vocabulaire des utilisateurs, pas le jargon interne</li>
+                        <li>Cohérence des termes dans toute l'interface</li>
+                        <li>Exemple : « Paramètres » vs « Réglages » vs « Mon compte » — choisir et tenir</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>🧭 Systèmes de navigation</h4>
+                    <ul>
+                        <li>Les mécanismes qui permettent de <strong>se déplacer</strong> dans le contenu</li>
+                        <li>Navigation principale, secondaire, locale (breadcrumbs)</li>
+                        <li>Navigation contextuelle (liens dans le contenu)</li>
+                        <li>Navigation utilitaire (connexion, panier, aide)</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>🔍 Systèmes de recherche</h4>
+                    <ul>
+                        <li>Les fonctionnalités de <strong>recherche et filtrage</strong></li>
+                        <li>Quand proposer une recherche plein texte</li>
+                        <li>Filtres et facettes pour affiner les résultats</li>
+                        <li>Auto-complétion, suggestions, recherche à facettes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🌳 Arborescences — organiser la navigation</h3>
+        <div class="dropdown-content">
+            <p>L'arborescence (ou <em>sitemap</em>) est la représentation visuelle de la hiérarchie des pages ou écrans d'un produit digital. C'est le premier livrable concret de l'architecture de l'information.</p>
+
+            <div class="tree-wrap">
+                <p style="font-size:.8rem;font-weight:700;color:var(--text-dark);margin-bottom:1rem;">🌳 Exemple — Application de gestion de budget étudiant</p>
+                <ul class="tree">
+                    <li>
+                        <span class="tree-node root">🏠 Accueil / Dashboard</span>
+                        <ul>
+                            <li>
+                                <span class="tree-node cat">💰 Comptes</span>
+                                <ul>
+                                    <li><span class="tree-node sub">Aperçu solde</span></li>
+                                    <li><span class="tree-node sub">Historique transactions</span></li>
+                                    <li><span class="tree-node sub">Ajouter un compte</span></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="tree-node cat">📊 Budget</span>
+                                <ul>
+                                    <li><span class="tree-node sub">Créer un budget</span></li>
+                                    <li><span class="tree-node sub">Catégories de dépenses</span></li>
+                                    <li><span class="tree-node sub">Alertes et limites</span></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="tree-node cat">📈 Analyses</span>
+                                <ul>
+                                    <li><span class="tree-node sub">Graphiques mensuels</span></li>
+                                    <li><span class="tree-node sub">Comparaison périodes</span></li>
+                                    <li><span class="tree-node sub">Export données</span></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="tree-node cat">⚙️ Réglages</span>
+                                <ul>
+                                    <li><span class="tree-node sub">Profil utilisateur</span></li>
+                                    <li><span class="tree-node sub">Notifications</span></li>
+                                    <li><span class="tree-node sub">Sécurité &amp; confidentialité</span></li>
+                                    <li><span class="tree-node sub">Aide</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Règles de bonne arborescence :</strong> Viser une profondeur maximale de 3 niveaux (idéalement 2). Au-delà, les utilisateurs se perdent. Préférer une arborescence « large et peu profonde » à une arborescence « étroite et profonde ». Tester la navigation avec des utilisateurs réels avant de passer à la conception des écrans.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">🔢 Loi de Hick — réduire la charge cognitive</h3>
+        <div class="dropdown-content">
+            <p>La <strong>Loi de Hick-Hyman</strong> (1952) énonce que le temps nécessaire pour prendre une décision augmente proportionnellement au logarithme du nombre d'options disponibles.</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>📐 Formulation</h4>
+                    <ul>
+                        <li>Plus il y a de choix, plus la décision prend du temps</li>
+                        <li>L'augmentation est logarithmique, pas linéaire</li>
+                        <li>Passer de 2 à 4 options est moins impactant que passer de 8 à 16</li>
+                        <li>Conséquence : réduire le nombre d'options est plus efficace que de les organiser visuellement</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🎯 Applications pratiques en UX</h4>
+                    <ul>
+                        <li>Limiter les items de navigation principale à 5–7 maximum</li>
+                        <li>Regrouper les options similaires plutôt que de toutes les lister</li>
+                        <li>Masquer les options rarement utilisées dans des menus secondaires</li>
+                        <li>Amazon : a réduit le menu principal de 35 à 7 catégories visibles</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>⚖️ Tension avec la découvrabilité</h4>
+                    <ul>
+                        <li>Trop peu d'options = contenu difficile à trouver (navigation profonde)</li>
+                        <li>Trop d'options = surcharge cognitive, paralysie du choix</li>
+                        <li>Le card sorting aide à trouver le bon équilibre empiriquement</li>
+                        <li>Tester avec des utilisateurs réels pour valider</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     03 · CARD SORTING
+═══════════════════════════════════════════ -->
+<section id="card-sorting" class="section">
+    <h2 class="section-title">03 · Card Sorting — faire participer les utilisateurs</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🃏 Définition et principe</h3>
+        <div class="dropdown-content">
+            <p>Le <strong>card sorting</strong> est une méthode de recherche UX dans laquelle des participants regroupent des contenus (écrits sur des cartes) en catégories selon leur propre logique mentale. C'est la méthode de référence pour concevoir une architecture de l'information basée sur les modèles mentaux des utilisateurs — pas sur l'organigramme interne de l'entreprise.</p>
+
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Principe</th>
+                        <th>Quand l'utiliser</th>
+                        <th>Ce qu'on apprend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Card sorting ouvert</td>
+                        <td>Les participants créent leurs propres catégories et les nomment librement</td>
+                        <td>Conception d'une nouvelle architecture from scratch</td>
+                        <td>Les groupements naturels et le vocabulaire des utilisateurs</td>
+                    </tr>
+                    <tr>
+                        <td>Card sorting fermé</td>
+                        <td>Les catégories sont prédéfinies ; les participants rangent les cartes dedans</td>
+                        <td>Tester une architecture existante ou proposée</td>
+                        <td>Si l'architecture actuelle correspond aux attentes utilisateurs</td>
+                    </tr>
+                    <tr>
+                        <td>Card sorting hybride</td>
+                        <td>Catégories prédéfinies + possibilité d'en créer de nouvelles</td>
+                        <td>Améliorer une architecture partielle</td>
+                        <td>Validation + découverte de nouvelles catégories manquantes</td>
+                    </tr>
+                    <tr>
+                        <td>Tree testing</td>
+                        <td>Tâches de navigation dans une arborescence textuelle (sans design)</td>
+                        <td>Valider une arborescence après card sorting</td>
+                        <td>Taux de succès de navigation, points de confusion</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🛠️ Conduire un card sorting en 5 étapes</h3>
+        <div class="dropdown-content">
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num">01</div>
+                    <div class="heuristic-content">
+                        <h5>Préparer les cartes (15–30 min)</h5>
+                        <p>Lister les contenus ou fonctionnalités à classer. Écrire chaque élément sur une carte distincte — des post-its ou des fiches cartonnées. Viser 30 à 100 cartes maximum. Utiliser des formulations simples, du point de vue de l'utilisateur (pas du jargon interne).</p>
+                        <p class="heuristic-example">Exemple pour une appli de cuisine : « Recettes pour débutants », « Liste de courses », « Temps de préparation », « Ajouter une recette », « Recettes par ingrédient »…</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">02</div>
+                    <div class="heuristic-content">
+                        <h5>Recruter les participants</h5>
+                        <p>15 à 20 participants suffisent pour un card sorting ouvert — au-delà, les nouvelles découvertes deviennent marginales (loi de la saturation). Les participants doivent représenter le public cible réel, pas des collègues ou des experts du domaine.</p>
+                        <p class="heuristic-example">Règle pratique : si vous n'avez pas 15 participants, même 5 à 8 donnent des tendances utiles pour orienter la réflexion — à compléter par des entretiens.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">03</div>
+                    <div class="heuristic-content">
+                        <h5>Animer la session (20–40 min par participant)</h5>
+                        <p>Demander au participant de trier les cartes en groupes qui lui semblent logiques, puis de nommer chaque groupe. Observer en silence — les hésitations et les verbalisations spontanées sont des données précieuses. Ne pas influencer les regroupements.</p>
+                        <p class="heuristic-example">Outils en ligne : OptimalSort, UXMetrics (gratuit), Maze — permettent de mener des card sortings à distance avec plus de participants.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">04</div>
+                    <div class="heuristic-content">
+                        <h5>Analyser les résultats</h5>
+                        <p>Construire une matrice de similarité : pour chaque paire de cartes, calculer le pourcentage de participants qui les ont mises dans le même groupe. Plus le pourcentage est élevé, plus l'association est forte. Identifier les consensus forts et les zones de confusion.</p>
+                        <p class="heuristic-example">Si 80 % des participants ont mis « Liste de courses » et « Recettes » ensemble, c'est un signal fort pour les regrouper dans la navigation.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">05</div>
+                    <div class="heuristic-content">
+                        <h5>Construire l'arborescence et la valider par tree testing</h5>
+                        <p>Proposer une arborescence basée sur les résultats du card sorting. Valider avec un tree testing (navigation textuelle sans design) avant de passer aux wireframes. Itérer si nécessaire.</p>
+                        <p class="heuristic-example">Ne jamais sauter l'étape de validation : le card sorting dit comment les utilisateurs <em>pensent</em> l'organisation, le tree testing vérifie s'ils <em>naviguent</em> efficacement dans l'organisation proposée.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎮 Exercice — Card sorting express</h3>
+        <div class="dropdown-content">
+            <p>Voici 16 contenus d'un site de formation en ligne. Glissez chaque carte dans la catégorie qui vous semble la plus logique. Comparez ensuite avec vos voisins — les divergences sont les plus instructives !</p>
+            <div id="cs-arena" class="card-sort-arena">
+                <div id="pool-unassigned" class="sort-pool" data-pool="unassigned">
+                    <h5>📦 Contenus à classer</h5>
+                    <div class="sort-cards-grid" id="cards-unassigned"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div id="pool-apprendre" class="sort-pool" data-pool="apprendre">
+                        <h5>🎓 Apprendre</h5>
+                        <div class="sort-cards-grid" id="cards-apprendre"></div>
+                    </div>
+                    <div id="pool-communaute" class="sort-pool" data-pool="communaute">
+                        <h5>👥 Communauté</h5>
+                        <div class="sort-cards-grid" id="cards-communaute"></div>
+                    </div>
+                    <div id="pool-compte" class="sort-pool" data-pool="compte">
+                        <h5>👤 Mon compte</h5>
+                        <div class="sort-cards-grid" id="cards-compte"></div>
+                    </div>
+                    <div id="pool-aide" class="sort-pool" data-pool="aide">
+                        <h5>❓ Aide</h5>
+                        <div class="sort-cards-grid" id="cards-aide"></div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="resetCardSort()" style="background:var(--gradient-primary);color:white;padding:.5rem 1.25rem;border-radius:6px;font-weight:600;font-size:.85rem;cursor:pointer;border:none;margin-top:.5rem;">↺ Réinitialiser</button>
+            <div class="alert alert-info" style="margin-top:1rem;">
+                <strong>💡 À discuter en classe :</strong> Quelles cartes ont été difficiles à classer ? Où y a-t-il des désaccords dans le groupe ? Ces divergences révèlent les zones d'ambiguïté dans l'architecture — exactement ce qu'on cherche à détecter par cette méthode.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     04 · QCM 1 — Mi-parcours
+═══════════════════════════════════════════ -->
+<section id="qcm1" class="section">
+    <h2 class="section-title">04 · QCM 1 — Autoévaluation mi-parcours</h2>
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>📝 Architecture de l'information &amp; Card Sorting</h3>
+            <span class="quiz-badge" id="qcm1-badge">5 questions · randomisées</span>
+        </div>
+        <div id="qcm1-question" class="quiz-question">
+            <p id="qcm1-question-text"></p>
+            <div id="qcm1-answers" class="quiz-answers"></div>
+            <button id="qcm1-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm1-result" class="quiz-result" style="display:none;">
+            <div id="qcm1-explanation" class="explanation"></div>
+            <button id="qcm1-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm1-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm1-progress">Question 1/5</span>
+            <span id="qcm1-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm1-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     05 · WIREFRAMES
+═══════════════════════════════════════════ -->
+<section id="wireframes" class="section">
+    <h2 class="section-title">05 · Wireframes — esquisser la structure</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">✏️ Définition et rôle</h3>
+        <div class="dropdown-content">
+            <p>Un <strong>wireframe</strong> est une représentation schématique d'une interface, centrée sur la structure, la hiérarchie des éléments et les interactions — sans couleur définitive, sans typographie choisie, sans images finales. C'est le plan de l'architecte avant le rendu 3D.</p>
+            <p>Le wireframe répond à la question : <em>« Quoi et où ? »</em> — quels éléments doivent être présents, et à quelle place dans la page ou l'écran. Il ne répond pas encore à <em>« Comment ça doit être beau ? »</em></p>
+            <div class="alert alert-success">
+                <strong>✅ Pourquoi commencer en wireframe ?</strong> Les révisions d'un wireframe papier prennent quelques secondes (gommer, redessiner). Les révisions d'un design haute fidélité dans Figma prennent plusieurs heures. Tester tôt et à moindre coût est l'un des principes fondamentaux de l'UX Design.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📐 Les 3 niveaux de fidélité</h3>
+        <div class="dropdown-content">
+            <div class="fidelity-compare">
+                <div class="fidelity-col">
+                    <div class="fidelity-header lofi">Low-fi (Basse fidélité)</div>
+                    <div class="fidelity-body">
+                        <ul>
+                            <li>Papier, crayon, post-its</li>
+                            <li>Blocs rectangulaires représentent le contenu</li>
+                            <li>Très rapide : 5–30 min par écran</li>
+                            <li>Idéal pour explorer et itérer vite</li>
+                            <li>Facile à modifier et à refaire</li>
+                            <li>Encourage la créativité sans inhibition</li>
+                            <li>Difficile à tester avec des utilisateurs peu habitués</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fidelity-col">
+                    <div class="fidelity-header midfi">Mid-fi (Fidélité moyenne)</div>
+                    <div class="fidelity-body">
+                        <ul>
+                            <li>Outil numérique (Figma, Balsamiq, Marvel)</li>
+                            <li>Typo et couleurs neutres (gris)</li>
+                            <li>Structure claire, annotations présentes</li>
+                            <li>30 min à 2h par écran</li>
+                            <li>Testable avec des utilisateurs</li>
+                            <li>Bon compromis entre rapidité et clarté</li>
+                            <li>Niveau recommandé pour les projets étudiants</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fidelity-col">
+                    <div class="fidelity-header hifi">Hi-fi (Haute fidélité)</div>
+                    <div class="fidelity-body">
+                        <ul>
+                            <li>Figma, Sketch, Adobe XD</li>
+                            <li>Couleurs, typographie, images réelles</li>
+                            <li>Interactions cliquables</li>
+                            <li>2h à plusieurs jours par écran</li>
+                            <li>Très proche du produit final</li>
+                            <li>Idéal pour les tests d'utilisabilité avancés</li>
+                            <li>Coûteux à modifier en profondeur</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>💡 Ordre recommandé :</strong> Low-fi → validation interne → Mid-fi → test utilisateur → ajustements → Hi-fi → test final. Sauter les premières étapes est le piège classique des équipes qui « veulent un beau résultat tout de suite » — et qui passent ensuite des semaines à corriger des problèmes de fond qu'un wireframe papier aurait révélés en 20 minutes.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🖼️ Exemples de wireframes schématiques</h3>
+        <div class="dropdown-content">
+            <p>Voici trois écrans low-fi annotés pour une application mobile de gestion de budget étudiant :</p>
+
+            <div class="wireframe-showcase">
+                <!-- Écran 1 : Accueil / Dashboard -->
+                <div class="wireframe-frame">
+                    <div class="wf-topbar">
+                        <div class="wf-dot" style="background:#ef4444;"></div>
+                        <div class="wf-dot" style="background:#f59e0b;"></div>
+                        <div class="wf-dot" style="background:#10b981;"></div>
+                        <span class="wf-title">ÉCRAN 1 — Dashboard</span>
+                    </div>
+                    <div class="wf-nav">
+                        <div class="wf-nav-item active">Accueil</div>
+                        <div class="wf-nav-item">Budget</div>
+                        <div class="wf-nav-item">Analyses</div>
+                        <div class="wf-nav-item">Réglages</div>
+                    </div>
+                    <div class="wf-body">
+                        <div class="wf-block" style="height:28px;width:55%;"></div>
+                        <div class="wf-text" style="width:40%;margin-top:.3rem;"></div>
+                        <div class="wf-block wf-img" style="height:90px;margin-top:.75rem;">Solde + graphique</div>
+                        <div class="wf-text" style="width:60%;margin-top:.75rem;"></div>
+                        <div class="wf-grid" style="margin-top:.5rem;">
+                            <div class="wf-card-mini">
+                                <div class="wf-text" style="width:80%;"></div>
+                                <div class="wf-text" style="width:50%;"></div>
+                            </div>
+                            <div class="wf-card-mini">
+                                <div class="wf-text" style="width:80%;"></div>
+                                <div class="wf-text" style="width:50%;"></div>
+                            </div>
+                        </div>
+                        <div class="wf-text" style="width:70%;margin-top:.75rem;"></div>
+                        <div class="wf-block" style="height:14px;width:100%;margin-top:.4rem;border-radius:2px;"></div>
+                        <div class="wf-block" style="height:14px;width:100%;margin-top:.35rem;border-radius:2px;"></div>
+                        <div class="wf-block" style="height:14px;width:100%;margin-top:.35rem;border-radius:2px;"></div>
+                        <div style="text-align:right;"><span class="wf-btn">+ Ajouter</span></div>
+                    </div>
+                </div>
+
+                <!-- Écran 2 : Liste des transactions -->
+                <div class="wireframe-frame">
+                    <div class="wf-topbar">
+                        <div class="wf-dot" style="background:#ef4444;"></div>
+                        <div class="wf-dot" style="background:#f59e0b;"></div>
+                        <div class="wf-dot" style="background:#10b981;"></div>
+                        <span class="wf-title">ÉCRAN 2 — Transactions</span>
+                    </div>
+                    <div class="wf-nav">
+                        <div class="wf-nav-item">Accueil</div>
+                        <div class="wf-nav-item active">Budget</div>
+                        <div class="wf-nav-item">Analyses</div>
+                        <div class="wf-nav-item">Réglages</div>
+                    </div>
+                    <div class="wf-body">
+                        <div class="wf-block" style="height:24px;width:50%;"></div>
+                        <div class="wf-block" style="height:32px;width:100%;margin-top:.6rem;border-radius:20px;"><!-- Barre recherche --></div>
+                        <div style="display:flex;gap:.4rem;margin:.6rem 0;">
+                            <div class="wf-block" style="height:20px;width:60px;border-radius:20px;flex-shrink:0;"></div>
+                            <div class="wf-block" style="height:20px;width:70px;border-radius:20px;flex-shrink:0;"></div>
+                            <div class="wf-block" style="height:20px;width:55px;border-radius:20px;flex-shrink:0;"></div>
+                        </div>
+                        <div class="wf-text" style="width:40%;"></div>
+                        <div class="wf-card-mini" style="margin:.4rem 0;"><div style="display:flex;justify-content:space-between;"><div class="wf-text" style="width:55%;margin:0;"></div><div class="wf-text" style="width:20%;margin:0;"></div></div><div class="wf-text" style="width:35%;margin-top:.3rem;"></div></div>
+                        <div class="wf-card-mini" style="margin:.4rem 0;"><div style="display:flex;justify-content:space-between;"><div class="wf-text" style="width:55%;margin:0;"></div><div class="wf-text" style="width:20%;margin:0;"></div></div><div class="wf-text" style="width:35%;margin-top:.3rem;"></div></div>
+                        <div class="wf-card-mini" style="margin:.4rem 0;"><div style="display:flex;justify-content:space-between;"><div class="wf-text" style="width:55%;margin:0;"></div><div class="wf-text" style="width:20%;margin:0;"></div></div><div class="wf-text" style="width:35%;margin-top:.3rem;"></div></div>
+                        <div class="wf-text" style="width:40%;margin-top:.6rem;"></div>
+                        <div class="wf-card-mini" style="margin:.4rem 0;"><div style="display:flex;justify-content:space-between;"><div class="wf-text" style="width:55%;margin:0;"></div><div class="wf-text" style="width:20%;margin:0;"></div></div><div class="wf-text" style="width:35%;margin-top:.3rem;"></div></div>
+                    </div>
+                </div>
+
+                <!-- Écran 3 : Ajouter une transaction -->
+                <div class="wireframe-frame">
+                    <div class="wf-topbar">
+                        <div class="wf-dot" style="background:#ef4444;"></div>
+                        <div class="wf-dot" style="background:#f59e0b;"></div>
+                        <div class="wf-dot" style="background:#10b981;"></div>
+                        <span class="wf-title">ÉCRAN 3 — Ajouter</span>
+                    </div>
+                    <div class="wf-nav">
+                        <div class="wf-nav-item">← Retour</div>
+                        <div class="wf-nav-item" style="margin-left:auto;font-weight:700;color:var(--primary-color);">Sauvegarder</div>
+                    </div>
+                    <div class="wf-body">
+                        <div class="wf-block" style="height:24px;width:60%;"></div>
+                        <div style="margin-top:.75rem;">
+                            <div class="wf-text" style="width:30%;"></div>
+                            <div class="wf-block" style="height:32px;width:100%;margin-top:.3rem;border-radius:6px;"></div>
+                        </div>
+                        <div style="margin-top:.65rem;">
+                            <div class="wf-text" style="width:35%;"></div>
+                            <div style="display:flex;gap:.5rem;margin-top:.35rem;">
+                                <div class="wf-block" style="height:28px;flex:1;border-radius:20px;"></div>
+                                <div class="wf-block" style="height:28px;flex:1;border-radius:20px;background:var(--primary-color);"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top:.65rem;">
+                            <div class="wf-text" style="width:30%;"></div>
+                            <div class="wf-block" style="height:32px;width:100%;margin-top:.3rem;border-radius:6px;"></div>
+                        </div>
+                        <div style="margin-top:.65rem;">
+                            <div class="wf-text" style="width:30%;"></div>
+                            <div class="wf-block" style="height:32px;width:100%;margin-top:.3rem;border-radius:6px;"></div>
+                        </div>
+                        <div style="margin-top:.65rem;">
+                            <div class="wf-text" style="width:25%;"></div>
+                            <div class="wf-block" style="height:60px;width:100%;margin-top:.3rem;border-radius:6px;"></div>
+                        </div>
+                        <div style="margin-top:.75rem;text-align:center;">
+                            <span class="wf-btn" style="padding:.55rem 2rem;font-size:.82rem;">Ajouter la dépense</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>💡 Convention visuelle :</strong> Dans un wireframe low-fi, les blocs gris représentent des zones de contenu (texte, image, bouton). Les lignes minces représentent les éléments textuels. Les coins arrondis indiquent les boutons interactifs. Les annotations en marge expliquent les comportements et interactions qui ne sont pas visibles dans le schéma statique.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📝 Bonnes pratiques d'annotation</h3>
+        <div class="dropdown-content">
+            <div class="do-dont">
+                <div class="do-col">
+                    <div class="do-header">✅ À faire</div>
+                    <div class="do-body">
+                        <ul>
+                            <li>Annoter les comportements dynamiques (états vides, erreurs, succès)</li>
+                            <li>Indiquer les tailles relatives et la hiérarchie visuelle</li>
+                            <li>Numéroter les éléments et les relier aux annotations en marge</li>
+                            <li>Préciser le contenu réel des champs (libellés, messages d'erreur)</li>
+                            <li>Documenter les transitions entre écrans (navigation)</li>
+                            <li>Annoter les règles métier et contraintes techniques</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dont-col">
+                    <div class="dont-header">❌ À éviter</div>
+                    <div class="dont-body">
+                        <ul>
+                            <li>Choisir des couleurs définitives (tout doit rester en niveaux de gris)</li>
+                            <li>Sélectionner une typographie — utiliser une police neutre générique</li>
+                            <li>Ajouter de vraies images — utiliser des placeholders (rectangle + croix)</li>
+                            <li>Faire des wireframes si détaillés qu'ils prennent plus de temps qu'un prototype</li>
+                            <li>Oublier les états d'erreur et les cas limites</li>
+                            <li>Créer des wireframes sans lien avec l'UJM et le persona</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     05 · 8 RÈGLES D'OR DE SHNEIDERMAN
+═══════════════════════════════════════════ -->
+<section id="shneiderman" class="section">
+    <h2 class="section-title">05 · Les 8 règles d'or de Shneiderman</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📖 Contexte et importance</h3>
+        <div class="dropdown-content">
+            <p>Ben Shneiderman, professeur à l'Université du Maryland, a formulé ses <strong>8 règles d'or</strong> de conception d'interface dans son ouvrage <em>Designing the User Interface</em> (1987, réédition 2016). Ces règles, issues de l'observation des interfaces les mieux conçues, restent d'une pertinence remarquable aujourd'hui — aussi bien pour les interfaces desktop que mobile.</p>
+            <p>À la différence des heuristiques de Nielsen (séance 1, évaluation des interfaces existantes), les règles de Shneiderman sont des <strong>principes de conception</strong> à appliquer dès la phase de wireframing.</p>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📐 Les 8 règles détaillées</h3>
+        <div class="dropdown-content">
+            <div class="shneiderman-grid">
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">
+                        <span style="font-size:1.3rem;">①</span> Cohérence
+                    </div>
+                    <div class="shn-body">
+                        <p>Séquences d'actions similaires pour des situations similaires. Terminologie identique dans les menus, invites et écrans.</p>
+                        <p class="shn-example">Application : utiliser toujours « Annuler » — jamais « Retour » ou « Non » pour la même action. Même format de date dans toute l'application.</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">
+                        <span style="font-size:1.3rem;">②</span> Raccourcis pour utilisateurs fréquents
+                    </div>
+                    <div class="shn-body">
+                        <p>Prévoir des raccourcis (clavier, gestes, commandes rapides) pour les utilisateurs expérimentés qui veulent aller plus vite que le flux standard.</p>
+                        <p class="shn-example">Application : Ctrl+S pour sauvegarder, swipe pour supprimer un élément, accès rapide aux actions récentes, commandes vocales.</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#10b981,#059669);">
+                        <span style="font-size:1.3rem;">③</span> Feedback informatif
+                    </div>
+                    <div class="shn-body">
+                        <p>Chaque action doit produire un retour visible et approprié. Le feedback doit être discret pour les actions fréquentes, plus visible pour les actions rares ou importantes.</p>
+                        <p class="shn-example">Application : confirmation visuelle après un clic, indicateur de chargement (spinner), toast « Sauvegardé ! », progression d'un upload.</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+                        <span style="font-size:1.3rem;">④</span> Dialogues conclusifs
+                    </div>
+                    <div class="shn-body">
+                        <p>Les séquences d'actions doivent avoir un début, un milieu et une fin clairement identifiables. Le feedback de fin de séquence doit être satisfaisant.</p>
+                        <p class="shn-example">Application : page de confirmation après un achat, message « Inscription réussie ! » après un formulaire, écran de succès avec résumé de la commande.</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+                        <span style="font-size:1.3rem;">⑤</span> Gestion des erreurs
+                    </div>
+                    <div class="shn-body">
+                        <p>Concevoir le système pour que les utilisateurs ne puissent pas faire d'erreurs graves. Si une erreur survient, proposer des instructions claires et simples pour la corriger.</p>
+                        <p class="shn-example">Application : désactiver les boutons d'envoi tant que le formulaire est incomplet, validation en temps réel des champs, message d'erreur précis (« Le mot de passe doit contenir 8 caractères »).</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#06b6d4,#0891b2);">
+                        <span style="font-size:1.3rem;">⑥</span> Inversion des actions (Undo)
+                    </div>
+                    <div class="shn-body">
+                        <p>Permettre aux utilisateurs d'annuler facilement leurs actions. Cela encourage l'exploration et réduit l'anxiété face aux conséquences d'une erreur.</p>
+                        <p class="shn-example">Application : Ctrl+Z universel, « Annuler l'envoi » dans Gmail, corbeille avec restauration, « Voulez-vous vraiment supprimer ? » pour les actions destructives.</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#ec4899,#db2777);">
+                        <span style="font-size:1.3rem;">⑦</span> Contrôle utilisateur
+                    </div>
+                    <div class="shn-body">
+                        <p>Les utilisateurs expérimentés veulent avoir le sentiment de maîtriser l'interface. Éviter les réponses surprenantes à leurs actions, les sequences obligatoires longues, les redémarrages imposés.</p>
+                        <p class="shn-example">Application : permettre de personaliser l'ordre des items, enregistrer automatiquement les préférences, ne pas forcer des mises à jour immédiates, mémoriser l'état de l'interface.</p>
+                    </div>
+                </div>
+                <div class="shn-item">
+                    <div class="shn-header" style="background:linear-gradient(135deg,#64748b,#475569);">
+                        <span style="font-size:1.3rem;">⑧</span> Réduction de la charge mémorielle
+                    </div>
+                    <div class="shn-body">
+                        <p>Réduire les informations que l'utilisateur doit retenir d'une interaction à l'autre. L'interface doit afficher ou rendre accessible ce dont l'utilisateur a besoin au bon moment.</p>
+                        <p class="shn-example">Application : breadcrumbs montrant où on est, historique récent accessible, pré-remplissage intelligent des formulaires, afficher le résumé de commande à chaque étape.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     06 · ACCESSIBILITÉ WCAG
+═══════════════════════════════════════════ -->
+<section id="accessibilite" class="section">
+    <h2 class="section-title">06 · Accessibilité — concevoir pour tous</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">♿ Qu'est-ce que l'accessibilité numérique ?</h3>
+        <div class="dropdown-content">
+            <p>L'<strong>accessibilité numérique</strong> désigne la pratique de concevoir des sites web et applications qui peuvent être utilisés par tout le monde, y compris les personnes en situation de handicap (visuel, auditif, moteur, cognitif).</p>
+            <p>Les <strong>WCAG</strong> (Web Content Accessibility Guidelines) sont les directives internationales de référence, publiées par le W3C. La version actuelle est WCAG 2.1. Elles sont organisées autour de 4 principes fondamentaux et 3 niveaux de conformité.</p>
+            <div class="alert alert-warning">
+                <strong>⚠️ Accessibilité ≠ contrainte :</strong> Concevoir pour l'accessibilité améliore l'expérience pour <em>tous</em> les utilisateurs. Les sous-titres aident les personnes sourdes, mais aussi ceux qui regardent une vidéo sans son dans les transports. Le contraste élevé aide les malvoyants, mais aussi les personnes qui utilisent leur téléphone en plein soleil. C'est le principe du « curb cut effect ».
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🔠 Les 4 principes POUR (WCAG 2.1)</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>👁️ Perceptible</h4>
+                    <ul>
+                        <li>Les informations et composants d'interface doivent être présentés de façon perceptible par tous les sens disponibles</li>
+                        <li>Alternatives textuelles pour les images (balise alt)</li>
+                        <li>Sous-titres pour les contenus audio et vidéo</li>
+                        <li>Contenu adaptable (responsive) et contrastes suffisants</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>⌨️ Utilisable</h4>
+                    <ul>
+                        <li>Les composants d'interface et la navigation doivent être utilisables par tous</li>
+                        <li>Navigation entièrement possible au clavier (sans souris)</li>
+                        <li>Délai suffisant pour lire et utiliser le contenu</li>
+                        <li>Pas de contenu susceptible de provoquer des crises (clignotements)</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>🧠 Compréhensible</h4>
+                    <ul>
+                        <li>L'information et le fonctionnement de l'interface doivent être compréhensibles</li>
+                        <li>Texte lisible et compréhensible (niveau langage)</li>
+                        <li>Navigation et comportements prévisibles et cohérents</li>
+                        <li>Aide à la saisie et prévention des erreurs dans les formulaires</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>💪 Robuste</h4>
+                    <ul>
+                        <li>Le contenu doit être interprétable de manière fiable par une grande variété d'agents utilisateurs</li>
+                        <li>Compatible avec les technologies d'assistance (lecteurs d'écran)</li>
+                        <li>HTML sémantique correct (balises appropriées)</li>
+                        <li>Compatibilité maintenue lors des évolutions du contenu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎯 Critères essentiels niveau A — les incontournables pour débutants</h3>
+        <div class="dropdown-content">
+            <div class="wcag-grid">
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-a">Niveau A</span>
+                    <h5>🖼️ Alternatives textuelles (1.1.1)</h5>
+                    <p>Toute image porteuse de sens doit avoir un attribut <code>alt</code> descriptif. Les images décoratives doivent avoir un <code>alt=""</code> vide pour être ignorées par les lecteurs d'écran.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-a">Niveau A</span>
+                    <h5>⌨️ Navigation au clavier (2.1.1)</h5>
+                    <p>Toutes les fonctionnalités doivent être accessibles au clavier. La touche Tab doit permettre de naviguer entre tous les éléments interactifs dans un ordre logique.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-a">Niveau A</span>
+                    <h5>🏷️ Étiquetage des formulaires (1.3.1)</h5>
+                    <p>Chaque champ de formulaire doit être associé à un label descriptif. Utiliser la balise <code>&lt;label for&gt;</code> ou l'attribut <code>aria-label</code> — jamais le placeholder seul.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-aa">Niveau AA</span>
+                    <h5>🎨 Contraste des couleurs (1.4.3)</h5>
+                    <p>Ratio de contraste minimum de <strong>4,5:1</strong> pour le texte normal et <strong>3:1</strong> pour le texte grand (≥18pt ou ≥14pt gras). Vérifiable avec des outils comme WebAIM Contrast Checker.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-aa">Niveau AA</span>
+                    <h5>📏 Redimensionnement du texte (1.4.4)</h5>
+                    <p>Le texte doit pouvoir être agrandi jusqu'à 200 % sans perte de contenu ni de fonctionnalité. Utiliser des unités relatives (<code>rem</code>, <code>em</code>) plutôt que des pixels fixes pour les tailles de police.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-aa">Niveau AA</span>
+                    <h5>🔍 Focus visible (2.4.7)</h5>
+                    <p>L'indicateur de focus (contour visible autour de l'élément sélectionné au clavier) doit être toujours visible. Ne jamais supprimer <code>outline: none</code> sans proposer une alternative visible.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-a">Niveau A</span>
+                    <h5>🌍 Langue de la page (3.1.1)</h5>
+                    <p>La langue principale de la page doit être déclarée dans la balise <code>&lt;html lang="fr"&gt;</code>. Indispensable pour les lecteurs d'écran qui adaptent leur synthèse vocale à la langue.</p>
+                </div>
+                <div class="wcag-item">
+                    <span class="wcag-badge badge-a">Niveau A</span>
+                    <h5>📛 Titres de pages (2.4.2)</h5>
+                    <p>Chaque page doit avoir un titre descriptif et unique (<code>&lt;title&gt;</code>) qui identifie son sujet ou son but. Crucial pour les utilisateurs de lecteurs d'écran et pour le référencement.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎨 Contrastes — comprendre et vérifier</h3>
+        <div class="dropdown-content">
+            <p>Le ratio de contraste mesure la différence de luminosité entre la couleur du texte et la couleur de son fond. Il va de 1:1 (aucun contraste — même couleur) à 21:1 (contraste maximum — noir sur blanc).</p>
+
+            <div class="contrast-demo">
+                <div class="contrast-box" style="background:#f3f4f6;">
+                    <span class="contrast-label" style="color:#9ca3af;">TEXTE SUR FOND CLAIR</span>
+                    <span class="contrast-text" style="color:#9ca3af;">Texte gris clair</span>
+                    <span class="contrast-ratio ratio-fail">Ratio : 2,9:1 ❌ ÉCHEC AA</span>
+                </div>
+                <div class="contrast-box" style="background:#f3f4f6;">
+                    <span class="contrast-label" style="color:#6b7280;">TEXTE SUR FOND CLAIR</span>
+                    <span class="contrast-text" style="color:#374151;">Texte gris foncé</span>
+                    <span class="contrast-ratio ratio-aaa">Ratio : 7,2:1 ✅ NIVEAU AAA</span>
+                </div>
+                <div class="contrast-box" style="background:#1e3a8a;">
+                    <span class="contrast-label" style="color:rgba(255,255,255,.6);">TEXTE SUR FOND SOMBRE</span>
+                    <span class="contrast-text" style="color:white;">Texte blanc sur bleu foncé</span>
+                    <span class="contrast-ratio ratio-aaa">Ratio : 9,2:1 ✅ NIVEAU AAA</span>
+                </div>
+                <div class="contrast-box" style="background:#3b82f6;">
+                    <span class="contrast-label" style="color:rgba(255,255,255,.8);">TEXTE SUR FOND COLORÉ</span>
+                    <span class="contrast-text" style="color:white;">Texte blanc sur bleu vif</span>
+                    <span class="contrast-ratio ratio-aa">Ratio : 3,5:1 ⚠️ OK pour grand texte</span>
+                </div>
+                <div class="contrast-box" style="background:#fef08a;">
+                    <span class="contrast-label" style="color:#78716c;">TEXTE SUR FOND JAUNE</span>
+                    <span class="contrast-text" style="color:#f59e0b;">Texte jaune sur jaune clair</span>
+                    <span class="contrast-ratio ratio-fail">Ratio : 1,8:1 ❌ ÉCHEC total</span>
+                </div>
+                <div class="contrast-box" style="background:#fef08a;">
+                    <span class="contrast-label" style="color:#78716c;">TEXTE SUR FOND JAUNE</span>
+                    <span class="contrast-text" style="color:#1c1917;">Texte très foncé sur jaune</span>
+                    <span class="contrast-ratio ratio-aaa">Ratio : 13,5:1 ✅ NIVEAU AAA</span>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>🛠️ Outils recommandés :</strong> <strong>WebAIM Contrast Checker</strong> (webaim.org/resources/contrastchecker) — gratuit, instantané. <strong>Figma Plugin « Contrast »</strong> — vérifie le contraste directement dans vos maquettes. <strong>Colour Contrast Analyser</strong> (TPGi) — application desktop pour tester n'importe quelle couleur à l'écran.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     07 · ERREURS CLASSIQUES
+═══════════════════════════════════════════ -->
+<section id="erreurs" class="section">
+    <h2 class="section-title">07 · Erreurs classiques à éviter</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">⚠️ En architecture de l'information</h3>
+        <div class="dropdown-content">
+            <div class="do-dont">
+                <div class="do-col">
+                    <div class="do-header">✅ Bonnes pratiques</div>
+                    <div class="do-body">
+                        <ul>
+                            <li>Baser l'architecture sur les modèles mentaux des utilisateurs (card sorting)</li>
+                            <li>Utiliser le vocabulaire des utilisateurs, pas le jargon interne</li>
+                            <li>Viser une profondeur de navigation de 2–3 niveaux maximum</li>
+                            <li>Tester l'arborescence avec un tree test avant de concevoir les écrans</li>
+                            <li>Permettre plusieurs chemins vers un même contenu important</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dont-col">
+                    <div class="dont-header">❌ Erreurs fréquentes</div>
+                    <div class="dont-body">
+                        <ul>
+                            <li>Calquer l'arborescence sur l'organigramme interne de l'entreprise</li>
+                            <li>Utiliser des termes marketing internes incompris des utilisateurs</li>
+                            <li>Créer des catégories trop nombreuses au même niveau (plus de 7)</li>
+                            <li>Ne jamais tester la navigation avec de vrais utilisateurs</li>
+                            <li>Dupliquer du contenu sans structure cohérente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">⚠️ En wireframing</h3>
+        <div class="dropdown-content">
+            <div class="do-dont">
+                <div class="do-col">
+                    <div class="do-header">✅ Bonnes pratiques</div>
+                    <div class="do-body">
+                        <ul>
+                            <li>Annoter les comportements interactifs et les états non visibles</li>
+                            <li>Inclure les états d'erreur et les cas limites (empty states)</li>
+                            <li>Travailler en niveaux de gris jusqu'à la validation de la structure</li>
+                            <li>Relier chaque décision de conception au persona et à l'UJM</li>
+                            <li>Laisser les wireframes assez simples pour être modifiés facilement</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dont-col">
+                    <div class="dont-header">❌ Erreurs fréquentes</div>
+                    <div class="dont-body">
+                        <ul>
+                            <li>Ajouter des couleurs et images dès le wireframe (perte de focus)</li>
+                            <li>Oublier de représenter l'état vide de l'interface (premier lancement)</li>
+                            <li>Créer des wireframes qui ne correspondent à aucun scénario utilisateur</li>
+                            <li>Traiter le wireframe comme livrable final plutôt que comme outil de réflexion</li>
+                            <li>Ne pas valider les wireframes avec des utilisateurs ou des collègues</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">⚠️ En accessibilité</h3>
+        <div class="dropdown-content">
+            <div class="do-dont">
+                <div class="do-col">
+                    <div class="do-header">✅ Bonnes pratiques</div>
+                    <div class="do-body">
+                        <ul>
+                            <li>Vérifier les contrastes dès la phase de wireframing</li>
+                            <li>Concevoir la navigation clavier dès l'arborescence</li>
+                            <li>Penser aux lecteurs d'écran lors de la structuration du contenu</li>
+                            <li>Inclure les labels et messages d'erreur accessibles dans les wireframes</li>
+                            <li>Tester avec des utilisateurs réels en situation de handicap</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dont-col">
+                    <div class="dont-header">❌ Erreurs fréquentes</div>
+                    <div class="dont-body">
+                        <ul>
+                            <li>Remettre l'accessibilité « à plus tard » — elle coûte 10× plus à corriger après</li>
+                            <li>Utiliser la seule couleur pour transmettre une information importante</li>
+                            <li>Supprimer le contour de focus CSS (outline:none) sans alternative</li>
+                            <li>Concevoir des zones tactiles trop petites (minimum 44×44px recommandé par Apple / Google)</li>
+                            <li>Écrire du texte sur des images sans alternative textuelle</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">📋 Checklist avant de passer au prototypage</h3>
+        <div class="dropdown-content">
+            <ul class="livrable-list">
+                <li>L'arborescence a été validée par un card sorting ou un tree test</li>
+                <li>Les étiquettes de navigation utilisent le vocabulaire des utilisateurs</li>
+                <li>La profondeur de navigation ne dépasse pas 3 niveaux</li>
+                <li>Les wireframes couvrent au minimum les 3 écrans principaux du scénario utilisateur</li>
+                <li>Chaque wireframe est annoté (comportements, états, transitions)</li>
+                <li>Les états d'erreur et l'état vide (empty state) sont représentés</li>
+                <li>Les 8 règles de Shneiderman ont été appliquées (feedback, cohérence, undo…)</li>
+                <li>Les contrastes ont été vérifiés (ratio ≥ 4,5:1 pour texte normal)</li>
+                <li>La navigation clavier est planifiée dans le flux</li>
+                <li>Les labels des formulaires sont bien présents et distincts des placeholders</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     09 · QCM 2 — Fin de séance
+═══════════════════════════════════════════ -->
+<section id="qcm2" class="section">
+    <h2 class="section-title">09 · QCM 2 — Autoévaluation avancée</h2>
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>📝 Wireframes, Shneiderman &amp; Accessibilité</h3>
+            <span class="quiz-badge" id="qcm2-badge">5 questions · randomisées</span>
+        </div>
+        <div id="qcm2-question" class="quiz-question">
+            <p id="qcm2-question-text"></p>
+            <div id="qcm2-answers" class="quiz-answers"></div>
+            <button id="qcm2-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm2-result" class="quiz-result" style="display:none;">
+            <div id="qcm2-explanation" class="explanation"></div>
+            <button id="qcm2-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm2-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm2-progress">Question 1/5</span>
+            <span id="qcm2-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm2-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     09 · GLOSSAIRE
+═══════════════════════════════════════════ -->
+<section id="glossaire" class="section">
+    <h2 class="section-title">09 · Glossaire</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📖 12 termes essentiels</h3>
+        <div class="dropdown-content">
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">IA</div>
+                    <div class="heuristic-content">
+                        <h5>Architecture de l'Information (IA)</h5>
+                        <p>Discipline qui consiste à organiser, structurer et étiqueter le contenu d'un système digital de façon à ce que les utilisateurs puissent trouver ce dont ils ont besoin et accomplir leurs tâches. Comprend les systèmes d'organisation, d'étiquetage, de navigation et de recherche.</p>
+                        <p class="heuristic-example">Référence : Peter Morville & Louis Rosenfeld, Information Architecture for the World Wide Web (1998).</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">CS</div>
+                    <div class="heuristic-content">
+                        <h5>Card Sorting</h5>
+                        <p>Méthode de recherche UX où des participants regroupent des contenus écrits sur des cartes selon leur propre logique. Permet de concevoir une architecture basée sur les modèles mentaux des utilisateurs. Trois variantes : ouvert (catégories libres), fermé (catégories prédéfinies), hybride.</p>
+                        <p class="heuristic-example">Nombre recommandé : 15–20 participants pour le card sorting ouvert. Outils : OptimalSort, UXMetrics (gratuit).</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">TT</div>
+                    <div class="heuristic-content">
+                        <h5>Tree Testing</h5>
+                        <p>Méthode d'évaluation d'une arborescence de navigation sous forme textuelle, sans design visuel. Des participants accomplissent des tâches de navigation en se déplaçant dans l'arborescence. Permet de valider une architecture avant d'investir en design.</p>
+                        <p class="heuristic-example">Mesures clés : taux de succès (utilisateur trouve la bonne page), taux de backtrack (retours en arrière), première sélection correcte.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">WF</div>
+                    <div class="heuristic-content">
+                        <h5>Wireframe</h5>
+                        <p>Représentation schématique d'une interface, centrée sur la structure, la hiérarchie des éléments et les interactions — sans couleur définitive, typographie choisie ou images réelles. Trois niveaux : low-fi (papier), mid-fi (outil numérique en niveaux de gris), hi-fi (haute fidélité avec couleurs).</p>
+                        <p class="heuristic-example">Objectif : répondre à « Quoi et où ? » avant de répondre à « Comment ça doit être beau ? »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">MoM</div>
+                    <div class="heuristic-content">
+                        <h5>Modèle mental</h5>
+                        <p>Représentation interne qu'un utilisateur se fait du fonctionnement d'un système, basée sur ses expériences passées et ses intuitions. Le design doit s'aligner sur les modèles mentaux des utilisateurs — pas l'inverse. Le card sorting permet de les découvrir.</p>
+                        <p class="heuristic-example">Exemple : les utilisateurs s'attendent à trouver « Nous contacter » en bas de page ou dans le menu principal — c'est leur modèle mental du web depuis les années 2000.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">LH</div>
+                    <div class="heuristic-content">
+                        <h5>Loi de Hick</h5>
+                        <p>Principe ergonomique (Hick et Hyman, 1952) stipulant que le temps de décision augmente proportionnellement au logarithme du nombre d'options disponibles. En pratique : réduire le nombre d'options visibles améliore la vitesse de navigation. Limite recommandée : 5–7 items de navigation principale.</p>
+                        <p class="heuristic-example">Contre-exemple à éviter : menus « hamburger » contenant 20+ options non hiérarchisées.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">WG</div>
+                    <div class="heuristic-content">
+                        <h5>WCAG (Web Content Accessibility Guidelines)</h5>
+                        <p>Directives internationales d'accessibilité web publiées par le W3C. Version actuelle : WCAG 2.1. Organisées autour des 4 principes POUR (Perceptible, Utilisable, Compréhensible, Robuste) et 3 niveaux de conformité : A (minimum), AA (recommandé), AAA (optimal).</p>
+                        <p class="heuristic-example">En France, la loi du 11 février 2005 et le RGAA (Référentiel Général d'Accessibilité pour les Administrations) rendent l'accessibilité obligatoire pour les services publics numériques.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">RC</div>
+                    <div class="heuristic-content">
+                        <h5>Ratio de contraste</h5>
+                        <p>Mesure de la différence de luminosité entre deux couleurs (généralement texte et fond). Calculé selon la formule de luminance relative. Échelle de 1:1 (aucun contraste) à 21:1 (contraste maximum). Seuils WCAG AA : 4,5:1 pour le texte normal, 3:1 pour le texte grand (≥18pt).</p>
+                        <p class="heuristic-example">Outil gratuit : WebAIM Contrast Checker — webaim.org/resources/contrastchecker</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">ES</div>
+                    <div class="heuristic-content">
+                        <h5>Empty State (état vide)</h5>
+                        <p>L'état d'une interface quand elle ne contient pas encore de données — premier lancement d'une appli, résultat de recherche vide, liste de favoris encore vide. Un empty state bien conçu guide l'utilisateur vers l'action à effectuer plutôt que d'afficher un écran blanc ou un message d'erreur.</p>
+                        <p class="heuristic-example">Bon empty state : illustration + texte explicatif + bouton d'action (« Ajoutez votre première transaction »). Mauvais : juste du blanc ou « Aucun résultat ».</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">BC</div>
+                    <div class="heuristic-content">
+                        <h5>Breadcrumb (fil d'Ariane)</h5>
+                        <p>Élément de navigation secondaire affichant le chemin parcouru depuis la page d'accueil jusqu'à la page actuelle. Permet à l'utilisateur de se situer dans l'arborescence et de remonter facilement à un niveau supérieur. Particulièrement utile sur les sites à arborescence profonde.</p>
+                        <p class="heuristic-example">Format standard : Accueil › Catégorie › Sous-catégorie › Page actuelle. La page actuelle n'est généralement pas un lien cliquable.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">SM</div>
+                    <div class="heuristic-content">
+                        <h5>Sitemap (plan du site)</h5>
+                        <p>Représentation visuelle hiérarchique de toutes les pages ou écrans d'un produit digital et de leurs relations. Premier livrable de l'architecture de l'information, il sert de carte de référence pour l'équipe de conception et de développement tout au long du projet.</p>
+                        <p class="heuristic-example">À distinguer du fichier sitemap.xml (pour les moteurs de recherche) — le sitemap UX est un document de travail visuel, pas un fichier technique.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">AT</div>
+                    <div class="heuristic-content">
+                        <h5>Technologies d'assistance</h5>
+                        <p>Logiciels ou matériels permettant aux personnes en situation de handicap d'utiliser des interfaces numériques : lecteurs d'écran (VoiceOver iOS/macOS, NVDA, JAWS), plages braille, commandes vocales, systèmes de commutation (switch access). Concevoir en respectant les WCAG garantit la compatibilité avec ces technologies.</p>
+                        <p class="heuristic-example">Test gratuit : VoiceOver est intégré à iOS et macOS. Tester la navigation au clavier + lecteur d'écran sur ses propres wireframes révèle souvent des problèmes invisibles visuellement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    <p>Introduction à l'UX Design — Jour 2, Séance 4 · Architecture, Wireframes &amp; Accessibilité</p>
+    <p style="margin-top:.5rem;opacity:.6;font-size:.85rem;">EEMI · Bachelor CDPD — B1 · Année académique 2024-2025</p>
+</footer>
+
+<script>
+// ══════════════════════════════════════════
+//  CARD SORTING INTERACTIF
+// ══════════════════════════════════════════
+const csItems = [
+    "Mes cours en cours","Catalogue des formations","Certificats obtenus","Exercices pratiques",
+    "Forum de discussion","Groupes d'étudiants","Messagerie privée","Événements live",
+    "Modifier mon profil","Historique d'activité","Mes favoris","Paramètres de notification",
+    "FAQ","Contacter le support","Guide d'utilisation","Signaler un problème"
+];
+
+function initCardSort() {
+    const container = document.getElementById('cards-unassigned');
+    container.innerHTML = '';
+    ['apprendre','communaute','compte','aide'].forEach(pool => {
+        document.getElementById('cards-' + pool).innerHTML = '';
+    });
+    csItems.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'sort-card';
+        card.textContent = item;
+        card.draggable = true;
+        card.dataset.item = i;
+        card.addEventListener('dragstart', onDragStart);
+        card.addEventListener('touchstart', onTouchStart, {passive: true});
+        container.appendChild(card);
+    });
+    document.querySelectorAll('.sort-pool').forEach(pool => {
+        pool.addEventListener('dragover', e => { e.preventDefault(); pool.classList.add('drop-over'); });
+        pool.addEventListener('dragleave', () => pool.classList.remove('drop-over'));
+        pool.addEventListener('drop', onDrop);
+    });
+}
+
+let draggedCard = null;
+function onDragStart(e) { draggedCard = e.target; e.target.classList.add('dragging'); }
+document.addEventListener('dragend', e => { if(e.target.classList) e.target.classList.remove('dragging'); });
+
+function onDrop(e) {
+    e.preventDefault();
+    const pool = e.currentTarget;
+    pool.classList.remove('drop-over');
+    if (draggedCard) {
+        const poolId = pool.dataset.pool;
+        const cardsContainer = pool.querySelector('.sort-cards-grid');
+        cardsContainer.appendChild(draggedCard);
+        draggedCard = null;
+    }
+}
+
+// Touch support
+let touchCard = null, touchClone = null;
+function onTouchStart(e) {
+    touchCard = e.currentTarget;
+    const rect = touchCard.getBoundingClientRect();
+    touchClone = touchCard.cloneNode(true);
+    touchClone.style.cssText = `position:fixed;top:${rect.top}px;left:${rect.left}px;width:${rect.width}px;opacity:.8;pointer-events:none;z-index:9999;`;
+    document.body.appendChild(touchClone);
+    touchCard.addEventListener('touchmove', onTouchMove, {passive:false});
+    touchCard.addEventListener('touchend', onTouchEnd);
+}
+function onTouchMove(e) {
+    e.preventDefault();
+    const t = e.touches[0];
+    if (touchClone) { touchClone.style.top = (t.clientY - 20) + 'px'; touchClone.style.left = (t.clientX - 40) + 'px'; }
+}
+function onTouchEnd(e) {
+    if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
+    const t = e.changedTouches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    const pool = el ? el.closest('.sort-pool') : null;
+    if (pool && touchCard) pool.querySelector('.sort-cards-grid').appendChild(touchCard);
+    touchCard = null;
+}
+
+function resetCardSort() { initCardSort(); }
+
+// ══════════════════════════════════════════
+//  BANQUE 1 — Séance 4 · Sections 02-03 (Architecture info + Card Sorting)
+// ══════════════════════════════════════════
+const bank1 = [
+    {
+        question: "Quels sont les 4 systèmes fondamentaux de l'Architecture de l'Information selon Morville et Rosenfeld ?",
+        answers: [
+            "Couleurs, typographie, espacements, icônes",
+            "Systèmes d'organisation, d'étiquetage, de navigation et de recherche",
+            "Personas, UJM, wireframes, prototypes haute fidélité",
+            "Backend, frontend, base de données, API REST"
+        ],
+        correct: 1,
+        explanation: "Selon Morville et Rosenfeld (1998), l'Architecture de l'Information repose sur 4 systèmes : (1) Organisation — comment le contenu est regroupé ; (2) Étiquetage — les mots et termes utilisés pour nommer le contenu ; (3) Navigation — les mécanismes de déplacement dans le contenu ; (4) Recherche — les fonctionnalités de recherche et filtrage. Ces 4 systèmes permettent aux utilisateurs de trouver ce dont ils ont besoin."
+    },
+    {
+        question: "Quelle est la différence principale entre un card sorting ouvert et un card sorting fermé ?",
+        answers: [
+            "Le card sorting ouvert se fait en ligne, le fermé se déroule uniquement en présentiel",
+            "Dans le card sorting ouvert, les participants créent leurs propres catégories ; dans le fermé, les catégories sont prédéfinies par l'équipe",
+            "Le card sorting ouvert utilise des vraies cartes papier, le fermé utilise un logiciel dédié",
+            "Le card sorting fermé est plus récent et a remplacé définitivement le card sorting ouvert"
+        ],
+        correct: 1,
+        explanation: "La distinction fondamentale est dans la liberté laissée aux participants. Dans le card sorting ouvert, les participants groupent les cartes ET créent eux-mêmes les noms de catégories — idéal pour concevoir une architecture from scratch et découvrir le vocabulaire naturel des utilisateurs. Dans le card sorting fermé, les catégories sont imposées — idéal pour valider une architecture existante. Le type hybride combine les deux."
+    },
+    {
+        question: "Que stipule la Loi de Hick-Hyman et quelle est son application principale en UX ?",
+        answers: [
+            "Plus une interface est grande, plus elle est difficile à utiliser par tous",
+            "Le temps de décision augmente selon le nombre d'options — d'où la recommandation de limiter à 5–7 items de navigation",
+            "Les utilisateurs lisent une page de gauche à droite et de haut en bas en forme de F",
+            "Les zones cliquables doivent avoir une taille minimale de 44×44 pixels pour mobile"
+        ],
+        correct: 1,
+        explanation: "La Loi de Hick-Hyman (1952) établit que le temps pour prendre une décision augmente selon le logarithme du nombre d'options. L'application directe en UX est de limiter le nombre d'items dans la navigation principale (recommandation 5–7 items), de masquer les options rarement utilisées, et de regrouper les contenus similaires plutôt que de tous les lister au même niveau."
+    },
+    {
+        question: "Dans quel ordre les niveaux de fidélité de wireframes doivent-ils être produits ?",
+        answers: [
+            "Hi-fi → Mid-fi → Low-fi (du plus complet au plus simple)",
+            "Low-fi → Mid-fi → Hi-fi (du plus schématique au plus proche du produit final)",
+            "L'ordre n'a aucune importance tant que le résultat final est de qualité",
+            "Mid-fi uniquement — low-fi est trop primitif et hi-fi trop coûteux pour les projets"
+        ],
+        correct: 1,
+        explanation: "L'ordre Low-fi → Mid-fi → Hi-fi est fondamental. Les wireframes papier (low-fi) permettent d'explorer rapidement sans investir de temps dans l'esthétique. Le mid-fi permet les tests utilisateurs avec un outil numérique. Le hi-fi ne vient qu'après validation de la structure. Commencer directement en hi-fi est l'une des erreurs les plus coûteuses en UX : on passe des semaines sur un design beau mais mal structuré."
+    },
+    {
+        question: "Pourquoi le card sorting est-il préférable à se baser sur l'organigramme interne pour concevoir la navigation ?",
+        answers: [
+            "Parce que le card sorting est beaucoup plus rapide à réaliser qu'une analyse de l'organigramme",
+            "Parce que les utilisateurs ignorent l'organisation interne — la navigation doit refléter leurs modèles mentaux, pas la structure organisationnelle",
+            "Parce que l'organigramme change trop souvent pour être une référence fiable",
+            "Parce que le card sorting est exigé par les WCAG pour la conformité accessibilité"
+        ],
+        correct: 1,
+        explanation: "L'une des erreurs les plus communes est de reproduire l'organigramme (Service Marketing / Service RH / Direction Commerciale) dans la navigation principale. Les utilisateurs ne savent pas et ne se soucient pas de qui s'occupe de quoi en interne — ils cherchent 'Comment commander', 'Aide' ou 'À propos'. Le card sorting révèle les modèles mentaux réels des utilisateurs et comment ils s'attendent naturellement à ce que le contenu soit organisé."
+    },
+    {
+        question: "Quelle est la profondeur de navigation maximale recommandée pour une bonne architecture ?",
+        answers: [
+            "1 seul niveau — tout doit être accessible depuis la page d'accueil directement",
+            "2 à 3 niveaux maximum pour éviter que les utilisateurs ne se perdent",
+            "5 à 7 niveaux pour permettre une hiérarchie fine et précise",
+            "Il n'y a pas de recommandation universelle — tout dépend de la quantité de contenu"
+        ],
+        correct: 1,
+        explanation: "La recommandation générale est de viser une profondeur maximale de 2 à 3 niveaux de navigation (idéalement 2). Au-delà, les utilisateurs se perdent, oublient où ils sont, et abandonnent. Le principe est de préférer une arborescence 'large et peu profonde' à une arborescence 'étroite et profonde'. Les breadcrumbs (fils d'Ariane) aident quand la profondeur ne peut pas être réduite."
+    },
+    {
+        question: "Que doit-on annoter dans un wireframe, au-delà de la structure visuelle ?",
+        answers: [
+            "Uniquement les couleurs et la typographie prévues pour la phase de design graphique",
+            "Les comportements dynamiques (états vides, erreurs, succès), les interactions et les règles métier",
+            "Seulement les tailles de police et les marges en pixels exacts à respecter",
+            "Les noms des développeurs responsables de chaque composant à implémenter"
+        ],
+        correct: 1,
+        explanation: "Un wireframe non annoté est un dessin sans mode d'emploi. Les annotations documentent ce qui ne peut pas être représenté dans une image statique : comportements dynamiques (que se passe-t-il quand le champ est vide ? en erreur ? en succès ?), règles de validation, messages d'erreur précis, transitions entre écrans, états spéciaux (chargement, liste vide). Sans annotations, le développeur ne peut pas implémenter correctement l'interface."
+    },
+    {
+        question: "Quel est l'objectif du Tree Testing en architecture de l'information ?",
+        answers: [
+            "Tester visuellement si l'arborescence est jolie et lisible pour les utilisateurs",
+            "Valider une arborescence de navigation sous forme textuelle, sans design, en demandant aux participants de trouver des pages précises",
+            "Vérifier que le sitemap XML est correctement indexé par les moteurs de recherche",
+            "Mesurer le temps de chargement des pages en profondeur dans l'arborescence"
+        ],
+        correct: 1,
+        explanation: "Le Tree Testing consiste à présenter l'arborescence sous forme textuelle (pas de design) et à demander aux participants de trouver où se trouve une information précise. Les mesures clés sont : le taux de succès (l'utilisateur trouve la bonne page), le taux de backtrack (retours en arrière), et la première sélection correcte. C'est idéal pour valider une architecture avant d'investir en design — et pour diagnostiquer précisément les problèmes de navigation."
+    }
+];
+
+// ══════════════════════════════════════════
+//  BANQUE 2 — Séance 4 · Sections 05-07 (Wireframes, Shneiderman, Accessibilité)
+// ══════════════════════════════════════════
+const bank2 = [
+    {
+        question: "Quelle est la règle ⑤ de Shneiderman et comment s'applique-t-elle ?",
+        answers: [
+            "Réduire la charge mémorielle — éviter de faire mémoriser des infos entre les étapes",
+            "Gestion des erreurs — concevoir pour prévenir les erreurs et fournir des instructions claires pour les corriger",
+            "Feedback informatif — chaque action doit produire un retour visible et approprié",
+            "Contrôle utilisateur — les utilisateurs doivent sentir qu'ils maîtrisent l'interface"
+        ],
+        correct: 1,
+        explanation: "La règle ⑤ de Shneiderman concerne la gestion des erreurs : concevoir d'abord pour que les utilisateurs ne puissent pas faire d'erreurs graves (désactiver les boutons d'envoi si le formulaire est incomplet, validation en temps réel). Quand une erreur survient, fournir des instructions claires pour la corriger — pas juste 'Erreur' en rouge, mais 'Le mot de passe doit contenir au moins 8 caractères et un chiffre'. Cette règle est souvent violée dans les formulaires mal conçus."
+    },
+    {
+        question: "Quel est le ratio de contraste minimum requis par les WCAG 2.1 (niveau AA) pour le texte normal ?",
+        answers: [
+            "2:1 — visible à l'œil nu dans des conditions normales",
+            "3:1 — recommandé pour les textes de grande taille (≥18pt regular)",
+            "4,5:1 — requis pour le texte normal selon le critère 1.4.3",
+            "7:1 — niveau AAA pour une accessibilité optimale"
+        ],
+        correct: 2,
+        explanation: "Les WCAG 2.1 au niveau AA exigent un ratio de contraste minimum de 4,5:1 pour le texte normal (critère 1.4.3). Pour le texte grand (≥18pt ou ≥14pt en gras), le seuil est de 3:1. Le niveau AAA exige 7:1 pour le texte normal. Ces seuils sont vérifiables avec des outils gratuits comme WebAIM Contrast Checker. Un texte gris clair sur fond blanc peut avoir un ratio de seulement 2–3:1 — illisible pour de nombreux utilisateurs."
+    },
+    {
+        question: "Qu'est-ce que le principe du 'curb cut effect' en accessibilité ?",
+        answers: [
+            "Un effet visuel d'arrondissement des coins dans les interfaces modernes et minimalistes",
+            "Le phénomène où les améliorations d'accessibilité conçues pour les personnes handicapées bénéficient à tous les utilisateurs",
+            "Un critère WCAG obligatoire pour les sites de service public et les administrations",
+            "Une technique de scrolling fluide pour améliorer les performances sur mobile"
+        ],
+        correct: 1,
+        explanation: "Le 'curb cut effect' tire son nom des abaissements de trottoirs conçus pour les fauteuils roulants mais utilisés par tout le monde — poussettes, livreurs, cyclistes. En accessibilité numérique : les sous-titres (conçus pour les sourds) sont utilisés dans les transports bruyants ; le contraste élevé aide par soleil ; la navigation clavier bénéficie aux power users. L'accessibilité améliore l'expérience universellement."
+    },
+    {
+        question: "Quelle règle de Shneiderman est violée quand une application ne propose pas de fonction 'Annuler' ou 'Undo' ?",
+        answers: [
+            "Règle ① — Chercher la cohérence dans toute l'interface",
+            "Règle ③ — Offrir un feedback informatif à chaque action",
+            "Règle ⑥ — Permettre l'inversion facile des actions effectuées",
+            "Règle ⑧ — Réduire la charge mémorielle à chaque étape"
+        ],
+        correct: 2,
+        explanation: "La règle ⑥ de Shneiderman concerne l'inversion des actions : permettre aux utilisateurs d'annuler facilement leurs actions. C'est psychologiquement crucial — quand les utilisateurs savent qu'ils peuvent revenir en arrière, ils explorent plus librement et font moins d'erreurs par peur. L'absence de Ctrl+Z, de corbeille ou d'annulation crée de l'anxiété et décourage l'exploration. Gmail propose même 'Annuler l'envoi' pendant 30 secondes."
+    },
+    {
+        question: "Qu'est-ce qu'un 'empty state' et pourquoi est-il important ?",
+        answers: [
+            "Un écran totalement blanc sans aucun élément — une erreur de design à absolument éviter",
+            "L'état d'une interface sans données (premier lancement, résultat vide) qui doit guider l'utilisateur vers l'action suivante",
+            "Un état de chargement avec une animation de spinning circle à l'écran",
+            "Un écran de confirmation indiquant que toutes les tâches ont bien été accomplies"
+        ],
+        correct: 1,
+        explanation: "Un empty state est l'état d'une interface quand elle ne contient pas encore de données : premier lancement, résultat de recherche vide, liste de favoris encore vide. Un bon empty state transforme un moment décevant en opportunité d'engagement : illustration + texte informatif + appel à l'action ('Ajoutez votre première transaction'). Un mauvais empty state affiche juste du blanc ou 'Aucun résultat' — laissant l'utilisateur sans direction."
+    },
+    {
+        question: "Un formulaire d'inscription affiche 'Erreur' en rouge sans plus d'explication quand l'utilisateur valide. Quelle règle de Shneiderman est violée ?",
+        answers: [
+            "Règle ① — Chercher la cohérence dans toute l'interface et ses composants",
+            "Règle ② — Permettre aux utilisateurs réguliers d'utiliser des raccourcis clavier",
+            "Règle ⑤ — Offrir une gestion simple et constructive des erreurs rencontrées",
+            "Règle ⑦ — Permettre à l'utilisateur de maîtriser et contrôler le dialogue"
+        ],
+        correct: 2,
+        explanation: "La règle ⑤ stipule qu'on doit d'abord concevoir pour prévenir les erreurs, puis — quand elles surviennent — fournir des messages clairs et précis pour les corriger. 'Erreur' sans explication viole cette règle : l'utilisateur ne sait pas quoi corriger. Le bon message : 'Le mot de passe doit contenir au moins 8 caractères et 1 chiffre.' Les WCAG 3.3.1 exigent également que les erreurs de saisie soient identifiées et décrites en texte."
+    },
+    {
+        question: "Pourquoi la navigation clavier est-elle un critère d'accessibilité essentiel même pour les utilisateurs sans handicap moteur ?",
+        answers: [
+            "Elle n'est pas essentielle pour les utilisateurs sans handicap — c'est une fonctionnalité secondaire",
+            "Parce que les power users, développeurs et utilisateurs avancés naviguent souvent au clavier pour aller plus vite",
+            "Parce que les WCAG l'exigent uniquement pour les sites gouvernementaux",
+            "Parce que la navigation clavier remplace la navigation tactile sur mobile"
+        ],
+        correct: 1,
+        explanation: "La navigation clavier est un exemple parfait du 'curb cut effect' : conçue pour les personnes avec un handicap moteur (impossibilité d'utiliser la souris), elle bénéficie aussi aux power users et développeurs qui préfèrent le clavier, aux utilisateurs en contexte de mains occupées, et améliore la compatibilité avec les lecteurs d'écran. Tester la navigation Tab/Shift+Tab révèle souvent des pièges de focus et des problèmes d'ordre de lecture invisibles visuellement."
+    },
+    {
+        question: "Un site e-commerce place dans sa navigation principale : 'Pôle commercial / Logistique / SAV / Comptabilité / RH'. Quelle erreur d'architecture commet-il ?",
+        answers: [
+            "Il utilise trop de niveaux de navigation en profondeur dans l'arborescence",
+            "Il reproduit l'organigramme interne plutôt que de refléter les modèles mentaux des utilisateurs",
+            "Il viole la loi de Hick en proposant exactement 5 options de navigation principale",
+            "Il manque d'un sitemap XML pour l'indexation par les moteurs de recherche"
+        ],
+        correct: 1,
+        explanation: "Reproduire l'organigramme interne dans la navigation est une erreur classique : les utilisateurs ne savent pas et ne se soucient pas de qui gère quoi en interne. Ils cherchent 'Commander', 'Suivre ma livraison', 'Retourner un article', 'Contact'. La navigation doit être organisée selon les objectifs et les modèles mentaux des utilisateurs — révélés par le card sorting — et non selon la structure organisationnelle de l'entreprise."
+    }
+];
+
+// ══════════════════════════════════════════
+//  MOTEUR QUIZ — factory createQuiz
+// ══════════════════════════════════════════
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function equalizeAnswerHeights(containerId) {
+    const btns = document.querySelectorAll('#' + containerId + ' .quiz-answer');
+    btns.forEach(b => { b.style.minHeight = ''; });
+    let maxH = 0;
+    btns.forEach(b => { maxH = Math.max(maxH, b.offsetHeight); });
+    btns.forEach(b => { b.style.minHeight = maxH + 'px'; });
+}
+
+function createQuiz(prefix, bank, count) {
+    const state = { questions: [], current: 0, score: 0, answered: 0, selected: null };
+    const $ = id => document.getElementById(prefix + '-' + id);
+
+    function init() {
+        const picked = shuffleArray(bank).slice(0, count);
+        state.questions = picked.map(q => {
+            const ct = q.answers[q.correct];
+            const sa = shuffleArray(q.answers);
+            return { ...q, answers: sa, correct: sa.indexOf(ct) };
+        });
+        state.current = 0; state.score = 0; state.answered = 0; state.selected = null;
+        $('question').style.display = 'block';
+        $('result').style.display   = 'none';
+        $('final').style.display    = 'none';
+        show();
+    }
+
+    function show() {
+        const q = state.questions[state.current];
+        $('question-text').textContent = q.question;
+        $('submit').disabled = true;
+        state.selected = null;
+        const c = $('answers');
+        c.innerHTML = '';
+        q.answers.forEach((a, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-answer';
+            btn.textContent = a;
+            btn.setAttribute('tabindex', '0');
+            btn.onclick = () => select(i);
+            c.appendChild(btn);
+        });
+        requestAnimationFrame(() => equalizeAnswerHeights(prefix + '-answers'));
+        bar();
+    }
+
+    function select(i) {
+        state.selected = i;
+        document.querySelectorAll('#' + prefix + '-answers .quiz-answer').forEach((b, j) => b.classList.toggle('selected', j === i));
+        $('submit').disabled = false;
+    }
+
+    function submit() {
+        if (state.selected === null) return;
+        const q = state.questions[state.current];
+        const ok = state.selected === q.correct;
+        state.answered++;
+        if (ok) state.score++;
+        document.querySelectorAll('#' + prefix + '-answers .quiz-answer').forEach((b, i) => {
+            b.onclick = null;
+            if (i === q.correct) b.classList.add('correct');
+            else if (i === state.selected) b.classList.add('incorrect');
+        });
+        const rd = $('result');
+        rd.className = 'quiz-result' + (ok ? '' : ' incorrect-result');
+        $('explanation').innerHTML = '<strong>' + (ok ? '✅ Correct !' : '❌ Incorrect') + '</strong><br><br>' + q.explanation;
+        $('next').textContent = state.current >= state.questions.length - 1 ? 'Voir mon score final' : 'Question suivante';
+        $('question').style.display = 'none';
+        rd.style.display = 'block';
+        bar();
+    }
+
+    function next() {
+        state.current++;
+        if (state.current < state.questions.length) {
+            $('question').style.display = 'block';
+            $('result').style.display   = 'none';
+            show();
+        } else { finalScore(); }
+    }
+
+    function finalScore() {
+        const pct = Math.round((state.score / state.answered) * 100);
+        let emoji, msg, color;
+        if (pct >= 80)      { emoji = '🎉'; color = '#10b981'; msg = 'Excellent ! Vous maîtrisez les concepts de cette séance.'; }
+        else if (pct >= 60) { emoji = '👍'; color = '#3b82f6'; msg = 'Bien joué ! Relisez les sections correspondantes pour consolider.'; }
+        else if (pct >= 40) { emoji = '📚'; color = '#f59e0b'; msg = 'Bon début ! Relisez les sections avant de retenter ce QCM.'; }
+        else                { emoji = '💪'; color = '#ef4444'; msg = 'Relisez attentivement le cours et retentez ce QCM.'; }
+        $('question').style.display = 'none';
+        $('result').style.display   = 'none';
+        const fd = $('final');
+        fd.style.display = 'block';
+        fd.innerHTML = `<div style="text-align:center;padding:2rem;">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">${emoji}</div>
+            <h3 style="color:${color};margin-bottom:.75rem;font-size:1.5rem;">Quiz terminé !</h3>
+            <p style="font-size:2rem;font-weight:700;margin-bottom:.5rem;">${state.score} / ${state.answered}</p>
+            <p style="font-size:1.1rem;color:#6b7280;margin-bottom:.5rem;">${pct} % de bonnes réponses</p>
+            <div style="width:100%;max-width:280px;background:#e5e7eb;border-radius:99px;height:10px;margin:1rem auto 1.5rem;">
+                <div style="height:100%;width:${pct}%;background:${color};border-radius:99px;"></div>
+            </div>
+            <p style="color:#6b7280;margin-bottom:2rem;font-size:1rem;">${msg}</p>
+            <button class="quiz-btn" onclick="${prefix === 'qcm1' ? 'quiz1' : 'quiz2'}.init()">🔄 Recommencer</button>
+        </div>`;
+        bar();
+    }
+
+    function bar() {
+        const total = state.questions.length;
+        $('progress').textContent = 'Question ' + (Math.min(state.current + 1, total)) + '/' + total;
+        $('score').textContent    = 'Score : ' + state.score + '/' + state.answered;
+        $('bar').style.width      = ((state.answered / total) * 100) + '%';
+    }
+
+    return { init, submit, next };
+}
+
+let quiz1, quiz2;
+
+// ══════════════════════════════════════════
+//  NAVIGATION + DROPDOWNS + ANIMATIONS
+// ══════════════════════════════════════════
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+    navLinks.forEach(l => l.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.getElementById(l.getAttribute('href').substring(1));
+        if (t) window.scrollTo({ top: t.offsetTop - 80, behavior: 'smooth' });
+    }));
+    function upd() {
+        let cur = '';
+        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 100) cur = s.id; });
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+    }
+    window.addEventListener('scroll', upd);
+    upd();
+}
+
+function initDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(dd =>
+        dd.querySelector('.dropdown-title').addEventListener('click', () => dd.classList.toggle('active'))
+    );
+}
+
+function initScrollAnimations() {
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.section').forEach(s => obs.observe(s));
+}
+
+document.addEventListener('keydown', e => {
+    if (e.target.classList.contains('quiz-answer')) {
+        const container = e.target.closest('.quiz-answers');
+        const answers = container ? [...container.querySelectorAll('.quiz-answer')] : [];
+        const i = answers.indexOf(e.target);
+        if (e.key === 'ArrowDown' && i < answers.length - 1) { e.preventDefault(); answers[i + 1].focus(); }
+        if (e.key === 'ArrowUp'   && i > 0)                  { e.preventDefault(); answers[i - 1].focus(); }
+        if (e.key === 'Enter' || e.key === ' ')               { e.preventDefault(); e.target.click(); }
+    }
+    if (e.key === 'Escape') document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    initNavigation();
+    initDropdowns();
+    initScrollAnimations();
+    initCardSort();
+
+    quiz1 = createQuiz('qcm1', bank1, 5);
+    quiz2 = createQuiz('qcm2', bank2, 5);
+
+    document.getElementById('qcm1-submit').addEventListener('click', () => quiz1.submit());
+    document.getElementById('qcm1-next').addEventListener('click',   () => quiz1.next());
+    document.getElementById('qcm2-submit').addEventListener('click', () => quiz2.submit());
+    document.getElementById('qcm2-next').addEventListener('click',   () => quiz2.next());
+
+    quiz1.init();
+    quiz2.init();
+
+    // ── Dark mode toggle ──
+    (function() {
+        const btn   = document.getElementById('dark-toggle');
+        const icon  = btn.querySelector('.toggle-icon');
+        const label = btn.querySelector('.toggle-label');
+        const apply = dark => {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent  = dark ? '☀️' : '🌙';
+            label.textContent = dark ? 'Light' : 'Dark';
+        };
+        apply(localStorage.getItem('ux-theme') === 'dark');
+        btn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            apply(!isDark);
+            localStorage.setItem('ux-theme', !isDark ? 'dark' : 'light');
+        });
+    })();
+
+    console.log('✅ UX Design — Séance 4 chargé');
+});
+</script>
+</body>
+</html>

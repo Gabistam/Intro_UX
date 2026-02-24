@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction à l'UX Design — Jour 2, Séance 3</title>
+    <script>(function(){var t=localStorage.getItem('ux-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ══ Extensions propres à la séance 3 ══ */
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+        .timeline::before { content: ''; position: absolute; left: .55rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary-color), var(--border-color)); }
+        .timeline-item { position: relative; margin-bottom: 1.75rem; }
+        .timeline-dot { position: absolute; left: -1.62rem; top: .25rem; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--primary-color); border: 3px solid var(--bg-white); box-shadow: 0 0 0 2px var(--primary-color); }
+        .timeline-dot.highlight { background: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-color); }
+        .timeline-date { font-size: .73rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .2rem; }
+        .timeline-title { font-weight: 600; color: var(--text-dark); margin-bottom: .3rem; }
+        .timeline-body { color: var(--text-light); font-size: .9rem; line-height: 1.6; }
+
+        /* Table comparaison */
+        .compare-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: .88rem; }
+        .compare-table th { background: var(--gradient-primary); color: white; padding: .75rem 1rem; text-align: left; font-weight: 600; }
+        .compare-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: top; color: var(--text-light); }
+        .compare-table tr:nth-child(even) td { background: var(--bg-light); }
+        .compare-table tr:hover td { background: rgba(59,130,246,.04); }
+        .compare-table td:first-child { font-weight: 600; color: var(--text-dark); }
+        @media (max-width: 768px) { .compare-table { font-size: .75rem; } .compare-table th, .compare-table td { padding: .5rem .6rem; } }
+
+        /* Liste numérotée */
+        .heuristic-list { display: flex; flex-direction: column; gap: .65rem; margin: 1.5rem 0; }
+        .heuristic-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem; background: var(--bg-light); border-radius: 8px; border: 1px solid var(--border-color); transition: all .3s ease; }
+        .heuristic-item:hover { background: rgba(59,130,246,.04); border-color: var(--primary-color); transform: translateX(4px); }
+        .heuristic-num { min-width: 2.1rem; height: 2.1rem; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .82rem; flex-shrink: 0; }
+        .heuristic-content h5 { font-weight: 600; color: var(--text-dark); margin-bottom: .15rem; font-size: .95rem; }
+        .heuristic-content p { color: var(--text-light); font-size: .85rem; line-height: 1.55; margin: 0; }
+        .heuristic-example { margin-top: .3rem; font-size: .78rem; color: var(--primary-color); font-style: italic; }
+
+        /* Quiz */
+        .quiz-progress-bar-wrap { background: var(--border-color); border-radius: 99px; height: 6px; margin-top: .5rem; overflow: hidden; }
+        .quiz-progress-bar-fill { height: 100%; background: var(--gradient-primary); border-radius: 99px; transition: width .4s ease; }
+        .quiz-header-band { background: var(--gradient-primary); color: white; padding: 1.25rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+        .quiz-header-band h3 { font-size: 1.05rem; font-weight: 700; margin: 0; color: white; }
+        .quiz-badge { background: rgba(255,255,255,.25); padding: .3rem .8rem; border-radius: 20px; font-size: .8rem; font-weight: 600; }
+        .quiz-result.incorrect-result { border-left-color: var(--danger-color); }
+        .card li { color: var(--text-light); font-size: .9rem; }
+        .card-gradient li { color: rgba(255,255,255,.9); border-bottom-color: rgba(255,255,255,.2); }
+
+        /* ══ Empathy Map ══ */
+        .empathy-map {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 0;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-md);
+        }
+        .em-cell {
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        .em-cell-header {
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: .6rem;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+        .em-cell ul { list-style: none; padding: 0; margin: 0; }
+        .em-cell li { font-size: .83rem; color: var(--text-light); padding: .3rem 0 .3rem 1rem; position: relative; line-height: 1.5; border-bottom: 1px dashed var(--border-color); }
+        .em-cell li:last-child { border-bottom: none; }
+        .em-cell li::before { content: '›'; position: absolute; left: 0; color: var(--primary-color); font-weight: 700; }
+        .em-think { background: rgba(59,130,246,.05); }
+        .em-see   { background: rgba(16,185,129,.05); }
+        .em-say   { background: rgba(245,158,11,.05); }
+        .em-do    { background: rgba(139,92,246,.05); }
+        .em-pain  { background: rgba(239,68,68,.05); }
+        .em-gain  { background: rgba(16,185,129,.08); }
+        .em-center {
+            grid-column: 1 / -1;
+            background: var(--gradient-primary);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: .02em;
+        }
+        .em-bottom { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+        @media (max-width: 640px) {
+            .empathy-map { grid-template-columns: 1fr; }
+            .em-bottom { grid-template-columns: 1fr; }
+        }
+
+        /* ══ User Journey Map ══ */
+        .ujm-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+        .ujm-table {
+            width: 100%;
+            min-width: 860px;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+        .ujm-table th {
+            padding: .75rem .9rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: .73rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            white-space: nowrap;
+        }
+        .ujm-table td {
+            padding: .75rem .9rem;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .ujm-table td:last-child { border-right: none; }
+        .ujm-table tr:last-child td { border-bottom: none; }
+        .ujm-row-label {
+            font-weight: 700;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            white-space: nowrap;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            border-right: 2px solid var(--border-color) !important;
+        }
+        .ujm-header-row th { background: var(--gradient-primary); color: white; }
+        .ujm-header-row th:first-child { background: rgba(30,41,90,.9); }
+        /* Couleurs de ligne */
+        .row-phase    td { background: rgba(59,130,246,.06); }
+        .row-actions  td { background: var(--bg-white); }
+        .row-thoughts td { background: rgba(245,158,11,.04); }
+        .row-emotions td { background: rgba(16,185,129,.04); }
+        .row-touch    td { background: rgba(139,92,246,.04); }
+        .row-friction td { background: rgba(239,68,68,.04); }
+        .row-opps     td { background: rgba(16,185,129,.08); }
+        /* Courbe émotion inline */
+        .emotion-chip {
+            display: inline-block;
+            padding: .2rem .55rem;
+            border-radius: 99px;
+            font-size: .75rem;
+            font-weight: 600;
+            margin: .1rem .1rem;
+        }
+        .emo-pos  { background: rgba(16,185,129,.15); color: #065f46; }
+        .emo-mid  { background: rgba(245,158,11,.15); color: #92400e; }
+        .emo-neg  { background: rgba(239,68,68,.15); color: #991b1b; }
+        /* Friction / Opportunité tags */
+        .friction-tag {
+            display: inline-block; padding: .18rem .5rem; border-radius: 4px;
+            background: rgba(239,68,68,.1); color: #b91c1c;
+            font-size: .75rem; font-weight: 600; margin: .1rem 0;
+        }
+        .opp-tag {
+            display: inline-block; padding: .18rem .5rem; border-radius: 4px;
+            background: rgba(16,185,129,.12); color: #065f46;
+            font-size: .75rem; font-weight: 600; margin: .1rem 0;
+        }
+
+        /* ══ Courbe d'émotion SVG ══ */
+        .emotion-curve-wrap {
+            background: var(--bg-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.5rem 1.25rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .emotion-curve-wrap svg { display: block; width: 100%; max-width: 700px; margin: 0 auto; }
+
+        /* ══ Grille d'erreurs ══ */
+        .error-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .error-item {
+            padding: 1rem 1.1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--danger-color);
+            background: rgba(239,68,68,.04);
+        }
+        .error-item h5 { font-size: .9rem; font-weight: 700; color: #b91c1c; margin-bottom: .4rem; }
+        .error-item p  { font-size: .82rem; color: var(--text-light); line-height: 1.55; margin: 0; }
+
+        /* ══ Secteurs exemples cards ══ */
+        .sector-badge {
+            display: inline-block;
+            padding: .2rem .65rem;
+            border-radius: 99px;
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            margin-bottom: .6rem;
+        }
+        .badge-ecom  { background: rgba(59,130,246,.12); color: var(--primary-color); }
+        .badge-sante { background: rgba(16,185,129,.12); color: #065f46; }
+        .badge-edu   { background: rgba(139,92,246,.12); color: #5b21b6; }
+
+        /* ══ Checklist livrables ══ */
+        .livrable-list { list-style: none; padding: 0; margin: 1rem 0; }
+        .livrable-list li {
+            display: flex; align-items: flex-start; gap: .75rem;
+            padding: .65rem .9rem; border-radius: 6px;
+            background: var(--bg-light); border: 1px solid var(--border-color);
+            margin-bottom: .4rem; font-size: .88rem; color: var(--text-dark);
+        }
+        .livrable-list li::before {
+            content: '✓'; flex-shrink: 0; width: 1.3rem; height: 1.3rem;
+            background: var(--secondary-color); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: .7rem; margin-top: .05rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+    <div class="nav-container">
+        <h1 class="nav-title">UX Design — Séance 3</h1>
+        <ul class="nav-links">
+            <li><a href="#intro"       class="nav-link">Introduction</a></li>
+            <li><a href="#empathy"     class="nav-link">Empathy Map</a></li>
+            <li><a href="#ujm-def"     class="nav-link">User Journey Map</a></li>
+            <li><a href="#ujm-struct"  class="nav-link">Structure</a></li>
+            <li><a href="#qcm1"        class="nav-link">QCM 1</a></li>
+            <li><a href="#ujm-exemple" class="nav-link">Exemple complet</a></li>
+            <li><a href="#secteurs"    class="nav-link">Secteurs</a></li>
+            <li><a href="#erreurs"     class="nav-link">Erreurs</a></li>
+            <li><a href="#glossaire"   class="nav-link">Glossaire</a></li>
+            <li><a href="#qcm2"        class="nav-link">QCM 2</a></li>
+        </ul>
+        <button class="dark-toggle" id="dark-toggle" aria-label="Basculer le mode sombre">
+            <span class="toggle-icon">🌙</span>
+            <span class="toggle-label">Dark</span>
+        </button>
+    </div>
+</nav>
+
+<main class="main-content">
+
+<!-- ═══════════════════════════════════════════
+     01 · INTRODUCTION
+═══════════════════════════════════════════ -->
+<section id="intro" class="section">
+    <h2 class="section-title">01 · De la compréhension à la cartographie</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🗺️ Où en sommes-nous ?</h3>
+        <div class="dropdown-content">
+            <p>Les deux premières séances ont posé les fondations : vous savez <strong>ce qu'est l'UX</strong> et vous avez appris à <strong>comprendre les utilisateurs</strong> grâce à la recherche. Vous disposez maintenant de verbatims, d'insights et de personas.</p>
+            <p>La question qui se pose maintenant est : <strong>comment passer de cette connaissance à un outil de conception actionnable ?</strong> C'est précisément le rôle des deux outils de cette séance : l'<em>Empathy Map</em> et la <em>User Journey Map</em>.</p>
+            <div class="alert alert-info">
+                <strong>💡 La logique du processus UX :</strong> Recherche → <strong>Comprendre</strong> (personas) → <strong>Modéliser</strong> (empathy map, user journey) → Concevoir (wireframes, prototypes) → Tester. Cette séance couvre l'étape de modélisation, qui est le pont indispensable entre la recherche et la conception.
+            </div>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <div class="card card-primary">
+            <h4>🎯 Objectifs de la séance</h4>
+            <ul>
+                <li>Comprendre la différence entre Empathy Map et User Journey Map</li>
+                <li>Maîtriser la structure et les composantes d'une UJM</li>
+                <li>Identifier les friction points et opportunités d'amélioration</li>
+                <li>Réaliser une UJM complète à partir d'un persona</li>
+            </ul>
+        </div>
+        <div class="card card-secondary">
+            <h4>🔗 Lien avec les séances précédentes</h4>
+            <ul>
+                <li><strong>Séance 1 :</strong> L'UX couvre l'intégralité du parcours — avant, pendant, après</li>
+                <li><strong>Séance 2 :</strong> Les personas décrivent <em>qui</em> sont les utilisateurs</li>
+                <li><strong>Séance 3 :</strong> L'UJM cartographie <em>ce que vivent</em> ces utilisateurs pas à pas</li>
+                <li>Ces trois outils forment un triptyque inséparable</li>
+            </ul>
+        </div>
+        <div class="card card-accent">
+            <h4>⚠️ Sans cartographie du parcours</h4>
+            <ul>
+                <li>On conçoit des fonctionnalités isolées sans vision globale</li>
+                <li>On rate les moments de friction les plus impactants</li>
+                <li>On ne voit pas les ruptures entre canaux (web, mobile, physique)</li>
+                <li>On optimise localement ce qui est globalement cassé</li>
+            </ul>
+        </div>
+        <div class="card card-gradient">
+            <h4>✅ Avec une UJM bien construite</h4>
+            <ul>
+                <li>Vision partagée et alignée de l'expérience au sein de l'équipe</li>
+                <li>Priorisation claire des points à améliorer en premier</li>
+                <li>Identification des opportunités d'innovation inexploitées</li>
+                <li>Support de communication avec les parties prenantes</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     02 · EMPATHY MAP
+═══════════════════════════════════════════ -->
+<section id="empathy" class="section">
+    <h2 class="section-title">02 · L'Empathy Map — entrer dans la tête de l'utilisateur</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🧠 Définition et utilité</h3>
+        <div class="dropdown-content">
+            <p>L'<strong>Empathy Map</strong> est un outil de synthèse visuelle qui permet à toute l'équipe de s'aligner sur une compréhension commune d'un utilisateur. Créée par Dave Gray (XPLANE, 2010), elle structure ce que l'on sait d'un utilisateur en six dimensions complémentaires.</p>
+            <p>Elle se construit <strong>après les entretiens</strong> et <strong>avant la User Journey Map</strong>. C'est une étape intermédiaire qui permet de synthétiser la recherche qualitative sous forme visuelle et de faire émerger les tensions entre ce que dit l'utilisateur et ce qu'il fait réellement.</p>
+            <div class="alert alert-info">
+                <strong>💡 Empathy Map ≠ Persona :</strong> Le persona décrit <em>qui</em> est l'utilisateur (profil, contexte, motivations). L'Empathy Map décrit <em>comment il perçoit et vit le monde</em> à travers six angles d'observation. Les deux sont complémentaires — on peut intégrer l'Empathy Map dans un persona enrichi.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🔲 Structure d'une Empathy Map — les 6 quadrants</h3>
+        <div class="dropdown-content">
+            <p>La version enrichie de l'Empathy Map (Dave Gray, 2017) comprend 6 zones :</p>
+
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>💭 Pense &amp; ressent</h4>
+                    <ul>
+                        <li>Ses préoccupations profondes</li>
+                        <li>Ce qui lui tient vraiment à cœur</li>
+                        <li>Ses croyances, ses rêves, ses craintes</li>
+                        <li>Ce qu'il ne dit pas à voix haute</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>👁️ Voit</h4>
+                    <ul>
+                        <li>Son environnement immédiat</li>
+                        <li>Ce que font ses proches et collègues</li>
+                        <li>Les offres et messages qu'il perçoit</li>
+                        <li>Ce que le marché lui propose</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>🗣️ Dit &amp; fait</h4>
+                    <ul>
+                        <li>Ce qu'il dit en public et aux autres</li>
+                        <li>Son attitude visible, ses comportements observés</li>
+                        <li>Ce qu'il a déclaré lors des entretiens</li>
+                        <li>Contradictions entre dire et faire</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>👂 Entend</h4>
+                    <ul>
+                        <li>Ce que disent ses proches et sa famille</li>
+                        <li>Les influenceurs qui le guident</li>
+                        <li>Ce qu'il entend au travail</li>
+                        <li>Les médias et canaux qu'il consomme</li>
+                    </ul>
+                </div>
+                <div class="card card-primary">
+                    <h4>😣 Souffrances (Pains)</h4>
+                    <ul>
+                        <li>Ses peurs et frustrations</li>
+                        <li>Les obstacles qui bloquent ses objectifs</li>
+                        <li>Les risques qu'il veut éviter</li>
+                        <li>Ce qui l'empêche de progresser</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🌟 Gains</h4>
+                    <ul>
+                        <li>Ses désirs et aspirations</li>
+                        <li>Ce qui constitue le succès pour lui</li>
+                        <li>Les mesures de réussite qu'il utilise</li>
+                        <li>Ce qu'il espère vraiment obtenir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📄 Exemple d'Empathy Map — Léa, alternante en marketing</h3>
+        <div class="dropdown-content">
+            <p>Voici une Empathy Map complète pour Léa (le persona de la séance 2), cette fois dans le contexte d'une application de gestion d'agenda pour alternants :</p>
+
+            <div class="empathy-map">
+                <div class="em-center">👩‍💻 Léa — 23 ans — Étudiante en alternance, Marketing Digital, Paris</div>
+
+                <div class="em-cell em-think">
+                    <div class="em-cell-header" style="color:#1d4ed8;">💭 PENSE &amp; RESSENT</div>
+                    <ul>
+                        <li>« Je n'ai jamais assez de temps pour tout faire correctement »</li>
+                        <li>Angoisse de rater une deadline entreprise à cause des cours</li>
+                        <li>Peur de décevoir son maître d'apprentissage</li>
+                        <li>Rêve de finir une journée sans to-do list restante</li>
+                        <li>Se sent parfois tiraillée entre deux mondes incompatibles</li>
+                    </ul>
+                </div>
+                <div class="em-cell em-see">
+                    <div class="em-cell-header" style="color:#065f46;">👁️ VOIT</div>
+                    <ul>
+                        <li>Ses collègues qui utilisent Notion, Google Calendar</li>
+                        <li>Des camarades qui semblent « gérer » sans effort apparent</li>
+                        <li>Publicités pour des applis de productivité partout sur Instagram</li>
+                        <li>Son bureau envahi de post-its et notes manuscrites</li>
+                        <li>Son agenda papier toujours en retard de remplissage</li>
+                    </ul>
+                </div>
+                <div class="em-cell em-say">
+                    <div class="em-cell-header" style="color:#92400e;">🗣️ DIT &amp; FAIT</div>
+                    <ul>
+                        <li>Dit : « Je vais m'organiser mieux ce trimestre »</li>
+                        <li>Fait : abandonne chaque nouvelle appli après 2 semaines</li>
+                        <li>Dit : « J'utilise mon agenda » — Fait : regarde son téléphone à la place</li>
+                        <li>Vérifie ses emails pro depuis son lit à 23h</li>
+                        <li>Jongle entre 4 outils différents sans vraie cohérence</li>
+                    </ul>
+                </div>
+                <div class="em-cell em-do">
+                    <div class="em-cell-header" style="color:#5b21b6;">👂 ENTEND</div>
+                    <ul>
+                        <li>Ses parents : « Il faut tout noter pour ne rien oublier »</li>
+                        <li>Son tuteur : « Sois plus proactive dans ton organisation »</li>
+                        <li>Ses amis : « Moi j'utilise Notion, c'est révolutionnaire »</li>
+                        <li>Podcast productivité : « La méthode GTD change la vie »</li>
+                        <li>Formatrice : « L'organisation est une compétence qui se travaille »</li>
+                    </ul>
+                </div>
+
+                <div class="em-bottom">
+                    <div class="em-cell em-pain" style="border-top:2px solid var(--danger-color);">
+                        <div class="em-cell-header" style="color:#b91c1c;">😣 SOUFFRANCES</div>
+                        <ul>
+                            <li>Oublie des réunions entreprise notées que dans un seul outil</li>
+                            <li>Les applis « trop puissantes » l'écrasent (Notion, trop complexe)</li>
+                            <li>Sentiment d'échec quand elle abandonne un système</li>
+                            <li>Conflits calendrier cours / missions entreprise non anticipés</li>
+                            <li>Panique le dimanche soir en pensant à la semaine</li>
+                        </ul>
+                    </div>
+                    <div class="em-cell em-gain" style="border-top:2px solid var(--secondary-color);">
+                        <div class="em-cell-header" style="color:#065f46;">🌟 GAINS</div>
+                        <ul>
+                            <li>Finir chaque journée avec le sentiment d'avoir avancé</li>
+                            <li>Anticiper les conflits de planning avant qu'ils arrivent</li>
+                            <li>Un seul endroit pour tout — cours + entreprise + perso</li>
+                            <li>Être reconnue comme fiable et organisée par son tuteur</li>
+                            <li>Récupérer du temps pour sa vie sociale et ses loisirs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>✅ Ce que révèle cette Empathy Map :</strong> La tension entre <em>« Dit »</em> et <em>« Fait »</em> montre que Léa a conscience de son problème mais ne trouve pas de solution durable. Ce n'est pas un problème de motivation, c'est un problème d'adéquation entre la complexité des outils et son contexte réel. Un bon design résoudra ça — pas un tutoriel.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">🛠️ Comment construire une Empathy Map en atelier</h3>
+        <div class="dropdown-content">
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num">01</div>
+                    <div class="heuristic-content">
+                        <h5>Préparer le support</h5>
+                        <p>Dessiner les 6 quadrants sur un paper board ou utiliser un template Figma. Placer le persona au centre. Préparer des post-its de couleurs différentes par quadrant.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">02</div>
+                    <div class="heuristic-content">
+                        <h5>Remplir individuellement (5 min)</h5>
+                        <p>Chaque membre de l'équipe écrit ses observations sur des post-its séparés — une idée par post-it. On puise dans les verbatims des entretiens, pas dans ses suppositions.</p>
+                        <p class="heuristic-example">Règle d'or : tout ce qui est dans l'Empathy Map doit pouvoir être justifié par une citation réelle d'utilisateur.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">03</div>
+                    <div class="heuristic-content">
+                        <h5>Partager et positionner (10 min)</h5>
+                        <p>Chacun colle ses post-its et explique en quelques mots. Les doublons sont regroupés. Les contradictions et tensions sont signalées — elles sont souvent les insights les plus précieux.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">04</div>
+                    <div class="heuristic-content">
+                        <h5>Identifier les tensions (5 min)</h5>
+                        <p>Chercher les contradictions entre les quadrants : ce que l'utilisateur <em>dit</em> vs ce qu'il <em>fait</em> ; ce qu'il <em>pense</em> vs ce qu'il <em>entend</em>. Ces tensions signalent souvent des besoins non satisfaits.</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">05</div>
+                    <div class="heuristic-content">
+                        <h5>Extraire les insights et préparer la UJM</h5>
+                        <p>Formalisez 2–3 insights clés sous forme de phrases actionnables. Ces insights alimenteront directement la ligne <em>Opportunités</em> de votre User Journey Map.</p>
+                        <p class="heuristic-example">Format d'un insight : « [Utilisateur] a besoin de [quoi] parce que [raison profonde], mais [obstacle actuel]. »</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     03 · USER JOURNEY MAP — DÉFINITION
+═══════════════════════════════════════════ -->
+<section id="ujm-def" class="section">
+    <h2 class="section-title">03 · La User Journey Map — définition et enjeux</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🗺️ Qu'est-ce qu'une User Journey Map ?</h3>
+        <div class="dropdown-content">
+            <p>Une <strong>User Journey Map</strong> (UJM) — ou carte du parcours utilisateur — est une représentation visuelle et chronologique de l'expérience vécue par un utilisateur lors de l'accomplissement d'un objectif précis, de la première prise de conscience jusqu'à l'après-usage.</p>
+            <p>Elle raconte une histoire : <em>comment une personne spécifique, dans un contexte donné, tente d'atteindre un but, les obstacles qu'elle rencontre et les émotions qu'elle ressent à chaque étape.</em></p>
+            <div class="alert alert-info">
+                <strong>💡 UJM ≠ Flowchart :</strong> Un flowchart décrit le fonctionnement technique d'un système. Une UJM décrit l'expérience humaine d'un utilisateur — avec ses émotions, ses doutes, ses allers-retours et ses déceptions. Ce n'est pas la même chose.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎯 À quoi sert une UJM concrètement ?</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>🔍 Rendre visible l'invisible</h4>
+                    <ul>
+                        <li>Cartographier les moments de friction cachés</li>
+                        <li>Identifier les ruptures entre canaux et points de contact</li>
+                        <li>Révéler les étapes où l'utilisateur abandonne</li>
+                        <li>Mettre en lumière les émotions négatives non anticipées</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🤝 Aligner l'équipe</h4>
+                    <ul>
+                        <li>Créer une vision partagée de l'expérience utilisateur</li>
+                        <li>Langage commun entre designers, devs, PM, marketing</li>
+                        <li>Dépasser les silos organisationnels</li>
+                        <li>Support de communication avec les décideurs</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>🎯 Prioriser les améliorations</h4>
+                    <ul>
+                        <li>Identifier les friction points les plus impactants</li>
+                        <li>Concentrer les ressources là où l'impact est maximal</li>
+                        <li>Justifier les choix de conception par l'expérience réelle</li>
+                        <li>Mesurer l'amélioration avant/après une refonte</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>💡 Générer des opportunités</h4>
+                    <ul>
+                        <li>Découvrir des fonctionnalités manquantes à forte valeur</li>
+                        <li>Identifier les moments où surprendre positivement l'utilisateur</li>
+                        <li>Trouver des angles différenciants vs la concurrence</li>
+                        <li>Innover de façon ciblée et justifiée</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">📐 Les 3 conditions pour qu'une UJM soit utile</h3>
+        <div class="dropdown-content">
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num">1</div>
+                    <div class="heuristic-content">
+                        <h5>Un persona spécifique — pas « l'utilisateur générique »</h5>
+                        <p>Une UJM qui essaie de représenter tous les utilisateurs finit par ne représenter personne. Il faut choisir un persona précis pour un scénario précis. Si vous avez 3 personas, vous aurez 3 UJM distinctes.</p>
+                        <p class="heuristic-example">Mauvais : « l'utilisateur de notre appli ». Bon : « Léa, 23 ans, alternante, qui cherche à synchroniser son agenda cours et entreprise pour la première fois. »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">2</div>
+                    <div class="heuristic-content">
+                        <h5>Un objectif clair — pas un processus générique</h5>
+                        <p>L'UJM doit raconter la quête d'un objectif précis, avec un début et une fin. Ce n'est pas une liste de toutes les fonctionnalités du produit.</p>
+                        <p class="heuristic-example">Mauvais : « utiliser notre application ». Bon : « planifier sa première semaine d'alternance et éviter un conflit de planning entre un cours et une réunion client. »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num">3</div>
+                    <div class="heuristic-content">
+                        <h5>Des données réelles — pas des suppositions</h5>
+                        <p>Chaque étape, émotion et friction doit être fondée sur des observations ou verbatims de recherche. Une UJM inventée sans données terrain est un biais cognitif collectif formalisé visuellement — dangereux.</p>
+                        <p class="heuristic-example">Règle pratique : pour chaque friction point identifié, vous devez pouvoir citer au moins un verbatim d'utilisateur qui le confirme.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     04 · STRUCTURE DE LA UJM
+═══════════════════════════════════════════ -->
+<section id="ujm-struct" class="section">
+    <h2 class="section-title">04 · Anatomie d'une User Journey Map</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🏗️ Les 7 lignes d'une UJM complète</h3>
+        <div class="dropdown-content">
+            <p>Une UJM se lit de gauche à droite — comme une histoire — et de haut en bas — chaque ligne apportant un angle de lecture différent sur la même étape du parcours.</p>
+
+            <div class="heuristic-list">
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">1</div>
+                    <div class="heuristic-content">
+                        <h5>Phases du parcours</h5>
+                        <p>Les grandes étapes chronologiques du parcours, nommées du point de vue de l'utilisateur. Généralement 4 à 6 phases, couvrant l'intégralité de l'expérience — de la prise de conscience jusqu'à l'après-usage.</p>
+                        <p class="heuristic-example">Exemples pour un e-commerce : Découverte → Recherche produit → Décision → Achat → Livraison → Après-vente</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">2</div>
+                    <div class="heuristic-content">
+                        <h5>Actions de l'utilisateur</h5>
+                        <p>Ce que l'utilisateur <em>fait</em> concrètement à chaque phase : les gestes, clics, recherches, appels, déplacements. Formulés à la 3ème personne, au présent, avec des verbes d'action.</p>
+                        <p class="heuristic-example">Exemples : « Tape une requête Google », « Ouvre 5 onglets de comparaison », « Appelle le SAV », « Renvoie le colis »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">3</div>
+                    <div class="heuristic-content">
+                        <h5>Pensées de l'utilisateur</h5>
+                        <p>Ce que l'utilisateur pense et se dit intérieurement à chaque étape — ses questions, doutes, hypothèses et raisonnements. Formulés comme des pensées, souvent à la 1ère personne.</p>
+                        <p class="heuristic-example">Exemples : « C'est pas clair ce prix, il y a des frais cachés ? », « Je comprends pas pourquoi je dois créer un compte pour acheter »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">4</div>
+                    <div class="heuristic-content">
+                        <h5>Émotions ressenties</h5>
+                        <p>L'état émotionnel de l'utilisateur à chaque phase, représenté visuellement par une courbe montante/descendante ou des émojis annotés. C'est la ligne la plus puissante pour identifier les moments critiques.</p>
+                        <p class="heuristic-example">Exemples : Enthousiaste 😊 → Confus 😕 → Frustré 😤 → Soulagé 😌 → Déçu 😞</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">5</div>
+                    <div class="heuristic-content">
+                        <h5>Points de contact (Touchpoints)</h5>
+                        <p>Les canaux et interfaces avec lesquels l'utilisateur interagit à chaque étape : application mobile, site web, email, téléphone, vendeur en magasin, livreur, etc.</p>
+                        <p class="heuristic-example">Exemples : App mobile, Google, Email de confirmation, Chatbot, Appel téléphonique, Push notification</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#ef4444,#dc2626);">6</div>
+                    <div class="heuristic-content">
+                        <h5>Friction points (Points de douleur)</h5>
+                        <p>Les obstacles, frustrations et problèmes concrets rencontrés à chaque étape. C'est la ligne la plus actionnable pour le designer — chaque friction est un problème à résoudre.</p>
+                        <p class="heuristic-example">Exemples : « Formulaire d'inscription trop long », « Délai de livraison affiché seulement après paiement », « Pas de confirmation de réception »</p>
+                    </div>
+                </div>
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:linear-gradient(135deg,#10b981,#059669);">7</div>
+                    <div class="heuristic-content">
+                        <h5>Opportunités d'amélioration</h5>
+                        <p>Les pistes de solution et idées d'amélioration directement liées aux frictions identifiées. Formulées comme des questions de design ou des hypothèses de solution, elles alimentent le backlog produit.</p>
+                        <p class="heuristic-example">Exemples : « Permettre l'achat sans création de compte », « Afficher le délai estimé dès la fiche produit », « Envoyer un SMS à l'expédition »</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📈 La courbe d'émotion — lire l'expérience en un coup d'œil</h3>
+        <div class="dropdown-content">
+            <p>La courbe d'émotion est l'élément visuel le plus impactant d'une UJM. Elle permet de <strong>lire l'expérience globale en quelques secondes</strong> et d'identifier immédiatement les moments critiques (pics positifs et négatifs).</p>
+
+            <div class="emotion-curve-wrap">
+                <p style="font-size:.8rem;color:var(--text-light);margin-bottom:.75rem;font-weight:600;">📊 Exemple — Parcours d'inscription à une plateforme e-learning</p>
+                <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Grille -->
+                    <line x1="80" y1="30" x2="80" y2="155" stroke="#e5e7eb" stroke-width="1"/>
+                    <line x1="80" y1="90" x2="680" y2="90" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,3"/>
+                    <!-- Labels axe Y -->
+                    <text x="68" y="38"  font-size="10" fill="#9ca3af" text-anchor="end">😄</text>
+                    <text x="68" y="94"  font-size="10" fill="#9ca3af" text-anchor="end">😐</text>
+                    <text x="68" y="150" font-size="10" fill="#9ca3af" text-anchor="end">😤</text>
+                    <!-- Labels phases (axe X) -->
+                    <text x="140" y="170" font-size="9" fill="#6b7280" text-anchor="middle">Découverte</text>
+                    <text x="258" y="170" font-size="9" fill="#6b7280" text-anchor="middle">Inscription</text>
+                    <text x="376" y="170" font-size="9" fill="#6b7280" text-anchor="middle">1er cours</text>
+                    <text x="494" y="170" font-size="9" fill="#6b7280" text-anchor="middle">Pratique</text>
+                    <text x="610" y="170" font-size="9" fill="#6b7280" text-anchor="middle">Certification</text>
+                    <!-- Séparateurs verticaux -->
+                    <line x1="199" y1="30" x2="199" y2="155" stroke="#f3f4f6" stroke-width="1"/>
+                    <line x1="317" y1="30" x2="317" y2="155" stroke="#f3f4f6" stroke-width="1"/>
+                    <line x1="435" y1="30" x2="435" y2="155" stroke="#f3f4f6" stroke-width="1"/>
+                    <line x1="553" y1="30" x2="553" y2="155" stroke="#f3f4f6" stroke-width="1"/>
+                    <!-- Zone sous la courbe -->
+                    <defs>
+                        <linearGradient id="curveGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/>
+                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M80,90 C110,70 130,50 140,45 C155,38 175,55 199,75 C220,90 240,135 258,140 C275,145 295,130 317,60 C335,42 355,38 376,42 C395,45 415,65 435,85 C450,95 470,70 494,55 C515,42 535,55 553,95 C568,120 585,130 610,65 C630,40 655,38 680,45"
+                          fill="url(#curveGrad)" stroke="none"/>
+                    <!-- Courbe principale -->
+                    <path d="M80,90 C110,70 130,50 140,45 C155,38 175,55 199,75 C220,90 240,135 258,140 C275,145 295,130 317,60 C335,42 355,38 376,42 C395,45 415,65 435,85 C450,95 470,70 494,55 C515,42 535,55 553,95 C568,120 585,130 610,65 C630,40 655,38 680,45"
+                          fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Points clés -->
+                    <circle cx="140" cy="45"  r="5" fill="#10b981" stroke="white" stroke-width="1.5"/>
+                    <circle cx="258" cy="140" r="5" fill="#ef4444" stroke="white" stroke-width="1.5"/>
+                    <circle cx="317" cy="60"  r="5" fill="#10b981" stroke="white" stroke-width="1.5"/>
+                    <circle cx="435" cy="85"  r="5" fill="#f59e0b" stroke="white" stroke-width="1.5"/>
+                    <circle cx="610" cy="65"  r="5" fill="#10b981" stroke="white" stroke-width="1.5"/>
+                    <!-- Annotation friction principale -->
+                    <line x1="258" y1="130" x2="258" y2="115" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,2"/>
+                    <rect x="210" y="100" width="96" height="18" rx="3" fill="rgba(239,68,68,.1)" stroke="#ef4444" stroke-width="1"/>
+                    <text x="258" y="112" font-size="8.5" fill="#b91c1c" text-anchor="middle" font-weight="600">⚡ Friction : formulaire</text>
+                </svg>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Les moments les plus importants :</strong> Les <strong>pics négatifs</strong> (creux de la courbe) indiquent les priorités de redesign absolues. Les <strong>pics positifs</strong> sont les moments à préserver et à renforcer. Les zones plates révèlent une expérience sans relief — ni bonne ni mauvaise — souvent signe d'un manque d'engagement.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     05 · QCM 1 — Mi-parcours
+═══════════════════════════════════════════ -->
+<section id="qcm1" class="section">
+    <h2 class="section-title">05 · QCM 1 — Autoévaluation mi-parcours</h2>
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>📝 Empathy Map &amp; Structure UJM</h3>
+            <span class="quiz-badge" id="qcm1-badge">5 questions · randomisées</span>
+        </div>
+        <div id="qcm1-question" class="quiz-question">
+            <p id="qcm1-question-text"></p>
+            <div id="qcm1-answers" class="quiz-answers"></div>
+            <button id="qcm1-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm1-result" class="quiz-result" style="display:none;">
+            <div id="qcm1-explanation" class="explanation"></div>
+            <button id="qcm1-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm1-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm1-progress">Question 1/5</span>
+            <span id="qcm1-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm1-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     06 · EXEMPLE COMPLET
+═══════════════════════════════════════════ -->
+<section id="ujm-exemple" class="section">
+    <h2 class="section-title">05 · Exemple complet — UJM annotée</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📋 Contexte du cas</h3>
+        <div class="dropdown-content">
+            <p><strong>Persona :</strong> Léa, 23 ans, alternante en Marketing Digital. Cherche à synchroniser son agenda cours / entreprise avec une nouvelle application mobile.</p>
+            <p><strong>Scénario :</strong> Léa entend parler d'une appli d'agenda pour alternants via Instagram. Elle la télécharge, s'inscrit et essaie de configurer son premier planning de la semaine.</p>
+            <p><strong>Portée :</strong> Du premier contact avec l'appli (découverte) à la fin de sa première semaine d'utilisation.</p>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🗺️ La User Journey Map</h3>
+        <div class="dropdown-content">
+            <div class="ujm-wrapper">
+                <table class="ujm-table">
+                    <thead>
+                        <tr class="ujm-header-row">
+                            <th style="width:130px;">Ligne</th>
+                            <th>① Découverte</th>
+                            <th>② Inscription</th>
+                            <th>③ Première config.</th>
+                            <th>④ Usage quotidien</th>
+                            <th>⑤ Fin de semaine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row-phase">
+                            <td class="ujm-row-label">📍 Phase</td>
+                            <td><strong>Prise de conscience</strong><br><small>Léa voit une pub Instagram</small></td>
+                            <td><strong>Onboarding</strong><br><small>Téléchargement et compte</small></td>
+                            <td><strong>Configuration</strong><br><small>Paramétrage du planning</small></td>
+                            <td><strong>Utilisation</strong><br><small>Gestion du quotidien</small></td>
+                            <td><strong>Évaluation</strong><br><small>Bilan de la semaine</small></td>
+                        </tr>
+                        <tr class="row-actions">
+                            <td class="ujm-row-label">🏃 Actions</td>
+                            <td>Voit la pub, clique sur le lien, parcourt l'App Store, lit les avis, télécharge l'appli</td>
+                            <td>Crée un compte, remplit profil (école, entreprise, rythme), confirme email</td>
+                            <td>Importe les cours depuis PDF, entre les horaires entreprise manuellement, connecte Google Calendar</td>
+                            <td>Consulte l'appli chaque matin, ajoute des tâches, répond aux notifications</td>
+                            <td>Regarde le récap hebdo, note ce qui a fonctionné, décide de continuer ou désinstaller</td>
+                        </tr>
+                        <tr class="row-thoughts">
+                            <td class="ujm-row-label">💭 Pensées</td>
+                            <td>« Encore une appli… ça va être pareil que les autres » · « Les avis ont l'air bons, je tente »</td>
+                            <td>« Pourquoi ils demandent mon numéro de tel ? » · « C'est long, j'espère que ça vaut le coup »</td>
+                            <td>« Je comprends pas comment entrer mon rythme en 3 semaines sur 4 » · « Où est le bouton pour importer ? »</td>
+                            <td>« C'est cool d'avoir tout au même endroit » · « Cette notif était pas urgente »</td>
+                            <td>« J'ai raté un cours à cause du bug de synchro... » · « L'interface est belle mais il manque des trucs »</td>
+                        </tr>
+                        <tr class="row-emotions">
+                            <td class="ujm-row-label">❤️ Émotions</td>
+                            <td><span class="emotion-chip emo-mid">Curieuse</span> <span class="emotion-chip emo-mid">Sceptique</span></td>
+                            <td><span class="emotion-chip emo-neg">Impatiente</span> <span class="emotion-chip emo-neg">Méfiante</span></td>
+                            <td><span class="emotion-chip emo-neg">Frustrée</span> <span class="emotion-chip emo-neg">Perdue</span></td>
+                            <td><span class="emotion-chip emo-pos">Satisfaite</span> <span class="emotion-chip emo-mid">Distraite</span></td>
+                            <td><span class="emotion-chip emo-neg">Déçue</span> <span class="emotion-chip emo-mid">Ambivalente</span></td>
+                        </tr>
+                        <tr class="row-touch">
+                            <td class="ujm-row-label">📱 Touchpoints</td>
+                            <td>Instagram · App Store · Avis utilisateurs</td>
+                            <td>App mobile · Email de confirmation</td>
+                            <td>App mobile · Fichier PDF · Google Calendar</td>
+                            <td>App mobile · Push notifications · Widget accueil</td>
+                            <td>App mobile · Email récap hebdo</td>
+                        </tr>
+                        <tr class="row-friction">
+                            <td class="ujm-row-label">⚡ Frictions</td>
+                            <td><span class="friction-tag">Pub trop vague sur les fonctionnalités</span></td>
+                            <td><span class="friction-tag">Profil trop long à remplir</span><br><span class="friction-tag">Demande d'infos non justifiées</span></td>
+                            <td><span class="friction-tag">Import PDF non supporté</span><br><span class="friction-tag">Rythme 3/4 semaines impossible à saisir</span><br><span class="friction-tag">Synchro Google Calendar bugguée</span></td>
+                            <td><span class="friction-tag">Trop de notifications non pertinentes</span></td>
+                            <td><span class="friction-tag">Bug synchro = cours raté</span><br><span class="friction-tag">Pas de support réactif</span></td>
+                        </tr>
+                        <tr class="row-opps">
+                            <td class="ujm-row-label">✨ Opportunités</td>
+                            <td><span class="opp-tag">Montrer 3 bénéfices concrets dès la pub</span></td>
+                            <td><span class="opp-tag">Onboarding progressif en 3 étapes max</span><br><span class="opp-tag">Expliquer pourquoi chaque info est demandée</span></td>
+                            <td><span class="opp-tag">Import automatique via ENT / école</span><br><span class="opp-tag">Template rythme alternance pré-configuré</span><br><span class="opp-tag">Tester la synchro avant validation</span></td>
+                            <td><span class="opp-tag">Personnalisation des types de notifs</span></td>
+                            <td><span class="opp-tag">Alerte proactive en cas de conflit calendrier</span><br><span class="opp-tag">Chat support intégré</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>✅ Lecture de cette UJM :</strong> Le moment le plus critique est la phase ③ (Configuration) — c'est là que l'utilisateur est le plus frustré et le plus susceptible d'abandonner. Trois frictions techniques majeures se concentrent sur un moment où la motivation est encore fragile. La priorité absolue du backlog produit devrait être là.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     06 · EXEMPLES SECTORIELS
+═══════════════════════════════════════════ -->
+<section id="secteurs" class="section">
+    <h2 class="section-title">06 · UJM selon les secteurs — adapter la méthode</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🛍️ E-commerce — parcours d'achat</h3>
+        <div class="dropdown-content">
+            <p>Le e-commerce est le terrain d'application le plus classique des UJM. Le parcours couvre typiquement 6 phases, avec des frictions spécifiques au secteur.</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4><span class="sector-badge badge-ecom">E-commerce</span><br>Phases typiques</h4>
+                    <ul>
+                        <li>Découverte (recherche Google, réseaux sociaux)</li>
+                        <li>Exploration du site / comparaison</li>
+                        <li>Décision d'achat et choix produit</li>
+                        <li>Tunnel d'achat et paiement</li>
+                        <li>Livraison et réception</li>
+                        <li>Après-vente et fidélisation</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4><span class="sector-badge badge-ecom">E-commerce</span><br>Frictions classiques</h4>
+                    <ul>
+                        <li>Obligation de créer un compte avant d'acheter</li>
+                        <li>Frais de livraison révélés à la dernière étape</li>
+                        <li>Manque d'information sur les délais de livraison</li>
+                        <li>Formulaires de paiement trop longs ou peu rassurants</li>
+                        <li>Politique de retour difficile à trouver</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4><span class="sector-badge badge-ecom">E-commerce</span><br>Opportunités fréquentes</h4>
+                    <ul>
+                        <li>Achat en 1 clic (guest checkout)</li>
+                        <li>Afficher délai et frais dès la fiche produit</li>
+                        <li>Barre de progression dans le tunnel</li>
+                        <li>Récap commande avant paiement</li>
+                        <li>Email de suivi proactif post-achat</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🏥 Santé — parcours patient</h3>
+        <div class="dropdown-content">
+            <p>Le secteur de la santé présente des enjeux UX particuliers : l'utilisateur est souvent anxieux, pressé ou fragilisé. La moindre friction peut avoir des conséquences réelles sur la santé.</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4><span class="sector-badge badge-sante">Santé</span><br>Phases typiques</h4>
+                    <ul>
+                        <li>Ressentir un symptôme et chercher de l'information</li>
+                        <li>Trouver et contacter un professionnel de santé</li>
+                        <li>Prendre un rendez-vous (en ligne ou par téléphone)</li>
+                        <li>Consultation et diagnostic</li>
+                        <li>Traitement et suivi</li>
+                        <li>Renouvellement / prévention</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4><span class="sector-badge badge-sante">Santé</span><br>Frictions classiques</h4>
+                    <ul>
+                        <li>Impossible de trouver un médecin qui accepte de nouveaux patients</li>
+                        <li>Délais d'attente très longs, non communiqués</li>
+                        <li>Résultats d'analyses reçus sans explication</li>
+                        <li>Ordonnances illisibles ou instructions confuses</li>
+                        <li>Rupture d'information entre spécialistes</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4><span class="sector-badge badge-sante">Santé</span><br>Spécificités UX</h4>
+                    <ul>
+                        <li>État émotionnel souvent négatif dès le départ (anxiété)</li>
+                        <li>Accessibilité critique (personnes âgées, handicap)</li>
+                        <li>Vocabulaire médical à simplifier sans dénaturer</li>
+                        <li>Confiance et réassurance primordiales</li>
+                        <li>RGPD renforcé pour les données de santé</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">🎓 Éducation — parcours apprenant</h3>
+        <div class="dropdown-content">
+            <p>Dans l'éducation numérique (e-learning, LMS, MOOC), la UJM révèle souvent un paradoxe : les plateformes sont riches en contenu mais pauvres en accompagnement de l'engagement et de la motivation.</p>
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4><span class="sector-badge badge-edu">Éducation</span><br>Phases typiques</h4>
+                    <ul>
+                        <li>Découverte et motivation initiale</li>
+                        <li>Inscription et onboarding</li>
+                        <li>Premiers apprentissages</li>
+                        <li>Pratique et exercices</li>
+                        <li>Évaluation et certification</li>
+                        <li>Application professionnelle</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4><span class="sector-badge badge-edu">Éducation</span><br>Frictions classiques</h4>
+                    <ul>
+                        <li>Abandon après le 1er module (taux souvent &gt; 70 %)</li>
+                        <li>Navigation dans le contenu peu intuitive</li>
+                        <li>Absence de feedback sur la progression</li>
+                        <li>Sentiment d'isolement (pas de communauté)</li>
+                        <li>Contenu dense sans rythme adaptatif</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4><span class="sector-badge badge-edu">Éducation</span><br>Opportunités fréquentes</h4>
+                    <ul>
+                        <li>Gamification et système de progression visible</li>
+                        <li>Rappels intelligents adaptés au rythme de l'apprenant</li>
+                        <li>Micro-learning (modules courts de 5–10 min)</li>
+                        <li>Communauté et entraide entre apprenants</li>
+                        <li>Certification valorisable sur LinkedIn</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     07 · ERREURS CLASSIQUES
+═══════════════════════════════════════════ -->
+<section id="erreurs" class="section">
+    <h2 class="section-title">07 · Erreurs classiques — ce qu'il faut éviter</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">⚠️ Les 8 erreurs les plus fréquentes avec les UJM</h3>
+        <div class="dropdown-content">
+            <div class="error-grid">
+                <div class="error-item">
+                    <h5>🚫 La UJM sans persona</h5>
+                    <p>Créer une « UJM générique pour tous les utilisateurs » aboutit à une carte qui ne représente personne précisément. Une UJM = un persona + un scénario spécifique.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM inventée</h5>
+                    <p>Remplir la carte en réunion sans données de recherche. Le résultat cartographie les croyances de l'équipe, pas l'expérience réelle des utilisateurs.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM exhaustive</h5>
+                    <p>Vouloir tout mettre — chaque micro-action, chaque écran. Une UJM trop détaillée devient illisible et inutilisable. La synthèse est une compétence.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM sans émotions</h5>
+                    <p>Garder uniquement les actions et supprimer la ligne des émotions. C'est supprimer la dimension humaine — et la plus grande valeur ajoutée de l'outil.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM rangée dans un tiroir</h5>
+                    <p>Créer une belle UJM en keynote puis l'oublier. Une UJM doit être affichée, référencée et mise à jour — c'est un outil vivant, pas un livrable.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM sans opportunités</h5>
+                    <p>S'arrêter à l'identification des frictions sans proposer de pistes d'amélioration. Les opportunités transforment un outil d'analyse en outil de conception.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM trop optimiste</h5>
+                    <p>Ne cartographier que le « happy path » (parcours idéal sans erreur). Les parcours réels incluent des erreurs, des retours en arrière, des abandons temporaires.</p>
+                </div>
+                <div class="error-item">
+                    <h5>🚫 La UJM ignorant les backstage</h5>
+                    <p>Oublier les processus internes (équipe, système, outil back-office) qui impactent directement l'expérience frontale. Parfois la friction visible vient d'un problème organisationnel invisible.</p>
+                </div>
+            </div>
+            <div class="alert alert-success">
+                <strong>✅ La règle d'or :</strong> Une bonne UJM est <strong>utilisée</strong>, pas seulement belle. Elle doit déclencher des décisions, alimenter un backlog, et être consultée lors des réunions de conception. Si personne ne la regarde après sa création, elle a raté son objectif.
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <h3 class="dropdown-title">📋 Checklist qualité — évaluer sa propre UJM</h3>
+        <div class="dropdown-content">
+            <ul class="livrable-list">
+                <li>Le persona est clairement identifié (prénom, contexte, objectif du scénario)</li>
+                <li>Le scénario est précis : il a un début (déclencheur) et une fin (résultat)</li>
+                <li>Les phases sont nommées du point de vue de l'utilisateur, pas du système</li>
+                <li>Chaque friction peut être justifiée par au moins un verbatim d'utilisateur réel</li>
+                <li>La ligne des émotions est présente et varie réellement (pas tout positif)</li>
+                <li>Les touchpoints couvrent tous les canaux impliqués (pas seulement l'appli)</li>
+                <li>Chaque friction a au moins une opportunité associée</li>
+                <li>La carte est lisible en moins de 3 minutes sans explication orale</li>
+                <li>Le moment le plus critique (friction principale) est clairement identifiable</li>
+                <li>Les opportunités sont formulées comme des questions de design actionnables</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     10 · QCM 2 — Fin de séance
+═══════════════════════════════════════════ -->
+<section id="qcm2" class="section">
+    <h2 class="section-title">10 · QCM 2 — Autoévaluation avancée</h2>
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>📝 Parcours, frictions et erreurs UJM</h3>
+            <span class="quiz-badge" id="qcm2-badge">5 questions · randomisées</span>
+        </div>
+        <div id="qcm2-question" class="quiz-question">
+            <p id="qcm2-question-text"></p>
+            <div id="qcm2-answers" class="quiz-answers"></div>
+            <button id="qcm2-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm2-result" class="quiz-result" style="display:none;">
+            <div id="qcm2-explanation" class="explanation"></div>
+            <button id="qcm2-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm2-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm2-progress">Question 1/5</span>
+            <span id="qcm2-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm2-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     09 · POUR ALLER PLUS LOIN
+═══════════════════════════════════════════ -->
+<section id="pour-aller-plus-loin" class="section">
+    <h2 class="section-title">09 · Pour aller plus loin</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📚 Références et ressources</h3>
+        <div class="dropdown-content">
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>This is Service Design Doing</h4>
+                    <ul>
+                        <li><strong>Auteurs :</strong> Stickdorn, Hormess, Lawrence, Schneider (2018)</li>
+                        <li>Référence absolue sur la cartographie de parcours</li>
+                        <li>Méthodes, templates, cas réels multi-secteurs</li>
+                        <li>Accompagné d'un site web avec ressources gratuites</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>Mapping Experiences</h4>
+                    <ul>
+                        <li><strong>Auteur :</strong> James Kalbach (O'Reilly, 2016)</li>
+                        <li>Guide complet des outils de cartographie UX</li>
+                        <li>UJM, Service Blueprint, Experience Maps…</li>
+                        <li>Très pratique et illustré</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>Nielsen Norman Group</h4>
+                    <ul>
+                        <li><strong>nngroup.com</strong></li>
+                        <li>Articles « Journey Mapping 101 » et « UJM Template »</li>
+                        <li>Vidéo : « How to Create a Customer Journey Map »</li>
+                        <li>Bibliothèque de templates gratuits téléchargeables</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>Outils pratiques</h4>
+                    <ul>
+                        <li><strong>Figma Community</strong> : templates UJM gratuits</li>
+                        <li><strong>Miro</strong> : collaboration en temps réel sur UJM</li>
+                        <li><strong>Canvanizer</strong> : Empathy Map en ligne gratuit</li>
+                        <li><strong>UXPressia</strong> : outil spécialisé UJM (version gratuite)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     10 · GLOSSAIRE
+═══════════════════════════════════════════ -->
+<section id="glossaire" class="section">
+    <h2 class="section-title">10 · Glossaire</h2>
+
+    <div class="dropdown active">
+        <h3 class="dropdown-title">📖 10 termes essentiels à retenir</h3>
+        <div class="dropdown-content">
+            <div class="heuristic-list">
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">UJM</div>
+                    <div class="heuristic-content">
+                        <h5>User Journey Map</h5>
+                        <p>Représentation visuelle et chronologique de l'expérience vécue par un utilisateur spécifique lors de l'accomplissement d'un objectif précis. Intègre les actions, pensées, émotions, touchpoints, frictions et opportunités à chaque étape du parcours.</p>
+                        <p class="heuristic-example">Synonymes courants : Customer Journey Map (CJM), Experience Map, Carte du parcours client.</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">EM</div>
+                    <div class="heuristic-content">
+                        <h5>Empathy Map</h5>
+                        <p>Outil de synthèse visuelle structurant ce que l'on sait d'un utilisateur en six dimensions : ce qu'il pense et ressent, voit, dit et fait, entend, ses souffrances et ses gains. Se construit après la recherche, avant la UJM.</p>
+                        <p class="heuristic-example">Créée par Dave Gray (XPLANE, 2010). Disponible en template sur Figma Community.</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">TP</div>
+                    <div class="heuristic-content">
+                        <h5>Touchpoint (point de contact)</h5>
+                        <p>Tout canal ou interface par lequel l'utilisateur interagit avec une organisation ou un produit au cours de son parcours : application mobile, site web, email, call center, vendeur physique, notification push, packaging, etc.</p>
+                        <p class="heuristic-example">Clé pour identifier les ruptures d'expérience entre canaux (ex : promesse faite sur le site non tenue à la livraison).</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">FP</div>
+                    <div class="heuristic-content">
+                        <h5>Friction point (point de friction)</h5>
+                        <p>Obstacle, difficulté ou irritant rencontré par l'utilisateur à une étape précise de son parcours, qui ralentit, bloque ou dégrade son expérience. La ligne des friction points est le cœur opérationnel d'une UJM.</p>
+                        <p class="heuristic-example">Distinguer : friction légère (ralentissement), friction importante (risque d'abandon), friction bloquante (abandon assuré).</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.65rem;min-width:2.6rem;height:2.6rem;">HP</div>
+                    <div class="heuristic-content">
+                        <h5>Happy path</h5>
+                        <p>Le parcours idéal de l'utilisateur, sans erreur, sans hésitation, sans friction — le chemin le plus direct vers l'accomplissement de son objectif. Utile pour comprendre l'expérience cible, mais insuffisant seul car les utilisateurs réels ne suivent jamais uniquement ce chemin.</p>
+                        <p class="heuristic-example">Une UJM rigoureuse documente aussi les « sad paths » : erreurs, incompréhensions, abandons partiels.</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">SB</div>
+                    <div class="heuristic-content">
+                        <h5>Service Blueprint</h5>
+                        <p>Extension de la UJM qui ajoute la dimension organisationnelle : en plus de l'expérience visible de l'utilisateur (frontstage), il cartographie les processus internes (backstage) et le support technique qui rendent le service possible.</p>
+                        <p class="heuristic-example">Utile quand les frictions utilisateur ont une cause organisationnelle interne (ex : délai de livraison long dû à un processus logistique interne mal conçu).</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">CE</div>
+                    <div class="heuristic-content">
+                        <h5>Courbe d'émotion</h5>
+                        <p>Représentation graphique de l'état émotionnel de l'utilisateur tout au long de son parcours. Elle visualise les hauts (moments de délice), les bas (moments de frustration ou d'abandon) et les plateaux (expérience neutre). C'est l'élément le plus synthétique d'une UJM.</p>
+                        <p class="heuristic-example">Les pics négatifs = priorités de redesign. Les pics positifs = moments à préserver et amplifier.</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">MoT</div>
+                    <div class="heuristic-content">
+                        <h5>Moment of Truth (moment de vérité)</h5>
+                        <p>Interaction critique à laquelle l'utilisateur forme une opinion durable sur le produit ou service — positivement ou négativement. Jan Carlzon (SAS Airlines, 1987) a popularisé ce concept en montrant que chaque interaction client forme l'image de marque.</p>
+                        <p class="heuristic-example">Le « Zero Moment of Truth » (Google) : la recherche d'information en ligne avant l'achat — devenu le moment décisif dans la plupart des parcours digitaux.</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">OB</div>
+                    <div class="heuristic-content">
+                        <h5>Onboarding</h5>
+                        <p>Phase d'accueil et de découverte d'un produit par un nouvel utilisateur, couvrant l'inscription, la configuration initiale et les premiers usages. L'onboarding est souvent le moment de friction le plus critique : c'est là que la majorité des abandons se produisent.</p>
+                        <p class="heuristic-example">Règle des 5 minutes : si un utilisateur ne comprend pas la valeur d'un produit dans les 5 premières minutes, il part et ne revient généralement pas.</p>
+                    </div>
+                </div>
+
+                <div class="heuristic-item">
+                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">CX</div>
+                    <div class="heuristic-content">
+                        <h5>Customer Experience (CX)</h5>
+                        <p>Perception globale qu'un client a d'une organisation à travers l'ensemble de ses interactions — avant, pendant et après l'achat. Plus large que l'UX (qui se concentre sur l'usage des interfaces), la CX inclut les interactions humaines, physiques et commerciales.</p>
+                        <p class="heuristic-example">Différence UX / CX : l'UX s'occupe de « comment fonctionne l'application ». La CX s'occupe de « comment je me sens vis-à-vis de la marque dans sa globalité ».</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+    <p>Introduction à l'UX Design — Jour 2, Séance 3 · User Journey Map</p>
+    <p style="margin-top:.5rem;opacity:.6;font-size:.85rem;">EEMI · Bachelor CDPD — B1 · Année académique 2024-2025</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════
+//  BANQUE 1 — Séance 3 · Sections 01-04 (Empathy Map + Structure UJM)
+// ════════════════════════════════════════════════════
+const bank1 = [
+    {
+        question: "Quelle est la différence fondamentale entre une Empathy Map et une User Journey Map ?",
+        answers: [
+            "L'Empathy Map est plus récente et remplace la UJM dans les équipes modernes",
+            "L'Empathy Map décrit comment un utilisateur perçoit son monde ; la UJM cartographie chronologiquement son expérience lors d'un parcours spécifique",
+            "L'Empathy Map est réservée aux équipes marketing ; la UJM est réservée aux équipes produit",
+            "Il n'y a aucune différence — ce sont deux noms pour le même outil"
+        ],
+        correct: 1,
+        explanation: "L'Empathy Map (Dave Gray, 2010) est un outil de synthèse statique : elle décrit comment un utilisateur perçoit le monde à travers 6 dimensions (pense, voit, dit, entend, souffrances, gains). La User Journey Map est dynamique et temporelle : elle cartographie l'évolution chronologique de l'expérience lors d'un parcours précis, avec les actions, pensées, émotions, touchpoints, frictions et opportunités à chaque étape. Les deux sont complémentaires — l'Empathy Map se construit après les entretiens et avant la UJM."
+    },
+    {
+        question: "Quels sont les deux éléments indispensables pour créer une User Journey Map valide ?",
+        answers: [
+            "Un budget conséquent et une équipe de 10 personnes minimum",
+            "Un persona spécifique ET un scénario précis avec un début et une fin",
+            "Un logiciel dédié et une salle de réunion équipée",
+            "Des données quantitatives et un sondage de 100 utilisateurs minimum"
+        ],
+        correct: 1,
+        explanation: "Une UJM valide nécessite impérativement deux conditions : (1) Un persona spécifique — pas un utilisateur générique, mais une personne précise dans un contexte précis ; (2) Un scénario délimité avec un déclencheur clair et une fin identifiable. Sans ces deux éléments, la carte finit par représenter tout le monde en général et personne en particulier — ce qui la rend inutilisable pour prendre des décisions de conception."
+    },
+    {
+        question: "Qu'est-ce qu'un 'friction point' dans une User Journey Map ?",
+        answers: [
+            "Un moment où l'utilisateur hésite entre deux chemins positifs",
+            "Le moment où l'interface est la plus belle et engageante",
+            "Un obstacle, difficulté ou irritant qui ralentit, bloque ou dégrade l'expérience à une étape précise du parcours",
+            "Une fonctionnalité avancée difficile à trouver pour les débutants"
+        ],
+        correct: 2,
+        explanation: "Un friction point est tout obstacle concret qui dégrade l'expérience : une interface incompréhensible, une information manquante, un délai trop long, un formulaire trop complexe, une rupture entre deux canaux. La ligne des friction points est le cœur opérationnel d'une UJM — c'est à partir d'elle que les opportunités d'amélioration sont définies. On distingue trois niveaux : friction légère (ralentissement), importante (risque d'abandon) et bloquante (abandon quasi certain)."
+    },
+    {
+        question: "Pourquoi la ligne des 'émotions' est-elle la plus stratégiquement importante d'une UJM ?",
+        answers: [
+            "Parce qu'elle est la plus colorée et la plus facile à lire pour les parties prenantes",
+            "Parce qu'elle permet d'identifier les moments critiques : là où l'utilisateur risque d'abandonner (creux) et là où il est le plus engagé (pics positifs)",
+            "Parce que les émotions sont plus faciles à mesurer que les comportements",
+            "Parce qu'elle remplace la nécessité de faire des tests utilisateurs"
+        ],
+        correct: 1,
+        explanation: "La courbe d'émotion est l'élément le plus synthétique d'une UJM car elle permet de lire l'expérience globale en quelques secondes. Les creux (émotions négatives) indiquent les priorités absolues de redesign — là où les utilisateurs souffrent le plus et risquent d'abandonner. Les pics positifs signalent les moments à préserver et amplifier. Les zones plates révèlent un manque d'engagement. Sans cette ligne, la UJM reste un flowchart d'actions sans dimension humaine."
+    },
+    {
+        question: "Qu'est-ce que le 'happy path' dans une User Journey Map ?",
+        answers: [
+            "Le parcours de l'utilisateur le plus heureux et satisfait de tous les personas",
+            "Le parcours idéal sans erreur ni friction — le chemin le plus direct vers l'objectif de l'utilisateur",
+            "La ligne des opportunités positives dans la UJM",
+            "Un test utilisateur réalisé uniquement avec des participants positifs"
+        ],
+        correct: 1,
+        explanation: "Le 'happy path' est le scénario idéal où tout se passe parfaitement : l'utilisateur trouve immédiatement ce qu'il cherche, ne fait aucune erreur, ne rencontre aucune friction. C'est utile pour comprendre l'expérience cible, mais insuffisant seul car les utilisateurs réels dévient constamment de ce chemin idéal. Une UJM rigoureuse documente aussi les 'sad paths' : les erreurs commises, les incompréhensions, les abandons temporaires et les chemins détournés."
+    },
+    {
+        question: "Combien de composantes la structure standard d'une User Journey Map contient-elle ?",
+        answers: [
+            "3 lignes : actions, émotions, opportunités",
+            "5 à 7 lignes : phases, actions, pensées, émotions, touchpoints, frictions, opportunités",
+            "2 éléments seulement : persona et scénario",
+            "10 lignes minimum pour être considérée complète"
+        ],
+        correct: 1,
+        explanation: "La structure standard d'une UJM comporte 5 à 7 lignes selon le niveau de détail : (1) Phases du parcours ; (2) Actions de l'utilisateur ; (3) Pensées / intentions ; (4) Émotions (la courbe émotionnelle) ; (5) Touchpoints ; (6) Frictions ; (7) Opportunités. Les lignes 1 à 5 décrivent l'existant, les lignes 6 et 7 orientent la conception. Sans cette structure, la carte risque de manquer les dimensions clés de l'expérience."
+    },
+    {
+        question: "Quel est le rôle des 'phases' dans la structure d'une UJM ?",
+        answers: [
+            "Les phases correspondent aux pages web visitées par l'utilisateur",
+            "Les phases découpent le parcours en grandes étapes nommées du point de vue de l'utilisateur, chacune regroupant plusieurs actions",
+            "Les phases indiquent les moments où changer de canal de communication",
+            "Les phases sont identiques pour tous les produits : Découverte, Achat, Usage, Fidélisation"
+        ],
+        correct: 1,
+        explanation: "Les phases sont les grandes étapes du parcours, toujours nommées du point de vue de l'utilisateur (ex : 'Je réalise que j'ai un problème', 'Je cherche une solution', 'J'essaie le produit') — jamais du point de vue du système ou de l'organisation. Elles regroupent plusieurs actions concrètes et servent à donner une lisibilité globale au parcours. Il n'existe pas de phases universelles : elles dépendent du produit, du contexte et du persona."
+    },
+    {
+        question: "Quand une Empathy Map doit-elle être construite dans le processus UX ?",
+        answers: [
+            "Avant de réaliser les entretiens utilisateurs, pour préparer les questions",
+            "Après la recherche (entretiens, observations) et avant la User Journey Map",
+            "En même temps que le prototype hi-fi pour valider l'esthétique",
+            "Uniquement à la fin du projet, comme bilan de l'expérience vécue"
+        ],
+        correct: 1,
+        explanation: "L'Empathy Map se construit après la recherche — une fois qu'on a collecté des verbatims, observé des comportements, et réalisé des entretiens. Elle synthétise ce qu'on sait d'un utilisateur en 6 dimensions avant de passer à la UJM. La construire avant la recherche mènerait à la remplir avec les suppositions de l'équipe, ce qui irait à l'encontre de son objectif. L'ordre canonique est : Recherche → Empathy Map → Persona → User Journey Map."
+    }
+];
+
+// ════════════════════════════════════════════════════
+//  BANQUE 2 — Séance 3 · Sections 06-07 (Exemples, secteurs, erreurs UJM)
+// ════════════════════════════════════════════════════
+const bank2 = [
+    {
+        question: "Dans quels quadrants de l'Empathy Map les tensions les plus révélatrices se trouvent-elles souvent ?",
+        answers: [
+            "Entre 'Voit' et 'Entend' — ce que l'environnement montre vs ce qu'on lui dit",
+            "Entre 'Dit & Fait' et 'Pense & Ressent' — ce qu'il exprime vs ce qu'il vit intérieurement",
+            "Entre 'Gains' et 'Souffrances' — ses désirs vs ses peurs",
+            "Toutes les tensions sont également importantes, aucune n'est prioritaire"
+        ],
+        correct: 1,
+        explanation: "La tension la plus révélatrice se trouve entre 'Dit & Fait' (comportements observables et déclarations publiques) et 'Pense & Ressent' (pensées profondes non exprimées). Cette contradiction — entre ce que l'utilisateur dit faire et ce qu'il fait réellement — est souvent la source des insights les plus précieux. Par exemple : « dit qu'il s'organise avec un agenda » mais « fait : ouvre 4 applis différentes sans cohérence »."
+    },
+    {
+        question: "Qu'est-ce qu'un touchpoint dans une User Journey Map ?",
+        answers: [
+            "Un moment émotionnellement fort dans le parcours de l'utilisateur",
+            "Tout canal ou interface par lequel l'utilisateur interagit avec le produit : appli, email, vendeur, packaging, notification, etc.",
+            "Un élément cliquable dans une interface (bouton, lien, menu)",
+            "Un point de mesure quantitative dans un funnel d'analytics"
+        ],
+        correct: 1,
+        explanation: "Un touchpoint est tout point de contact entre l'utilisateur et l'organisation : application mobile, site web, email transactionnel, notification push, vendeur physique, livreur, packaging, publicité, service client téléphonique, etc. Cartographier les touchpoints permet d'identifier les ruptures d'expérience entre canaux — souvent là où les frictions les plus importantes se produisent (ex : une promesse faite sur le site non tenue lors de la livraison physique)."
+    },
+    {
+        question: "Quelle est la principale différence entre une UJM et un Service Blueprint ?",
+        answers: [
+            "Un Service Blueprint est réservé au secteur des services, pas au digital",
+            "Un Service Blueprint ajoute la dimension organisationnelle interne (backstage) à l'expérience visible de l'utilisateur (frontstage)",
+            "Un Service Blueprint est une version simplifiée de la UJM sans la ligne des émotions",
+            "Il n'y a aucune différence — Service Blueprint et UJM sont synonymes"
+        ],
+        correct: 1,
+        explanation: "Une UJM se concentre sur l'expérience visible de l'utilisateur (frontstage). Un Service Blueprint étend cette vision en y ajoutant deux couches organisationnelles : les processus des employés visibles par l'utilisateur, et les systèmes backstage qui rendent le service possible. C'est utile quand les frictions utilisateur ont une cause organisationnelle interne — ex : un délai de livraison long dû à un processus logistique interne défaillant."
+    },
+    {
+        question: "Quelle erreur rend une User Journey Map pratiquement inutile ?",
+        answers: [
+            "La créer en équipe plutôt qu'individuellement",
+            "La remplir en réunion sans données de recherche — ce qui cartographie les croyances de l'équipe, pas l'expérience réelle",
+            "Utiliser des post-its de couleur plutôt qu'un outil numérique",
+            "La limiter à 5 étapes maximum pour rester lisible"
+        ],
+        correct: 1,
+        explanation: "La pire erreur est de créer une UJM en réunion à partir des suppositions de l'équipe, sans données de recherche réelles. Le résultat cartographie les biais cognitifs de l'équipe, pas l'expérience utilisateur réelle. Cette fausse UJM est potentiellement plus dangereuse que pas de UJM : elle donne une fausse confiance et oriente les décisions dans la mauvaise direction. Chaque friction, émotion et action doit pouvoir être justifiée par au moins un verbatim ou une observation terrain."
+    },
+    {
+        question: "Qu'est-ce qu'un 'Moment of Truth' dans un parcours utilisateur ?",
+        answers: [
+            "Le moment où l'utilisateur reçoit la facture finale d'un service",
+            "Une interaction critique à laquelle l'utilisateur forme une opinion durable sur le produit — positivement ou négativement",
+            "Le moment où l'on présente les résultats d'une UJM aux parties prenantes",
+            "La phase de tests utilisateurs qui valide le prototype final"
+        ],
+        correct: 1,
+        explanation: "Le concept de 'Moment of Truth' (Jan Carlzon, SAS Airlines, 1987) désigne les interactions critiques où l'utilisateur forme une impression durable sur la marque. Google a identifié le 'Zero Moment of Truth' — la recherche en ligne avant l'achat — comme le moment décisif dans la plupart des parcours digitaux. En UJM, identifier ces moments permet de concentrer les efforts de conception là où l'impact sur la perception est le plus fort."
+    },
+    {
+        question: "Pourquoi créer une UJM exhaustive documentant chaque micro-action est-il problématique ?",
+        answers: [
+            "Parce que les parties prenantes n'ont pas le temps de la lire en réunion",
+            "Parce qu'elle devient illisible et masque les moments vraiment critiques dans un excès de détails secondaires",
+            "Parce que les outils actuels ne peuvent pas gérer autant d'étapes dans une carte",
+            "Parce qu'une UJM exhaustive viole le RGPD en documentant trop précisément les comportements"
+        ],
+        correct: 1,
+        explanation: "Une UJM est un outil de communication et de décision — pas une spécification fonctionnelle complète. Si elle documente chaque micro-clic, elle devient illisible, personne ne l'utilise, et les moments critiques se noient dans les détails. L'art de la UJM est la synthèse : regrouper les actions en phases significatives, n'identifier que les frictions majeures, et formuler des opportunités actionnables. Moins, c'est souvent plus."
+    },
+    {
+        question: "Dans quel contexte une UJM est-elle particulièrement indispensable ?",
+        answers: [
+            "Uniquement pour les produits e-commerce à fort volume de transactions",
+            "Quand l'expérience implique plusieurs canaux (web, mobile, physique) et que des ruptures entre canaux sont suspectées",
+            "Seulement au lancement d'un nouveau produit, pas pour l'amélioration d'un existant",
+            "Exclusivement pour les applications mobiles grand public"
+        ],
+        correct: 1,
+        explanation: "La UJM est particulièrement puissante quand l'expérience implique plusieurs canaux ou points de contact distincts. Les ruptures entre ces canaux — là où la continuité de l'expérience se brise — sont souvent les sources de friction les plus impactantes et les plus difficiles à détecter sans une vue d'ensemble. Elle est utile à toutes les phases d'un projet, de la conception initiale à l'optimisation continue."
+    },
+    {
+        question: "Dans une UJM e-commerce (recherche d'un produit → livraison), quelle phase concentre généralement le plus de frictions selon les études ?",
+        answers: [
+            "La phase de découverte produit sur le moteur de recherche",
+            "La phase de paiement et confirmation de commande",
+            "La phase post-achat : attente de livraison et résolution de problèmes",
+            "La phase de navigation dans le catalogue de produits"
+        ],
+        correct: 2,
+        explanation: "La phase post-achat (suivi de commande, livraison, gestion des retours, service après-vente) est systématiquement celle qui concentre le plus de frictions dans les UJM e-commerce. L'utilisateur passe d'un environnement digital maîtrisé (le site) à une expérience physique avec de nombreux acteurs (transporteurs, entrepôts) et perd le contrôle. C'est souvent là que la promesse de l'expérience digitale se heurte aux contraintes opérationnelles réelles."
+    }
+];
+
+// ════════════════════════════════════════════════════
+//  MOTEUR QUIZ — factory createQuiz
+// ════════════════════════════════════════════════════
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function equalizeAnswerHeights(containerId) {
+    const btns = document.querySelectorAll('#' + containerId + ' .quiz-answer');
+    btns.forEach(b => { b.style.minHeight = ''; });
+    let maxH = 0;
+    btns.forEach(b => { maxH = Math.max(maxH, b.offsetHeight); });
+    btns.forEach(b => { b.style.minHeight = maxH + 'px'; });
+}
+
+function createQuiz(prefix, bank, count) {
+    const state = { questions: [], current: 0, score: 0, answered: 0, selected: null };
+    const $ = id => document.getElementById(prefix + '-' + id);
+
+    function init() {
+        const picked = shuffleArray(bank).slice(0, count);
+        state.questions = picked.map(q => {
+            const ct = q.answers[q.correct];
+            const sa = shuffleArray(q.answers);
+            return { ...q, answers: sa, correct: sa.indexOf(ct) };
+        });
+        state.current = 0; state.score = 0; state.answered = 0; state.selected = null;
+        $('question').style.display = 'block';
+        $('result').style.display   = 'none';
+        $('final').style.display    = 'none';
+        show();
+    }
+
+    function show() {
+        const q = state.questions[state.current];
+        $('question-text').textContent = q.question;
+        $('submit').disabled = true;
+        state.selected = null;
+        const c = $('answers');
+        c.innerHTML = '';
+        q.answers.forEach((a, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-answer';
+            btn.textContent = a;
+            btn.setAttribute('tabindex', '0');
+            btn.onclick = () => select(i);
+            c.appendChild(btn);
+        });
+        requestAnimationFrame(() => equalizeAnswerHeights(prefix + '-answers'));
+        bar();
+    }
+
+    function select(i) {
+        state.selected = i;
+        document.querySelectorAll('#' + prefix + '-answers .quiz-answer').forEach((b, j) => b.classList.toggle('selected', j === i));
+        $('submit').disabled = false;
+    }
+
+    function submit() {
+        if (state.selected === null) return;
+        const q = state.questions[state.current];
+        const ok = state.selected === q.correct;
+        state.answered++;
+        if (ok) state.score++;
+        document.querySelectorAll('#' + prefix + '-answers .quiz-answer').forEach((b, i) => {
+            b.onclick = null;
+            if (i === q.correct) b.classList.add('correct');
+            else if (i === state.selected) b.classList.add('incorrect');
+        });
+        const rd = $('result');
+        rd.className = 'quiz-result' + (ok ? '' : ' incorrect-result');
+        $('explanation').innerHTML = '<strong>' + (ok ? '✅ Correct !' : '❌ Incorrect') + '</strong><br><br>' + q.explanation;
+        $('next').textContent = state.current >= state.questions.length - 1 ? 'Voir mon score final' : 'Question suivante';
+        $('question').style.display = 'none';
+        rd.style.display = 'block';
+        bar();
+    }
+
+    function next() {
+        state.current++;
+        if (state.current < state.questions.length) {
+            $('question').style.display = 'block';
+            $('result').style.display   = 'none';
+            show();
+        } else { finalScore(); }
+    }
+
+    function finalScore() {
+        const pct = Math.round((state.score / state.answered) * 100);
+        let emoji, msg, color;
+        if (pct >= 80)      { emoji = '🎉'; color = '#10b981'; msg = 'Excellent ! Vous maîtrisez les concepts de cette séance.'; }
+        else if (pct >= 60) { emoji = '👍'; color = '#3b82f6'; msg = 'Bien joué ! Relisez les sections sur la structure et les frictions pour consolider.'; }
+        else if (pct >= 40) { emoji = '📚'; color = '#f59e0b'; msg = 'Bon début ! Relisez les sections correspondantes avant de retenter.'; }
+        else                { emoji = '💪'; color = '#ef4444'; msg = 'Relisez attentivement le cours et retentez ce QCM.'; }
+        $('question').style.display = 'none';
+        $('result').style.display   = 'none';
+        const fd = $('final');
+        fd.style.display = 'block';
+        fd.innerHTML = `<div style="text-align:center;padding:2rem;">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">${emoji}</div>
+            <h3 style="color:${color};margin-bottom:.75rem;font-size:1.5rem;">Quiz terminé !</h3>
+            <p style="font-size:2rem;font-weight:700;margin-bottom:.5rem;">${state.score} / ${state.answered}</p>
+            <p style="font-size:1.1rem;color:#6b7280;margin-bottom:.5rem;">${pct} % de bonnes réponses</p>
+            <div style="width:100%;max-width:280px;background:#e5e7eb;border-radius:99px;height:10px;margin:1rem auto 1.5rem;">
+                <div style="height:100%;width:${pct}%;background:${color};border-radius:99px;"></div>
+            </div>
+            <p style="color:#6b7280;margin-bottom:2rem;font-size:1rem;">${msg}</p>
+            <button class="quiz-btn" onclick="${prefix === 'qcm1' ? 'quiz1' : 'quiz2'}.init()">🔄 Recommencer</button>
+        </div>`;
+        bar();
+    }
+
+    function bar() {
+        const total = state.questions.length;
+        $('progress').textContent = 'Question ' + (Math.min(state.current + 1, total)) + '/' + total;
+        $('score').textContent    = 'Score : ' + state.score + '/' + state.answered;
+        $('bar').style.width      = ((state.answered / total) * 100) + '%';
+    }
+
+    return { init, submit, next };
+}
+
+let quiz1, quiz2;
+
+// ════════ Navigation + Dropdowns + Animations ════════
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.getElementById(link.getAttribute('href').substring(1));
+            if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        });
+    });
+    function updateActive() {
+        let current = '';
+        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 100) current = s.id; });
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    }
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+}
+
+function initDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(dd => {
+        dd.querySelector('.dropdown-title').addEventListener('click', () => dd.classList.toggle('active'));
+    });
+}
+
+function initScrollAnimations() {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.section').forEach(s => observer.observe(s));
+}
+
+document.addEventListener('keydown', e => {
+    if (e.target.classList.contains('quiz-answer')) {
+        const container = e.target.closest('.quiz-answers');
+        const answers = container ? [...container.querySelectorAll('.quiz-answer')] : [];
+        const idx = answers.indexOf(e.target);
+        if (e.key === 'ArrowDown' && idx < answers.length - 1) { e.preventDefault(); answers[idx + 1].focus(); }
+        if (e.key === 'ArrowUp'   && idx > 0)                  { e.preventDefault(); answers[idx - 1].focus(); }
+        if (e.key === 'Enter' || e.key === ' ')                 { e.preventDefault(); e.target.click(); }
+    }
+    if (e.key === 'Escape') document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    initNavigation();
+    initDropdowns();
+    initScrollAnimations();
+
+    quiz1 = createQuiz('qcm1', bank1, 5);
+    quiz2 = createQuiz('qcm2', bank2, 5);
+
+    document.getElementById('qcm1-submit').addEventListener('click', () => quiz1.submit());
+    document.getElementById('qcm1-next').addEventListener('click',   () => quiz1.next());
+    document.getElementById('qcm2-submit').addEventListener('click', () => quiz2.submit());
+    document.getElementById('qcm2-next').addEventListener('click',   () => quiz2.next());
+
+    quiz1.init();
+    quiz2.init();
+
+    // ── Dark mode toggle ──
+    (function() {
+        const btn   = document.getElementById('dark-toggle');
+        const icon  = btn.querySelector('.toggle-icon');
+        const label = btn.querySelector('.toggle-label');
+        const apply = dark => {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            icon.textContent  = dark ? '☀️' : '🌙';
+            label.textContent = dark ? 'Light' : 'Dark';
+        };
+        apply(localStorage.getItem('ux-theme') === 'dark');
+        btn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            apply(!isDark);
+            localStorage.setItem('ux-theme', !isDark ? 'dark' : 'light');
+        });
+    })();
+
+    console.log('✅ UX Design — Séance 3 chargé');
+});
+</script>
+</body>
+</html>
