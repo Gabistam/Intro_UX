@@ -239,12 +239,10 @@
             <li><a href="#recherche"       class="nav-link">Recherche UX</a></li>
             <li><a href="#methodes"        class="nav-link">Méthodes</a></li>
             <li><a href="#entretien"       class="nav-link">Entretien</a></li>
-            <li><a href="#qcm1"            class="nav-link">QCM 1</a></li>
             <li><a href="#persona"         class="nav-link">Persona</a></li>
             <li><a href="#biais"           class="nav-link">Biais cognitifs</a></li>
             <li><a href="#pour-aller-plus-loin" class="nav-link">Aller +loin</a></li>
             <li><a href="#glossaire"       class="nav-link">Glossaire</a></li>
-            <li><a href="#qcm2"            class="nav-link">QCM 2</a></li>
         </ul>
         <button class="dark-toggle" id="dark-toggle" aria-label="Basculer le mode sombre">
             <span class="toggle-icon">🌙</span>
@@ -416,7 +414,7 @@
 <!-- ═══════════════════════════════════════════
      03 · LES MÉTHODES DE RECHERCHE
 ═══════════════════════════════════════════ -->
-<section id="methodes" class="section">
+<section id="methodes" class="section px-2.5">
     <h2 class="section-title">03 · Les principales méthodes de recherche UX</h2>
 
     <div class="dropdown active">
@@ -424,76 +422,79 @@
         <div class="dropdown-content">
             <p>Il existe des dizaines de méthodes de recherche UX. Voici les plus courantes, regroupées par type :</p>
         </div>
+
+            <div class="cards-grid">
+                <div class="card card-primary">
+                    <h4>🎙️ Entretien utilisateur</h4>
+                    <ul>
+                        <li><strong>Type :</strong> Qualitatif · Génératif</li>
+                        <li>Conversation structurée ou semi-dirigée</li>
+                        <li>Explore motivations, habitudes, contexte de vie</li>
+                        <li>5 à 8 participants suffisent</li>
+                        <li>Durée : 30 à 60 minutes</li>
+                        <li><strong>Livrable :</strong> Verbatims, insights, patterns</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>👁️ Observation terrain</h4>
+                    <ul>
+                        <li><strong>Type :</strong> Qualitatif · Génératif</li>
+                        <li>Observer les utilisateurs dans leur environnement réel</li>
+                        <li>Révèle ce que les gens font vs ce qu'ils disent</li>
+                        <li>Idéal pour détecter des comportements non verbalisés</li>
+                        <li>Contextual inquiry : observation + entretien simultanés</li>
+                        <li><strong>Livrable :</strong> Notes de terrain, photos, insights</li>
+                    </ul>
+                </div>
+                <div class="card card-accent">
+                    <h4>📊 Sondage / Questionnaire</h4>
+                    <ul>
+                        <li><strong>Type :</strong> Quantitatif · Évaluatif</li>
+                        <li>Collecte de données à grande échelle</li>
+                        <li>Mesure de satisfaction, NPS, fréquence d'usage</li>
+                        <li>100+ répondants pour être représentatif</li>
+                        <li>Attention aux questions biaisées</li>
+                        <li><strong>Outils :</strong> Google Forms, Typeform, SurveyMonkey</li>
+                    </ul>
+                </div>
+                <div class="card card-gradient">
+                    <h4>🖥️ Test utilisateur</h4>
+                    <ul>
+                        <li><strong>Type :</strong> Qualitatif · Évaluatif</li>
+                        <li>Un utilisateur réalise des tâches sur le produit</li>
+                        <li>Règle des 5 : 5 participants détectent ~85 % des problèmes</li>
+                        <li>Think-aloud protocol : l'utilisateur verbalise sa pensée</li>
+                        <li>Peut se faire sur wireframe, prototype ou produit final</li>
+                        <li><strong>Livrable :</strong> Rapport de tests, vidéos commentées</li>
+                    </ul>
+                </div>
+                <div class="card card-primary">
+                    <h4>📈 Analytics comportementaux</h4>
+                    <ul>
+                        <li><strong>Type :</strong> Quantitatif · Évaluatif</li>
+                        <li>Données d'usage réelles et continues</li>
+                        <li>Taux d'abandon, flux de navigation, heatmaps</li>
+                        <li>Dit <em>quoi</em> mais pas <em>pourquoi</em></li>
+                        <li><strong>Outils :</strong> Google Analytics, Hotjar, Mixpanel</li>
+                        <li><strong>Livrable :</strong> Rapports, dashboards, alertes</li>
+                    </ul>
+                </div>
+                <div class="card card-secondary">
+                    <h4>🃏 Card Sorting</h4>
+                    <ul>
+                        <li><strong>Type :</strong> Qualitatif/Quantitatif · Génératif</li>
+                        <li>Les utilisateurs groupent des contenus en catégories</li>
+                        <li>Révèle comment les utilisateurs organisent mentalement l'information</li>
+                        <li>Idéal pour concevoir l'architecture de l'information</li>
+                        <li><strong>Outils :</strong> Optimal Workshop, cartes papier</li>
+                        <li><strong>Livrable :</strong> Dendrogramme, matrice de similarité</li>
+                    </ul>
+                </div>
+            </div>
+        
     </div>
 
-    <div class="cards-grid">
-        <div class="card card-primary">
-            <h4>🎙️ Entretien utilisateur</h4>
-            <ul>
-                <li><strong>Type :</strong> Qualitatif · Génératif</li>
-                <li>Conversation structurée ou semi-dirigée</li>
-                <li>Explore motivations, habitudes, contexte de vie</li>
-                <li>5 à 8 participants suffisent</li>
-                <li>Durée : 30 à 60 minutes</li>
-                <li><strong>Livrable :</strong> Verbatims, insights, patterns</li>
-            </ul>
-        </div>
-        <div class="card card-secondary">
-            <h4>👁️ Observation terrain</h4>
-            <ul>
-                <li><strong>Type :</strong> Qualitatif · Génératif</li>
-                <li>Observer les utilisateurs dans leur environnement réel</li>
-                <li>Révèle ce que les gens font vs ce qu'ils disent</li>
-                <li>Idéal pour détecter des comportements non verbalisés</li>
-                <li>Contextual inquiry : observation + entretien simultanés</li>
-                <li><strong>Livrable :</strong> Notes de terrain, photos, insights</li>
-            </ul>
-        </div>
-        <div class="card card-accent">
-            <h4>📊 Sondage / Questionnaire</h4>
-            <ul>
-                <li><strong>Type :</strong> Quantitatif · Évaluatif</li>
-                <li>Collecte de données à grande échelle</li>
-                <li>Mesure de satisfaction, NPS, fréquence d'usage</li>
-                <li>100+ répondants pour être représentatif</li>
-                <li>Attention aux questions biaisées</li>
-                <li><strong>Outils :</strong> Google Forms, Typeform, SurveyMonkey</li>
-            </ul>
-        </div>
-        <div class="card card-gradient">
-            <h4>🖥️ Test utilisateur</h4>
-            <ul>
-                <li><strong>Type :</strong> Qualitatif · Évaluatif</li>
-                <li>Un utilisateur réalise des tâches sur le produit</li>
-                <li>Règle des 5 : 5 participants détectent ~85 % des problèmes</li>
-                <li>Think-aloud protocol : l'utilisateur verbalise sa pensée</li>
-                <li>Peut se faire sur wireframe, prototype ou produit final</li>
-                <li><strong>Livrable :</strong> Rapport de tests, vidéos commentées</li>
-            </ul>
-        </div>
-        <div class="card card-primary">
-            <h4>📈 Analytics comportementaux</h4>
-            <ul>
-                <li><strong>Type :</strong> Quantitatif · Évaluatif</li>
-                <li>Données d'usage réelles et continues</li>
-                <li>Taux d'abandon, flux de navigation, heatmaps</li>
-                <li>Dit <em>quoi</em> mais pas <em>pourquoi</em></li>
-                <li><strong>Outils :</strong> Google Analytics, Hotjar, Mixpanel</li>
-                <li><strong>Livrable :</strong> Rapports, dashboards, alertes</li>
-            </ul>
-        </div>
-        <div class="card card-secondary">
-            <h4>🃏 Card Sorting</h4>
-            <ul>
-                <li><strong>Type :</strong> Qualitatif/Quantitatif · Génératif</li>
-                <li>Les utilisateurs groupent des contenus en catégories</li>
-                <li>Révèle comment les utilisateurs organisent mentalement l'information</li>
-                <li>Idéal pour concevoir l'architecture de l'information</li>
-                <li><strong>Outils :</strong> Optimal Workshop, cartes papier</li>
-                <li><strong>Livrable :</strong> Dendrogramme, matrice de similarité</li>
-            </ul>
-        </div>
-    </div>
+
 
     <div class="dropdown">
         <h3 class="dropdown-title">⏱️ Choisir la bonne méthode selon les contraintes</h3>
