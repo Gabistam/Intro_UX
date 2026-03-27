@@ -890,19 +890,12 @@
      05 · 8 RÈGLES D'OR DE SHNEIDERMAN
 ═══════════════════════════════════════════ -->
 <section id="shneiderman" class="section">
-    <h2 class="section-title">05 · Les 8 règles d'or de Shneiderman</h2>
+    <h2 class="section-title">06 · Les 8 règles d'or de Shneiderman</h2>
 
     <div class="dropdown active">
-        <h3 class="dropdown-title">📖 Contexte et importance</h3>
+        <h3 class="dropdown-title">📐 Les 8 règles — principes de conception à appliquer dès le wireframing</h3>
         <div class="dropdown-content">
-            <p>Ben Shneiderman, professeur à l'Université du Maryland, a formulé ses <strong>8 règles d'or</strong> de conception d'interface dans son ouvrage <em>Designing the User Interface</em> (1987, réédition 2016). Ces règles, issues de l'observation des interfaces les mieux conçues, restent d'une pertinence remarquable aujourd'hui — aussi bien pour les interfaces desktop que mobile.</p>
-            <p>À la différence des heuristiques de Nielsen (séance 1, évaluation des interfaces existantes), les règles de Shneiderman sont des <strong>principes de conception</strong> à appliquer dès la phase de wireframing.</p>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">📐 Les 8 règles détaillées</h3>
-        <div class="dropdown-content">
+            <p style="margin-bottom:1rem;font-size:.9rem;color:var(--text-light);">Formulées par Ben Shneiderman (<em>Designing the User Interface</em>, 1987), ces règles sont des <strong>principes de conception</strong> — à appliquer en amont, à la différence des heuristiques de Nielsen qui servent à évaluer des interfaces existantes.</p>
             <div class="shneiderman-grid">
                 <div class="shn-item">
                     <div class="shn-header" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">
@@ -985,151 +978,47 @@
      06 · ACCESSIBILITÉ WCAG
 ═══════════════════════════════════════════ -->
 <section id="accessibilite" class="section">
-    <h2 class="section-title">06 · Accessibilité — concevoir pour tous</h2>
+    <h2 class="section-title">07 · Accessibilité — concevoir pour tous</h2>
 
     <div class="dropdown active">
-        <h3 class="dropdown-title">♿ Qu'est-ce que l'accessibilité numérique ?</h3>
+        <h3 class="dropdown-title">♿ Les 4 principes POUR — WCAG 2.1</h3>
         <div class="dropdown-content">
-            <p>L'<strong>accessibilité numérique</strong> désigne la pratique de concevoir des sites web et applications qui peuvent être utilisés par tout le monde, y compris les personnes en situation de handicap (visuel, auditif, moteur, cognitif).</p>
-            <p>Les <strong>WCAG</strong> (Web Content Accessibility Guidelines) sont les directives internationales de référence, publiées par le W3C. La version actuelle est WCAG 2.1. Elles sont organisées autour de 4 principes fondamentaux et 3 niveaux de conformité.</p>
-            <div class="alert alert-warning">
-                <strong>⚠️ Accessibilité ≠ contrainte :</strong> Concevoir pour l'accessibilité améliore l'expérience pour <em>tous</em> les utilisateurs. Les sous-titres aident les personnes sourdes, mais aussi ceux qui regardent une vidéo sans son dans les transports. Le contraste élevé aide les malvoyants, mais aussi les personnes qui utilisent leur téléphone en plein soleil. C'est le principe du « curb cut effect ».
+            <div class="alert alert-warning" style="margin-bottom:1rem;">
+                <strong>⚠️ Accessibilité ≠ contrainte :</strong> Concevoir pour l'accessibilité améliore l'expérience pour <em>tous</em>. Sous-titres, contraste élevé, navigation clavier bénéficient à l'ensemble des utilisateurs (« curb cut effect »). Les WCAG 2.1 définissent 3 niveaux : A (minimum), AA (recommandé), AAA (optimal).
             </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🔠 Les 4 principes POUR (WCAG 2.1)</h3>
-        <div class="dropdown-content">
             <div class="cards-grid">
                 <div class="card card-primary">
                     <h4>👁️ Perceptible</h4>
                     <ul>
-                        <li>Les informations et composants d'interface doivent être présentés de façon perceptible par tous les sens disponibles</li>
-                        <li>Alternatives textuelles pour les images (balise alt)</li>
-                        <li>Sous-titres pour les contenus audio et vidéo</li>
-                        <li>Contenu adaptable (responsive) et contrastes suffisants</li>
+                        <li>Alt textuels sur toutes les images porteuses de sens</li>
+                        <li>Sous-titres pour les contenus audio/vidéo</li>
+                        <li>Contrastes suffisants (≥ 4,5:1 texte normal, ≥ 3:1 grand texte)</li>
                     </ul>
                 </div>
                 <div class="card card-secondary">
                     <h4>⌨️ Utilisable</h4>
                     <ul>
-                        <li>Les composants d'interface et la navigation doivent être utilisables par tous</li>
-                        <li>Navigation entièrement possible au clavier (sans souris)</li>
-                        <li>Délai suffisant pour lire et utiliser le contenu</li>
-                        <li>Pas de contenu susceptible de provoquer des crises (clignotements)</li>
+                        <li>Navigation entièrement possible au clavier (Tab)</li>
+                        <li>Focus visible — ne jamais supprimer <code>outline</code> sans alternative</li>
+                        <li>Zones tactiles ≥ 44×44 px sur mobile</li>
                     </ul>
                 </div>
                 <div class="card card-accent">
                     <h4>🧠 Compréhensible</h4>
                     <ul>
-                        <li>L'information et le fonctionnement de l'interface doivent être compréhensibles</li>
-                        <li>Texte lisible et compréhensible (niveau langage)</li>
-                        <li>Navigation et comportements prévisibles et cohérents</li>
-                        <li>Aide à la saisie et prévention des erreurs dans les formulaires</li>
+                        <li>Langue déclarée : <code>&lt;html lang="fr"&gt;</code></li>
+                        <li>Labels de formulaires explicites — jamais le placeholder seul</li>
+                        <li>Messages d'erreur précis et actionnables</li>
                     </ul>
                 </div>
                 <div class="card card-gradient">
                     <h4>💪 Robuste</h4>
                     <ul>
-                        <li>Le contenu doit être interprétable de manière fiable par une grande variété d'agents utilisateurs</li>
-                        <li>Compatible avec les technologies d'assistance (lecteurs d'écran)</li>
                         <li>HTML sémantique correct (balises appropriées)</li>
-                        <li>Compatibilité maintenue lors des évolutions du contenu</li>
+                        <li>Compatible avec les lecteurs d'écran (VoiceOver, NVDA)</li>
+                        <li>Titre de page unique et descriptif par écran</li>
                     </ul>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🎯 Critères essentiels niveau A — les incontournables pour débutants</h3>
-        <div class="dropdown-content">
-            <div class="wcag-grid">
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-a">Niveau A</span>
-                    <h5>🖼️ Alternatives textuelles (1.1.1)</h5>
-                    <p>Toute image porteuse de sens doit avoir un attribut <code>alt</code> descriptif. Les images décoratives doivent avoir un <code>alt=""</code> vide pour être ignorées par les lecteurs d'écran.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-a">Niveau A</span>
-                    <h5>⌨️ Navigation au clavier (2.1.1)</h5>
-                    <p>Toutes les fonctionnalités doivent être accessibles au clavier. La touche Tab doit permettre de naviguer entre tous les éléments interactifs dans un ordre logique.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-a">Niveau A</span>
-                    <h5>🏷️ Étiquetage des formulaires (1.3.1)</h5>
-                    <p>Chaque champ de formulaire doit être associé à un label descriptif. Utiliser la balise <code>&lt;label for&gt;</code> ou l'attribut <code>aria-label</code> — jamais le placeholder seul.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-aa">Niveau AA</span>
-                    <h5>🎨 Contraste des couleurs (1.4.3)</h5>
-                    <p>Ratio de contraste minimum de <strong>4,5:1</strong> pour le texte normal et <strong>3:1</strong> pour le texte grand (≥18pt ou ≥14pt gras). Vérifiable avec des outils comme WebAIM Contrast Checker.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-aa">Niveau AA</span>
-                    <h5>📏 Redimensionnement du texte (1.4.4)</h5>
-                    <p>Le texte doit pouvoir être agrandi jusqu'à 200 % sans perte de contenu ni de fonctionnalité. Utiliser des unités relatives (<code>rem</code>, <code>em</code>) plutôt que des pixels fixes pour les tailles de police.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-aa">Niveau AA</span>
-                    <h5>🔍 Focus visible (2.4.7)</h5>
-                    <p>L'indicateur de focus (contour visible autour de l'élément sélectionné au clavier) doit être toujours visible. Ne jamais supprimer <code>outline: none</code> sans proposer une alternative visible.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-a">Niveau A</span>
-                    <h5>🌍 Langue de la page (3.1.1)</h5>
-                    <p>La langue principale de la page doit être déclarée dans la balise <code>&lt;html lang="fr"&gt;</code>. Indispensable pour les lecteurs d'écran qui adaptent leur synthèse vocale à la langue.</p>
-                </div>
-                <div class="wcag-item">
-                    <span class="wcag-badge badge-a">Niveau A</span>
-                    <h5>📛 Titres de pages (2.4.2)</h5>
-                    <p>Chaque page doit avoir un titre descriptif et unique (<code>&lt;title&gt;</code>) qui identifie son sujet ou son but. Crucial pour les utilisateurs de lecteurs d'écran et pour le référencement.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🎨 Contrastes — comprendre et vérifier</h3>
-        <div class="dropdown-content">
-            <p>Le ratio de contraste mesure la différence de luminosité entre la couleur du texte et la couleur de son fond. Il va de 1:1 (aucun contraste — même couleur) à 21:1 (contraste maximum — noir sur blanc).</p>
-
-            <div class="contrast-demo">
-                <div class="contrast-box" style="background:#f3f4f6;">
-                    <span class="contrast-label" style="color:#9ca3af;">TEXTE SUR FOND CLAIR</span>
-                    <span class="contrast-text" style="color:#9ca3af;">Texte gris clair</span>
-                    <span class="contrast-ratio ratio-fail">Ratio : 2,9:1 ❌ ÉCHEC AA</span>
-                </div>
-                <div class="contrast-box" style="background:#f3f4f6;">
-                    <span class="contrast-label" style="color:#6b7280;">TEXTE SUR FOND CLAIR</span>
-                    <span class="contrast-text" style="color:#374151;">Texte gris foncé</span>
-                    <span class="contrast-ratio ratio-aaa">Ratio : 7,2:1 ✅ NIVEAU AAA</span>
-                </div>
-                <div class="contrast-box" style="background:#1e3a8a;">
-                    <span class="contrast-label" style="color:rgba(255,255,255,.6);">TEXTE SUR FOND SOMBRE</span>
-                    <span class="contrast-text" style="color:white;">Texte blanc sur bleu foncé</span>
-                    <span class="contrast-ratio ratio-aaa">Ratio : 9,2:1 ✅ NIVEAU AAA</span>
-                </div>
-                <div class="contrast-box" style="background:#3b82f6;">
-                    <span class="contrast-label" style="color:rgba(255,255,255,.8);">TEXTE SUR FOND COLORÉ</span>
-                    <span class="contrast-text" style="color:white;">Texte blanc sur bleu vif</span>
-                    <span class="contrast-ratio ratio-aa">Ratio : 3,5:1 ⚠️ OK pour grand texte</span>
-                </div>
-                <div class="contrast-box" style="background:#fef08a;">
-                    <span class="contrast-label" style="color:#78716c;">TEXTE SUR FOND JAUNE</span>
-                    <span class="contrast-text" style="color:#f59e0b;">Texte jaune sur jaune clair</span>
-                    <span class="contrast-ratio ratio-fail">Ratio : 1,8:1 ❌ ÉCHEC total</span>
-                </div>
-                <div class="contrast-box" style="background:#fef08a;">
-                    <span class="contrast-label" style="color:#78716c;">TEXTE SUR FOND JAUNE</span>
-                    <span class="contrast-text" style="color:#1c1917;">Texte très foncé sur jaune</span>
-                    <span class="contrast-ratio ratio-aaa">Ratio : 13,5:1 ✅ NIVEAU AAA</span>
-                </div>
-            </div>
-
-            <div class="alert alert-info">
-                <strong>🛠️ Outils recommandés :</strong> <strong>WebAIM Contrast Checker</strong> (webaim.org/resources/contrastchecker) — gratuit, instantané. <strong>Figma Plugin « Contrast »</strong> — vérifie le contraste directement dans vos maquettes. <strong>Colour Contrast Analyser</strong> (TPGi) — application desktop pour tester n'importe quelle couleur à l'écran.
             </div>
         </div>
     </div>
@@ -1139,10 +1028,10 @@
      07 · ERREURS CLASSIQUES
 ═══════════════════════════════════════════ -->
 <section id="erreurs" class="section">
-    <h2 class="section-title">07 · Erreurs classiques à éviter</h2>
+    <h2 class="section-title">08 · Erreurs classiques à éviter</h2>
 
     <div class="dropdown active">
-        <h3 class="dropdown-title">⚠️ En architecture de l'information</h3>
+        <h3 class="dropdown-title">⚠️ Erreurs fréquentes — Architecture, Wireframes &amp; Accessibilité</h3>
         <div class="dropdown-content">
             <div class="do-dont">
                 <div class="do-col">
@@ -1150,10 +1039,11 @@
                     <div class="do-body">
                         <ul>
                             <li>Baser l'architecture sur les modèles mentaux des utilisateurs (card sorting)</li>
-                            <li>Utiliser le vocabulaire des utilisateurs, pas le jargon interne</li>
-                            <li>Viser une profondeur de navigation de 2–3 niveaux maximum</li>
-                            <li>Tester l'arborescence avec un tree test avant de concevoir les écrans</li>
-                            <li>Permettre plusieurs chemins vers un même contenu important</li>
+                            <li>Utiliser le vocabulaire des utilisateurs — pas le jargon interne</li>
+                            <li>Viser 2–3 niveaux de navigation maximum</li>
+                            <li>Annoter les wireframes : états vides, erreurs, transitions</li>
+                            <li>Travailler en niveaux de gris jusqu'à validation de la structure</li>
+                            <li>Vérifier les contrastes et la navigation clavier dès le wireframe</li>
                         </ul>
                     </div>
                 </div>
@@ -1162,74 +1052,11 @@
                     <div class="dont-body">
                         <ul>
                             <li>Calquer l'arborescence sur l'organigramme interne de l'entreprise</li>
-                            <li>Utiliser des termes marketing internes incompris des utilisateurs</li>
-                            <li>Créer des catégories trop nombreuses au même niveau (plus de 7)</li>
-                            <li>Ne jamais tester la navigation avec de vrais utilisateurs</li>
-                            <li>Dupliquer du contenu sans structure cohérente</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">⚠️ En wireframing</h3>
-        <div class="dropdown-content">
-            <div class="do-dont">
-                <div class="do-col">
-                    <div class="do-header">✅ Bonnes pratiques</div>
-                    <div class="do-body">
-                        <ul>
-                            <li>Annoter les comportements interactifs et les états non visibles</li>
-                            <li>Inclure les états d'erreur et les cas limites (empty states)</li>
-                            <li>Travailler en niveaux de gris jusqu'à la validation de la structure</li>
-                            <li>Relier chaque décision de conception au persona et à l'UJM</li>
-                            <li>Laisser les wireframes assez simples pour être modifiés facilement</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="dont-col">
-                    <div class="dont-header">❌ Erreurs fréquentes</div>
-                    <div class="dont-body">
-                        <ul>
-                            <li>Ajouter des couleurs et images dès le wireframe (perte de focus)</li>
-                            <li>Oublier de représenter l'état vide de l'interface (premier lancement)</li>
-                            <li>Créer des wireframes qui ne correspondent à aucun scénario utilisateur</li>
-                            <li>Traiter le wireframe comme livrable final plutôt que comme outil de réflexion</li>
-                            <li>Ne pas valider les wireframes avec des utilisateurs ou des collègues</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">⚠️ En accessibilité</h3>
-        <div class="dropdown-content">
-            <div class="do-dont">
-                <div class="do-col">
-                    <div class="do-header">✅ Bonnes pratiques</div>
-                    <div class="do-body">
-                        <ul>
-                            <li>Vérifier les contrastes dès la phase de wireframing</li>
-                            <li>Concevoir la navigation clavier dès l'arborescence</li>
-                            <li>Penser aux lecteurs d'écran lors de la structuration du contenu</li>
-                            <li>Inclure les labels et messages d'erreur accessibles dans les wireframes</li>
-                            <li>Tester avec des utilisateurs réels en situation de handicap</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="dont-col">
-                    <div class="dont-header">❌ Erreurs fréquentes</div>
-                    <div class="dont-body">
-                        <ul>
-                            <li>Remettre l'accessibilité « à plus tard » — elle coûte 10× plus à corriger après</li>
-                            <li>Utiliser la seule couleur pour transmettre une information importante</li>
-                            <li>Supprimer le contour de focus CSS (outline:none) sans alternative</li>
-                            <li>Concevoir des zones tactiles trop petites (minimum 44×44px recommandé par Apple / Google)</li>
-                            <li>Écrire du texte sur des images sans alternative textuelle</li>
+                            <li>Créer plus de 7 catégories au même niveau de navigation</li>
+                            <li>Ajouter couleurs et images dès le wireframe (perte de focus sur la structure)</li>
+                            <li>Oublier les états d'erreur et l'état vide (premier lancement)</li>
+                            <li>Remettre l'accessibilité « à plus tard » — 10× plus coûteux à corriger</li>
+                            <li>Utiliser la couleur seule pour transmettre une information importante</li>
                         </ul>
                     </div>
                 </div>
@@ -1244,13 +1071,12 @@
                 <li>L'arborescence a été validée par un card sorting ou un tree test</li>
                 <li>Les étiquettes de navigation utilisent le vocabulaire des utilisateurs</li>
                 <li>La profondeur de navigation ne dépasse pas 3 niveaux</li>
-                <li>Les wireframes couvrent au minimum les 3 écrans principaux du scénario utilisateur</li>
+                <li>Les wireframes couvrent les écrans principaux du scénario utilisateur</li>
                 <li>Chaque wireframe est annoté (comportements, états, transitions)</li>
                 <li>Les états d'erreur et l'état vide (empty state) sont représentés</li>
                 <li>Les 8 règles de Shneiderman ont été appliquées (feedback, cohérence, undo…)</li>
                 <li>Les contrastes ont été vérifiés (ratio ≥ 4,5:1 pour texte normal)</li>
                 <li>La navigation clavier est planifiée dans le flux</li>
-                <li>Les labels des formulaires sont bien présents et distincts des placeholders</li>
             </ul>
         </div>
     </div>
@@ -1293,103 +1119,65 @@
     <h2 class="section-title">09 · Glossaire</h2>
 
     <div class="dropdown active">
-        <h3 class="dropdown-title">📖 12 termes essentiels</h3>
+        <h3 class="dropdown-title">📖 8 termes essentiels</h3>
         <div class="dropdown-content">
             <div class="heuristic-list">
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">IA</div>
                     <div class="heuristic-content">
                         <h5>Architecture de l'Information (IA)</h5>
-                        <p>Discipline qui consiste à organiser, structurer et étiqueter le contenu d'un système digital de façon à ce que les utilisateurs puissent trouver ce dont ils ont besoin et accomplir leurs tâches. Comprend les systèmes d'organisation, d'étiquetage, de navigation et de recherche.</p>
-                        <p class="heuristic-example">Référence : Peter Morville & Louis Rosenfeld, Information Architecture for the World Wide Web (1998).</p>
+                        <p>Discipline consistant à organiser, structurer et étiqueter le contenu d'un système digital pour que les utilisateurs trouvent ce dont ils ont besoin. Repose sur 4 systèmes : organisation, étiquetage, navigation, recherche (Morville & Rosenfeld, 1998).</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">CS</div>
                     <div class="heuristic-content">
                         <h5>Card Sorting</h5>
-                        <p>Méthode de recherche UX où des participants regroupent des contenus écrits sur des cartes selon leur propre logique. Permet de concevoir une architecture basée sur les modèles mentaux des utilisateurs. Trois variantes : ouvert (catégories libres), fermé (catégories prédéfinies), hybride.</p>
-                        <p class="heuristic-example">Nombre recommandé : 15–20 participants pour le card sorting ouvert. Outils : OptimalSort, UXMetrics (gratuit).</p>
+                        <p>Méthode où des participants regroupent des contenus selon leur propre logique, révélant les modèles mentaux des utilisateurs. Trois variantes : ouvert (catégories libres), fermé (catégories prédéfinies), hybride. Outils : OptimalSort, UXMetrics (gratuit).</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">TT</div>
                     <div class="heuristic-content">
                         <h5>Tree Testing</h5>
-                        <p>Méthode d'évaluation d'une arborescence de navigation sous forme textuelle, sans design visuel. Des participants accomplissent des tâches de navigation en se déplaçant dans l'arborescence. Permet de valider une architecture avant d'investir en design.</p>
-                        <p class="heuristic-example">Mesures clés : taux de succès (utilisateur trouve la bonne page), taux de backtrack (retours en arrière), première sélection correcte.</p>
+                        <p>Évaluation d'une arborescence sous forme textuelle (sans design) : les participants cherchent des informations précises. Mesures clés : taux de succès, taux de backtrack. Permet de valider l'architecture avant tout investissement en design.</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">WF</div>
                     <div class="heuristic-content">
                         <h5>Wireframe</h5>
-                        <p>Représentation schématique d'une interface, centrée sur la structure, la hiérarchie des éléments et les interactions — sans couleur définitive, typographie choisie ou images réelles. Trois niveaux : low-fi (papier), mid-fi (outil numérique en niveaux de gris), hi-fi (haute fidélité avec couleurs).</p>
-                        <p class="heuristic-example">Objectif : répondre à « Quoi et où ? » avant de répondre à « Comment ça doit être beau ? »</p>
+                        <p>Représentation schématique d'une interface centrée sur la structure et les interactions, sans couleur ni image définitives. Trois niveaux : low-fi (papier), mid-fi (numérique en gris), hi-fi (couleurs). Répond à « Quoi et où ? » avant « Comment ça doit être beau ? »</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">MoM</div>
                     <div class="heuristic-content">
                         <h5>Modèle mental</h5>
-                        <p>Représentation interne qu'un utilisateur se fait du fonctionnement d'un système, basée sur ses expériences passées et ses intuitions. Le design doit s'aligner sur les modèles mentaux des utilisateurs — pas l'inverse. Le card sorting permet de les découvrir.</p>
-                        <p class="heuristic-example">Exemple : les utilisateurs s'attendent à trouver « Nous contacter » en bas de page ou dans le menu principal — c'est leur modèle mental du web depuis les années 2000.</p>
+                        <p>Représentation interne qu'un utilisateur se fait du fonctionnement d'un système, basée sur ses expériences passées. Le design doit s'aligner sur les modèles mentaux des utilisateurs — le card sorting permet de les découvrir.</p>
+                        <p class="heuristic-example">Exemple : les utilisateurs s'attendent à trouver « Contact » en bas de page — c'est leur modèle mental du web.</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">LH</div>
                     <div class="heuristic-content">
                         <h5>Loi de Hick</h5>
-                        <p>Principe ergonomique (Hick et Hyman, 1952) stipulant que le temps de décision augmente proportionnellement au logarithme du nombre d'options disponibles. En pratique : réduire le nombre d'options visibles améliore la vitesse de navigation. Limite recommandée : 5–7 items de navigation principale.</p>
-                        <p class="heuristic-example">Contre-exemple à éviter : menus « hamburger » contenant 20+ options non hiérarchisées.</p>
+                        <p>Le temps de décision augmente proportionnellement au logarithme du nombre d'options (Hick & Hyman, 1952). En pratique : limiter la navigation principale à 5–7 items maximum.</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">WG</div>
                     <div class="heuristic-content">
-                        <h5>WCAG (Web Content Accessibility Guidelines)</h5>
-                        <p>Directives internationales d'accessibilité web publiées par le W3C. Version actuelle : WCAG 2.1. Organisées autour des 4 principes POUR (Perceptible, Utilisable, Compréhensible, Robuste) et 3 niveaux de conformité : A (minimum), AA (recommandé), AAA (optimal).</p>
-                        <p class="heuristic-example">En France, la loi du 11 février 2005 et le RGAA (Référentiel Général d'Accessibilité pour les Administrations) rendent l'accessibilité obligatoire pour les services publics numériques.</p>
-                    </div>
-                </div>
-                <div class="heuristic-item">
-                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">RC</div>
-                    <div class="heuristic-content">
-                        <h5>Ratio de contraste</h5>
-                        <p>Mesure de la différence de luminosité entre deux couleurs (généralement texte et fond). Calculé selon la formule de luminance relative. Échelle de 1:1 (aucun contraste) à 21:1 (contraste maximum). Seuils WCAG AA : 4,5:1 pour le texte normal, 3:1 pour le texte grand (≥18pt).</p>
-                        <p class="heuristic-example">Outil gratuit : WebAIM Contrast Checker — webaim.org/resources/contrastchecker</p>
+                        <h5>WCAG</h5>
+                        <p>Directives internationales d'accessibilité web (W3C, version 2.1). 4 principes POUR : Perceptible, Utilisable, Compréhensible, Robuste. 3 niveaux : A (minimum), AA (recommandé), AAA (optimal). En France, obligatoires pour les services publics numériques (RGAA).</p>
                     </div>
                 </div>
                 <div class="heuristic-item">
                     <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">ES</div>
                     <div class="heuristic-content">
                         <h5>Empty State (état vide)</h5>
-                        <p>L'état d'une interface quand elle ne contient pas encore de données — premier lancement d'une appli, résultat de recherche vide, liste de favoris encore vide. Un empty state bien conçu guide l'utilisateur vers l'action à effectuer plutôt que d'afficher un écran blanc ou un message d'erreur.</p>
-                        <p class="heuristic-example">Bon empty state : illustration + texte explicatif + bouton d'action (« Ajoutez votre première transaction »). Mauvais : juste du blanc ou « Aucun résultat ».</p>
-                    </div>
-                </div>
-                <div class="heuristic-item">
-                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">BC</div>
-                    <div class="heuristic-content">
-                        <h5>Breadcrumb (fil d'Ariane)</h5>
-                        <p>Élément de navigation secondaire affichant le chemin parcouru depuis la page d'accueil jusqu'à la page actuelle. Permet à l'utilisateur de se situer dans l'arborescence et de remonter facilement à un niveau supérieur. Particulièrement utile sur les sites à arborescence profonde.</p>
-                        <p class="heuristic-example">Format standard : Accueil › Catégorie › Sous-catégorie › Page actuelle. La page actuelle n'est généralement pas un lien cliquable.</p>
-                    </div>
-                </div>
-                <div class="heuristic-item">
-                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">SM</div>
-                    <div class="heuristic-content">
-                        <h5>Sitemap (plan du site)</h5>
-                        <p>Représentation visuelle hiérarchique de toutes les pages ou écrans d'un produit digital et de leurs relations. Premier livrable de l'architecture de l'information, il sert de carte de référence pour l'équipe de conception et de développement tout au long du projet.</p>
-                        <p class="heuristic-example">À distinguer du fichier sitemap.xml (pour les moteurs de recherche) — le sitemap UX est un document de travail visuel, pas un fichier technique.</p>
-                    </div>
-                </div>
-                <div class="heuristic-item">
-                    <div class="heuristic-num" style="background:var(--gradient-primary);font-size:.62rem;min-width:2.6rem;height:2.6rem;">AT</div>
-                    <div class="heuristic-content">
-                        <h5>Technologies d'assistance</h5>
-                        <p>Logiciels ou matériels permettant aux personnes en situation de handicap d'utiliser des interfaces numériques : lecteurs d'écran (VoiceOver iOS/macOS, NVDA, JAWS), plages braille, commandes vocales, systèmes de commutation (switch access). Concevoir en respectant les WCAG garantit la compatibilité avec ces technologies.</p>
-                        <p class="heuristic-example">Test gratuit : VoiceOver est intégré à iOS et macOS. Tester la navigation au clavier + lecteur d'écran sur ses propres wireframes révèle souvent des problèmes invisibles visuellement.</p>
+                        <p>État d'une interface sans données (premier lancement, résultat vide). Un bon empty state guide l'utilisateur vers l'action suivante : illustration + texte + bouton d'appel à l'action.</p>
+                        <p class="heuristic-example">Mauvais : blanc ou « Aucun résultat ». Bon : « Ajoutez votre première transaction » + bouton.</p>
                     </div>
                 </div>
             </div>
