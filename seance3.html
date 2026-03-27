@@ -244,14 +244,13 @@
         <ul class="nav-links">
             <li><a href="#intro"       class="nav-link">Introduction</a></li>
             <li><a href="#empathy"     class="nav-link">Empathy Map</a></li>
+            <li><a href="#qcm1"        class="nav-link">QCM 1</a></li>
             <li><a href="#ujm-def"     class="nav-link">User Journey Map</a></li>
             <li><a href="#ujm-struct"  class="nav-link">Structure</a></li>
-            <li><a href="#qcm1"        class="nav-link">QCM 1</a></li>
             <li><a href="#ujm-exemple" class="nav-link">Exemple complet</a></li>
-            <li><a href="#secteurs"    class="nav-link">Secteurs</a></li>
             <li><a href="#erreurs"     class="nav-link">Erreurs</a></li>
-            <li><a href="#glossaire"   class="nav-link">Glossaire</a></li>
             <li><a href="#qcm2"        class="nav-link">QCM 2</a></li>
+            <li><a href="#glossaire"   class="nav-link">Glossaire</a></li>
         </ul>
         <button class="dark-toggle" id="dark-toggle" aria-label="Basculer le mode sombre">
             <span class="toggle-icon">🌙</span>
@@ -526,10 +525,40 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     03 · USER JOURNEY MAP — DÉFINITION
+     03 · QCM 1 — Mi-parcours (après Empathy Map)
+═══════════════════════════════════════════ -->
+<section id="qcm1" class="section">
+    <h2 class="section-title">03 · QCM 1 — Autoévaluation Empathy Map</h2>
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>📝 Empathy Map — Concepts et pratique</h3>
+            <span class="quiz-badge" id="qcm1-badge">5 questions · randomisées</span>
+        </div>
+        <div id="qcm1-question" class="quiz-question">
+            <p id="qcm1-question-text"></p>
+            <div id="qcm1-answers" class="quiz-answers"></div>
+            <button id="qcm1-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm1-result" class="quiz-result" style="display:none;">
+            <div id="qcm1-explanation" class="explanation"></div>
+            <button id="qcm1-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm1-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm1-progress">Question 1/5</span>
+            <span id="qcm1-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm1-bar" style="width:0%"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     04 · USER JOURNEY MAP — DÉFINITION
 ═══════════════════════════════════════════ -->
 <section id="ujm-def" class="section">
-    <h2 class="section-title">03 · La User Journey Map — définition et enjeux</h2>
+    <h2 class="section-title">04 · La User Journey Map — définition et enjeux</h2>
 
     <div class="dropdown active">
         <h3 class="dropdown-title">🗺️ Qu'est-ce qu'une User Journey Map ?</h3>
@@ -620,10 +649,10 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     04 · STRUCTURE DE LA UJM
+     05 · STRUCTURE DE LA UJM
 ═══════════════════════════════════════════ -->
 <section id="ujm-struct" class="section">
-    <h2 class="section-title">04 · Anatomie d'une User Journey Map</h2>
+    <h2 class="section-title">05 · Anatomie d'une User Journey Map</h2>
 
     <div class="dropdown active">
         <h3 class="dropdown-title">🏗️ Les 7 lignes d'une UJM complète</h3>
@@ -750,40 +779,10 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     05 · QCM 1 — Mi-parcours
-═══════════════════════════════════════════ -->
-<section id="qcm1" class="section">
-    <h2 class="section-title">05 · QCM 1 — Autoévaluation mi-parcours</h2>
-    <div class="quiz-container">
-        <div class="quiz-header-band">
-            <h3>📝 Empathy Map &amp; Structure UJM</h3>
-            <span class="quiz-badge" id="qcm1-badge">5 questions · randomisées</span>
-        </div>
-        <div id="qcm1-question" class="quiz-question">
-            <p id="qcm1-question-text"></p>
-            <div id="qcm1-answers" class="quiz-answers"></div>
-            <button id="qcm1-submit" class="quiz-btn" disabled>Valider la réponse</button>
-        </div>
-        <div id="qcm1-result" class="quiz-result" style="display:none;">
-            <div id="qcm1-explanation" class="explanation"></div>
-            <button id="qcm1-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
-        </div>
-        <div id="qcm1-final" style="display:none;"></div>
-        <div class="quiz-progress">
-            <span id="qcm1-progress">Question 1/5</span>
-            <span id="qcm1-score" class="quiz-score">Score : 0/0</span>
-        </div>
-        <div class="quiz-progress-bar-wrap">
-            <div class="quiz-progress-bar-fill" id="qcm1-bar" style="width:0%"></div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
      06 · EXEMPLE COMPLET
 ═══════════════════════════════════════════ -->
 <section id="ujm-exemple" class="section">
-    <h2 class="section-title">05 · Exemple complet — UJM annotée</h2>
+    <h2 class="section-title">06 · Exemple complet — UJM annotée</h2>
 
     <div class="dropdown active">
         <h3 class="dropdown-title">📋 Contexte du cas</h3>
@@ -878,133 +877,6 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     06 · EXEMPLES SECTORIELS
-═══════════════════════════════════════════ -->
-<section id="secteurs" class="section">
-    <h2 class="section-title">06 · UJM selon les secteurs — adapter la méthode</h2>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🛍️ E-commerce — parcours d'achat</h3>
-        <div class="dropdown-content">
-            <p>Le e-commerce est le terrain d'application le plus classique des UJM. Le parcours couvre typiquement 6 phases, avec des frictions spécifiques au secteur.</p>
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <h4><span class="sector-badge badge-ecom">E-commerce</span><br>Phases typiques</h4>
-                    <ul>
-                        <li>Découverte (recherche Google, réseaux sociaux)</li>
-                        <li>Exploration du site / comparaison</li>
-                        <li>Décision d'achat et choix produit</li>
-                        <li>Tunnel d'achat et paiement</li>
-                        <li>Livraison et réception</li>
-                        <li>Après-vente et fidélisation</li>
-                    </ul>
-                </div>
-                <div class="card card-secondary">
-                    <h4><span class="sector-badge badge-ecom">E-commerce</span><br>Frictions classiques</h4>
-                    <ul>
-                        <li>Obligation de créer un compte avant d'acheter</li>
-                        <li>Frais de livraison révélés à la dernière étape</li>
-                        <li>Manque d'information sur les délais de livraison</li>
-                        <li>Formulaires de paiement trop longs ou peu rassurants</li>
-                        <li>Politique de retour difficile à trouver</li>
-                    </ul>
-                </div>
-                <div class="card card-accent">
-                    <h4><span class="sector-badge badge-ecom">E-commerce</span><br>Opportunités fréquentes</h4>
-                    <ul>
-                        <li>Achat en 1 clic (guest checkout)</li>
-                        <li>Afficher délai et frais dès la fiche produit</li>
-                        <li>Barre de progression dans le tunnel</li>
-                        <li>Récap commande avant paiement</li>
-                        <li>Email de suivi proactif post-achat</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🏥 Santé — parcours patient</h3>
-        <div class="dropdown-content">
-            <p>Le secteur de la santé présente des enjeux UX particuliers : l'utilisateur est souvent anxieux, pressé ou fragilisé. La moindre friction peut avoir des conséquences réelles sur la santé.</p>
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <h4><span class="sector-badge badge-sante">Santé</span><br>Phases typiques</h4>
-                    <ul>
-                        <li>Ressentir un symptôme et chercher de l'information</li>
-                        <li>Trouver et contacter un professionnel de santé</li>
-                        <li>Prendre un rendez-vous (en ligne ou par téléphone)</li>
-                        <li>Consultation et diagnostic</li>
-                        <li>Traitement et suivi</li>
-                        <li>Renouvellement / prévention</li>
-                    </ul>
-                </div>
-                <div class="card card-secondary">
-                    <h4><span class="sector-badge badge-sante">Santé</span><br>Frictions classiques</h4>
-                    <ul>
-                        <li>Impossible de trouver un médecin qui accepte de nouveaux patients</li>
-                        <li>Délais d'attente très longs, non communiqués</li>
-                        <li>Résultats d'analyses reçus sans explication</li>
-                        <li>Ordonnances illisibles ou instructions confuses</li>
-                        <li>Rupture d'information entre spécialistes</li>
-                    </ul>
-                </div>
-                <div class="card card-accent">
-                    <h4><span class="sector-badge badge-sante">Santé</span><br>Spécificités UX</h4>
-                    <ul>
-                        <li>État émotionnel souvent négatif dès le départ (anxiété)</li>
-                        <li>Accessibilité critique (personnes âgées, handicap)</li>
-                        <li>Vocabulaire médical à simplifier sans dénaturer</li>
-                        <li>Confiance et réassurance primordiales</li>
-                        <li>RGPD renforcé pour les données de santé</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🎓 Éducation — parcours apprenant</h3>
-        <div class="dropdown-content">
-            <p>Dans l'éducation numérique (e-learning, LMS, MOOC), la UJM révèle souvent un paradoxe : les plateformes sont riches en contenu mais pauvres en accompagnement de l'engagement et de la motivation.</p>
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <h4><span class="sector-badge badge-edu">Éducation</span><br>Phases typiques</h4>
-                    <ul>
-                        <li>Découverte et motivation initiale</li>
-                        <li>Inscription et onboarding</li>
-                        <li>Premiers apprentissages</li>
-                        <li>Pratique et exercices</li>
-                        <li>Évaluation et certification</li>
-                        <li>Application professionnelle</li>
-                    </ul>
-                </div>
-                <div class="card card-secondary">
-                    <h4><span class="sector-badge badge-edu">Éducation</span><br>Frictions classiques</h4>
-                    <ul>
-                        <li>Abandon après le 1er module (taux souvent &gt; 70 %)</li>
-                        <li>Navigation dans le contenu peu intuitive</li>
-                        <li>Absence de feedback sur la progression</li>
-                        <li>Sentiment d'isolement (pas de communauté)</li>
-                        <li>Contenu dense sans rythme adaptatif</li>
-                    </ul>
-                </div>
-                <div class="card card-accent">
-                    <h4><span class="sector-badge badge-edu">Éducation</span><br>Opportunités fréquentes</h4>
-                    <ul>
-                        <li>Gamification et système de progression visible</li>
-                        <li>Rappels intelligents adaptés au rythme de l'apprenant</li>
-                        <li>Micro-learning (modules courts de 5–10 min)</li>
-                        <li>Communauté et entraide entre apprenants</li>
-                        <li>Certification valorisable sur LinkedIn</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
      07 · ERREURS CLASSIQUES
 ═══════════════════════════════════════════ -->
 <section id="erreurs" class="section">
@@ -1073,13 +945,13 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     10 · QCM 2 — Fin de séance
+     08 · QCM 2 — Fin de séance
 ═══════════════════════════════════════════ -->
 <section id="qcm2" class="section">
-    <h2 class="section-title">10 · QCM 2 — Autoévaluation avancée</h2>
+    <h2 class="section-title">08 · QCM 2 — Autoévaluation avancée</h2>
     <div class="quiz-container">
         <div class="quiz-header-band">
-            <h3>📝 Parcours, frictions et erreurs UJM</h3>
+            <h3>📝 User Journey Map — Parcours, frictions et erreurs</h3>
             <span class="quiz-badge" id="qcm2-badge">5 questions · randomisées</span>
         </div>
         <div id="qcm2-question" class="quiz-question">
@@ -1103,61 +975,10 @@
 </section>
 
 <!-- ═══════════════════════════════════════════
-     09 · POUR ALLER PLUS LOIN
-═══════════════════════════════════════════ -->
-<section id="pour-aller-plus-loin" class="section">
-    <h2 class="section-title">09 · Pour aller plus loin</h2>
-
-    <div class="dropdown active">
-        <h3 class="dropdown-title">📚 Références et ressources</h3>
-        <div class="dropdown-content">
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <h4>This is Service Design Doing</h4>
-                    <ul>
-                        <li><strong>Auteurs :</strong> Stickdorn, Hormess, Lawrence, Schneider (2018)</li>
-                        <li>Référence absolue sur la cartographie de parcours</li>
-                        <li>Méthodes, templates, cas réels multi-secteurs</li>
-                        <li>Accompagné d'un site web avec ressources gratuites</li>
-                    </ul>
-                </div>
-                <div class="card card-secondary">
-                    <h4>Mapping Experiences</h4>
-                    <ul>
-                        <li><strong>Auteur :</strong> James Kalbach (O'Reilly, 2016)</li>
-                        <li>Guide complet des outils de cartographie UX</li>
-                        <li>UJM, Service Blueprint, Experience Maps…</li>
-                        <li>Très pratique et illustré</li>
-                    </ul>
-                </div>
-                <div class="card card-accent">
-                    <h4>Nielsen Norman Group</h4>
-                    <ul>
-                        <li><strong>nngroup.com</strong></li>
-                        <li>Articles « Journey Mapping 101 » et « UJM Template »</li>
-                        <li>Vidéo : « How to Create a Customer Journey Map »</li>
-                        <li>Bibliothèque de templates gratuits téléchargeables</li>
-                    </ul>
-                </div>
-                <div class="card card-gradient">
-                    <h4>Outils pratiques</h4>
-                    <ul>
-                        <li><strong>Figma Community</strong> : templates UJM gratuits</li>
-                        <li><strong>Miro</strong> : collaboration en temps réel sur UJM</li>
-                        <li><strong>Canvanizer</strong> : Empathy Map en ligne gratuit</li>
-                        <li><strong>UXPressia</strong> : outil spécialisé UJM (version gratuite)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     10 · GLOSSAIRE
+     09 · GLOSSAIRE
 ═══════════════════════════════════════════ -->
 <section id="glossaire" class="section">
-    <h2 class="section-title">10 · Glossaire</h2>
+    <h2 class="section-title">09 · Glossaire</h2>
 
     <div class="dropdown active">
         <h3 class="dropdown-title">📖 10 termes essentiels à retenir</h3>
@@ -1269,7 +1090,7 @@
 
 <script>
 // ════════════════════════════════════════════════════
-//  BANQUE 1 — Séance 3 · Sections 01-04 (Empathy Map + Structure UJM)
+//  BANQUE 1 — Séance 3 · Section 02 (Empathy Map)
 // ════════════════════════════════════════════════════
 const bank1 = [
     {
@@ -1281,8 +1102,91 @@ const bank1 = [
             "Il n'y a aucune différence — ce sont deux noms pour le même outil"
         ],
         correct: 1,
-        explanation: "L'Empathy Map (Dave Gray, 2010) est un outil de synthèse statique : elle décrit comment un utilisateur perçoit le monde à travers 6 dimensions (pense, voit, dit, entend, souffrances, gains). La User Journey Map est dynamique et temporelle : elle cartographie l'évolution chronologique de l'expérience lors d'un parcours précis, avec les actions, pensées, émotions, touchpoints, frictions et opportunités à chaque étape. Les deux sont complémentaires — l'Empathy Map se construit après les entretiens et avant la UJM."
+        explanation: "L'Empathy Map (Dave Gray, 2010) est un outil de synthèse statique : elle décrit comment un utilisateur perçoit le monde à travers 6 dimensions (pense, voit, dit, entend, souffrances, gains). La User Journey Map est dynamique et temporelle : elle cartographie l'évolution chronologique de l'expérience lors d'un parcours précis. Les deux sont complémentaires — l'Empathy Map se construit après les entretiens et avant la UJM."
     },
+    {
+        question: "Quand une Empathy Map doit-elle être construite dans le processus UX ?",
+        answers: [
+            "Avant de réaliser les entretiens utilisateurs, pour préparer les questions",
+            "Après la recherche (entretiens, observations) et avant la User Journey Map",
+            "En même temps que le prototype hi-fi pour valider l'esthétique",
+            "Uniquement à la fin du projet, comme bilan de l'expérience vécue"
+        ],
+        correct: 1,
+        explanation: "L'Empathy Map se construit après la recherche — une fois qu'on a collecté des verbatims, observé des comportements, et réalisé des entretiens. Elle synthétise ce qu'on sait d'un utilisateur en 6 dimensions avant de passer à la UJM. La construire avant la recherche mènerait à la remplir avec les suppositions de l'équipe. L'ordre canonique est : Recherche → Empathy Map → Persona → User Journey Map."
+    },
+    {
+        question: "Dans quels quadrants de l'Empathy Map les tensions les plus révélatrices se trouvent-elles souvent ?",
+        answers: [
+            "Entre 'Voit' et 'Entend' — ce que l'environnement montre vs ce qu'on lui dit",
+            "Entre 'Dit & Fait' et 'Pense & Ressent' — ce qu'il exprime vs ce qu'il vit intérieurement",
+            "Entre 'Gains' et 'Souffrances' — ses désirs vs ses peurs",
+            "Toutes les tensions sont également importantes, aucune n'est prioritaire"
+        ],
+        correct: 1,
+        explanation: "La tension la plus révélatrice se trouve entre 'Dit & Fait' (comportements observables et déclarations publiques) et 'Pense & Ressent' (pensées profondes non exprimées). Cette contradiction — entre ce que l'utilisateur dit faire et ce qu'il fait réellement — est souvent la source des insights les plus précieux. Par exemple : « dit qu'il s'organise avec un agenda » mais « fait : ouvre 4 applis différentes sans cohérence »."
+    },
+    {
+        question: "Quelle règle d'or s'applique lors du remplissage d'une Empathy Map en atelier ?",
+        answers: [
+            "Chaque post-it doit être écrit par le responsable UX uniquement pour garantir la cohérence",
+            "Tout ce qui figure dans l'Empathy Map doit pouvoir être justifié par une citation réelle d'utilisateur",
+            "Il faut remplir tous les quadrants avec au moins 10 éléments chacun",
+            "Les quadrants 'Souffrances' et 'Gains' doivent toujours être remplis en dernier"
+        ],
+        correct: 1,
+        explanation: "La règle d'or de l'Empathy Map est que chaque élément doit être ancré dans des données réelles : verbatims d'entretiens, observations terrain, comportements documentés. Remplir la carte avec des suppositions produirait un outil faussé qui cartographie les croyances de l'équipe plutôt que la réalité de l'utilisateur — ce qui peut mener à de mauvaises décisions de conception."
+    },
+    {
+        question: "Quelle est la différence entre une Empathy Map et un persona ?",
+        answers: [
+            "Le persona est plus récent et remplace l'Empathy Map dans les méthodes agiles",
+            "Le persona décrit qui est l'utilisateur (profil, contexte, motivations) ; l'Empathy Map décrit comment il perçoit et vit le monde à travers 6 angles d'observation",
+            "L'Empathy Map est quantitative, le persona est qualitatif",
+            "Il n'y a aucune différence — les deux outils produisent le même livrable"
+        ],
+        correct: 1,
+        explanation: "Le persona et l'Empathy Map sont deux outils complémentaires : le persona répond à la question 'Qui est cet utilisateur ?' (profil démographique, contexte de vie, objectifs, frustrations générales). L'Empathy Map répond à 'Comment perçoit-il son monde ?' en structurant ce qu'il pense, voit, dit, entend, souffre et désire dans un contexte précis. On peut intégrer une Empathy Map dans un persona enrichi."
+    },
+    {
+        question: "À quoi servent les insights extraits d'une Empathy Map ?",
+        answers: [
+            "À valider les hypothèses graphiques de l'équipe de design",
+            "À alimenter directement la ligne Opportunités de la User Journey Map",
+            "À remplacer les entretiens utilisateurs dans les projets agiles",
+            "À définir le budget alloué à chaque phase du projet"
+        ],
+        correct: 1,
+        explanation: "Les insights extraits d'une Empathy Map — formulés comme « [Utilisateur] a besoin de [quoi] parce que [raison profonde], mais [obstacle actuel] » — alimentent directement la ligne Opportunités de la User Journey Map. Ils constituent le pont entre la compréhension de l'utilisateur (Empathy Map) et la cartographie de son parcours (UJM), garantissant que les opportunités identifiées sont ancrées dans des besoins réels."
+    },
+    {
+        question: "Combien de quadrants/dimensions comprend la version enrichie de l'Empathy Map (Dave Gray, 2017) ?",
+        answers: [
+            "4 quadrants : Pense, Voit, Dit, Entend",
+            "6 zones : Pense & Ressent, Voit, Dit & Fait, Entend, Souffrances, Gains",
+            "8 zones incluant des données démographiques et comportementales",
+            "2 zones seulement : Souffrances et Gains (Pain & Gain)"
+        ],
+        correct: 1,
+        explanation: "La version enrichie de l'Empathy Map (Dave Gray, 2017) comprend 6 zones : (1) Pense & Ressent — préoccupations profondes, croyances, craintes ; (2) Voit — environnement immédiat, offres perçues ; (3) Dit & Fait — comportements observables, déclarations publiques ; (4) Entend — influences, proches, médias ; (5) Souffrances (Pains) — peurs, obstacles, frustrations ; (6) Gains — désirs, aspirations, définition du succès."
+    },
+    {
+        question: "Quelle étape de la construction d'une Empathy Map en atelier est la plus précieuse pour identifier des insights ?",
+        answers: [
+            "L'étape de préparation du support et des post-its",
+            "L'étape de remplissage individuel silencieux",
+            "L'étape d'identification des tensions et contradictions entre quadrants",
+            "L'étape de présentation finale aux parties prenantes"
+        ],
+        correct: 2,
+        explanation: "L'identification des tensions et contradictions entre quadrants — notamment entre ce que l'utilisateur 'Dit' et ce qu'il 'Fait' réellement — est l'étape la plus génératrice d'insights. Ces contradictions révèlent des besoins non satisfaits que l'utilisateur lui-même n'exprime pas clairement. C'est là que se cachent les opportunités de design les plus impactantes, celles qui résolvent de vrais problèmes plutôt que des problèmes déclarés."
+    }
+];
+
+// ════════════════════════════════════════════════════
+//  BANQUE 2 — Séance 3 · Sections 04-07 (UJM : définition, structure, exemple, erreurs)
+// ════════════════════════════════════════════════════
+const bank2 = [
     {
         question: "Quels sont les deux éléments indispensables pour créer une User Journey Map valide ?",
         answers: [
@@ -1317,67 +1221,6 @@ const bank1 = [
         explanation: "La courbe d'émotion est l'élément le plus synthétique d'une UJM car elle permet de lire l'expérience globale en quelques secondes. Les creux (émotions négatives) indiquent les priorités absolues de redesign — là où les utilisateurs souffrent le plus et risquent d'abandonner. Les pics positifs signalent les moments à préserver et amplifier. Les zones plates révèlent un manque d'engagement. Sans cette ligne, la UJM reste un flowchart d'actions sans dimension humaine."
     },
     {
-        question: "Qu'est-ce que le 'happy path' dans une User Journey Map ?",
-        answers: [
-            "Le parcours de l'utilisateur le plus heureux et satisfait de tous les personas",
-            "Le parcours idéal sans erreur ni friction — le chemin le plus direct vers l'objectif de l'utilisateur",
-            "La ligne des opportunités positives dans la UJM",
-            "Un test utilisateur réalisé uniquement avec des participants positifs"
-        ],
-        correct: 1,
-        explanation: "Le 'happy path' est le scénario idéal où tout se passe parfaitement : l'utilisateur trouve immédiatement ce qu'il cherche, ne fait aucune erreur, ne rencontre aucune friction. C'est utile pour comprendre l'expérience cible, mais insuffisant seul car les utilisateurs réels dévient constamment de ce chemin idéal. Une UJM rigoureuse documente aussi les 'sad paths' : les erreurs commises, les incompréhensions, les abandons temporaires et les chemins détournés."
-    },
-    {
-        question: "Combien de composantes la structure standard d'une User Journey Map contient-elle ?",
-        answers: [
-            "3 lignes : actions, émotions, opportunités",
-            "5 à 7 lignes : phases, actions, pensées, émotions, touchpoints, frictions, opportunités",
-            "2 éléments seulement : persona et scénario",
-            "10 lignes minimum pour être considérée complète"
-        ],
-        correct: 1,
-        explanation: "La structure standard d'une UJM comporte 5 à 7 lignes selon le niveau de détail : (1) Phases du parcours ; (2) Actions de l'utilisateur ; (3) Pensées / intentions ; (4) Émotions (la courbe émotionnelle) ; (5) Touchpoints ; (6) Frictions ; (7) Opportunités. Les lignes 1 à 5 décrivent l'existant, les lignes 6 et 7 orientent la conception. Sans cette structure, la carte risque de manquer les dimensions clés de l'expérience."
-    },
-    {
-        question: "Quel est le rôle des 'phases' dans la structure d'une UJM ?",
-        answers: [
-            "Les phases correspondent aux pages web visitées par l'utilisateur",
-            "Les phases découpent le parcours en grandes étapes nommées du point de vue de l'utilisateur, chacune regroupant plusieurs actions",
-            "Les phases indiquent les moments où changer de canal de communication",
-            "Les phases sont identiques pour tous les produits : Découverte, Achat, Usage, Fidélisation"
-        ],
-        correct: 1,
-        explanation: "Les phases sont les grandes étapes du parcours, toujours nommées du point de vue de l'utilisateur (ex : 'Je réalise que j'ai un problème', 'Je cherche une solution', 'J'essaie le produit') — jamais du point de vue du système ou de l'organisation. Elles regroupent plusieurs actions concrètes et servent à donner une lisibilité globale au parcours. Il n'existe pas de phases universelles : elles dépendent du produit, du contexte et du persona."
-    },
-    {
-        question: "Quand une Empathy Map doit-elle être construite dans le processus UX ?",
-        answers: [
-            "Avant de réaliser les entretiens utilisateurs, pour préparer les questions",
-            "Après la recherche (entretiens, observations) et avant la User Journey Map",
-            "En même temps que le prototype hi-fi pour valider l'esthétique",
-            "Uniquement à la fin du projet, comme bilan de l'expérience vécue"
-        ],
-        correct: 1,
-        explanation: "L'Empathy Map se construit après la recherche — une fois qu'on a collecté des verbatims, observé des comportements, et réalisé des entretiens. Elle synthétise ce qu'on sait d'un utilisateur en 6 dimensions avant de passer à la UJM. La construire avant la recherche mènerait à la remplir avec les suppositions de l'équipe, ce qui irait à l'encontre de son objectif. L'ordre canonique est : Recherche → Empathy Map → Persona → User Journey Map."
-    }
-];
-
-// ════════════════════════════════════════════════════
-//  BANQUE 2 — Séance 3 · Sections 06-07 (Exemples, secteurs, erreurs UJM)
-// ════════════════════════════════════════════════════
-const bank2 = [
-    {
-        question: "Dans quels quadrants de l'Empathy Map les tensions les plus révélatrices se trouvent-elles souvent ?",
-        answers: [
-            "Entre 'Voit' et 'Entend' — ce que l'environnement montre vs ce qu'on lui dit",
-            "Entre 'Dit & Fait' et 'Pense & Ressent' — ce qu'il exprime vs ce qu'il vit intérieurement",
-            "Entre 'Gains' et 'Souffrances' — ses désirs vs ses peurs",
-            "Toutes les tensions sont également importantes, aucune n'est prioritaire"
-        ],
-        correct: 1,
-        explanation: "La tension la plus révélatrice se trouve entre 'Dit & Fait' (comportements observables et déclarations publiques) et 'Pense & Ressent' (pensées profondes non exprimées). Cette contradiction — entre ce que l'utilisateur dit faire et ce qu'il fait réellement — est souvent la source des insights les plus précieux. Par exemple : « dit qu'il s'organise avec un agenda » mais « fait : ouvre 4 applis différentes sans cohérence »."
-    },
-    {
         question: "Qu'est-ce qu'un touchpoint dans une User Journey Map ?",
         answers: [
             "Un moment émotionnellement fort dans le parcours de l'utilisateur",
@@ -1387,17 +1230,6 @@ const bank2 = [
         ],
         correct: 1,
         explanation: "Un touchpoint est tout point de contact entre l'utilisateur et l'organisation : application mobile, site web, email transactionnel, notification push, vendeur physique, livreur, packaging, publicité, service client téléphonique, etc. Cartographier les touchpoints permet d'identifier les ruptures d'expérience entre canaux — souvent là où les frictions les plus importantes se produisent (ex : une promesse faite sur le site non tenue lors de la livraison physique)."
-    },
-    {
-        question: "Quelle est la principale différence entre une UJM et un Service Blueprint ?",
-        answers: [
-            "Un Service Blueprint est réservé au secteur des services, pas au digital",
-            "Un Service Blueprint ajoute la dimension organisationnelle interne (backstage) à l'expérience visible de l'utilisateur (frontstage)",
-            "Un Service Blueprint est une version simplifiée de la UJM sans la ligne des émotions",
-            "Il n'y a aucune différence — Service Blueprint et UJM sont synonymes"
-        ],
-        correct: 1,
-        explanation: "Une UJM se concentre sur l'expérience visible de l'utilisateur (frontstage). Un Service Blueprint étend cette vision en y ajoutant deux couches organisationnelles : les processus des employés visibles par l'utilisateur, et les systèmes backstage qui rendent le service possible. C'est utile quand les frictions utilisateur ont une cause organisationnelle interne — ex : un délai de livraison long dû à un processus logistique interne défaillant."
     },
     {
         question: "Quelle erreur rend une User Journey Map pratiquement inutile ?",
@@ -1411,48 +1243,37 @@ const bank2 = [
         explanation: "La pire erreur est de créer une UJM en réunion à partir des suppositions de l'équipe, sans données de recherche réelles. Le résultat cartographie les biais cognitifs de l'équipe, pas l'expérience utilisateur réelle. Cette fausse UJM est potentiellement plus dangereuse que pas de UJM : elle donne une fausse confiance et oriente les décisions dans la mauvaise direction. Chaque friction, émotion et action doit pouvoir être justifiée par au moins un verbatim ou une observation terrain."
     },
     {
-        question: "Qu'est-ce qu'un 'Moment of Truth' dans un parcours utilisateur ?",
+        question: "Combien de lignes comprend la structure standard d'une User Journey Map complète ?",
         answers: [
-            "Le moment où l'utilisateur reçoit la facture finale d'un service",
-            "Une interaction critique à laquelle l'utilisateur forme une opinion durable sur le produit — positivement ou négativement",
-            "Le moment où l'on présente les résultats d'une UJM aux parties prenantes",
-            "La phase de tests utilisateurs qui valide le prototype final"
+            "3 lignes : actions, émotions, opportunités",
+            "5 à 7 lignes : phases, actions, pensées, émotions, touchpoints, frictions, opportunités",
+            "2 éléments seulement : persona et scénario",
+            "10 lignes minimum pour être considérée complète"
         ],
         correct: 1,
-        explanation: "Le concept de 'Moment of Truth' (Jan Carlzon, SAS Airlines, 1987) désigne les interactions critiques où l'utilisateur forme une impression durable sur la marque. Google a identifié le 'Zero Moment of Truth' — la recherche en ligne avant l'achat — comme le moment décisif dans la plupart des parcours digitaux. En UJM, identifier ces moments permet de concentrer les efforts de conception là où l'impact sur la perception est le plus fort."
+        explanation: "La structure standard d'une UJM comporte 5 à 7 lignes selon le niveau de détail : (1) Phases du parcours ; (2) Actions de l'utilisateur ; (3) Pensées / intentions ; (4) Émotions (la courbe émotionnelle) ; (5) Touchpoints ; (6) Frictions ; (7) Opportunités. Les lignes 1 à 5 décrivent l'existant, les lignes 6 et 7 orientent la conception. Sans cette structure, la carte risque de manquer les dimensions clés de l'expérience."
     },
     {
-        question: "Pourquoi créer une UJM exhaustive documentant chaque micro-action est-il problématique ?",
+        question: "Qu'est-ce que le 'happy path' dans une User Journey Map ?",
         answers: [
-            "Parce que les parties prenantes n'ont pas le temps de la lire en réunion",
-            "Parce qu'elle devient illisible et masque les moments vraiment critiques dans un excès de détails secondaires",
-            "Parce que les outils actuels ne peuvent pas gérer autant d'étapes dans une carte",
-            "Parce qu'une UJM exhaustive viole le RGPD en documentant trop précisément les comportements"
+            "Le parcours de l'utilisateur le plus heureux et satisfait de tous les personas",
+            "Le parcours idéal sans erreur ni friction — le chemin le plus direct vers l'objectif de l'utilisateur",
+            "La ligne des opportunités positives dans la UJM",
+            "Un test utilisateur réalisé uniquement avec des participants positifs"
         ],
         correct: 1,
-        explanation: "Une UJM est un outil de communication et de décision — pas une spécification fonctionnelle complète. Si elle documente chaque micro-clic, elle devient illisible, personne ne l'utilise, et les moments critiques se noient dans les détails. L'art de la UJM est la synthèse : regrouper les actions en phases significatives, n'identifier que les frictions majeures, et formuler des opportunités actionnables. Moins, c'est souvent plus."
+        explanation: "Le 'happy path' est le scénario idéal où tout se passe parfaitement : l'utilisateur trouve immédiatement ce qu'il cherche, ne fait aucune erreur, ne rencontre aucune friction. C'est utile pour comprendre l'expérience cible, mais insuffisant seul car les utilisateurs réels dévient constamment de ce chemin idéal. Une UJM rigoureuse documente aussi les 'sad paths' : les erreurs commises, les incompréhensions, les abandons temporaires et les chemins détournés."
     },
     {
-        question: "Dans quel contexte une UJM est-elle particulièrement indispensable ?",
+        question: "Quelle est la principale différence entre une UJM et un Service Blueprint ?",
         answers: [
-            "Uniquement pour les produits e-commerce à fort volume de transactions",
-            "Quand l'expérience implique plusieurs canaux (web, mobile, physique) et que des ruptures entre canaux sont suspectées",
-            "Seulement au lancement d'un nouveau produit, pas pour l'amélioration d'un existant",
-            "Exclusivement pour les applications mobiles grand public"
+            "Un Service Blueprint est réservé au secteur des services, pas au digital",
+            "Un Service Blueprint ajoute la dimension organisationnelle interne (backstage) à l'expérience visible de l'utilisateur (frontstage)",
+            "Un Service Blueprint est une version simplifiée de la UJM sans la ligne des émotions",
+            "Il n'y a aucune différence — Service Blueprint et UJM sont synonymes"
         ],
         correct: 1,
-        explanation: "La UJM est particulièrement puissante quand l'expérience implique plusieurs canaux ou points de contact distincts. Les ruptures entre ces canaux — là où la continuité de l'expérience se brise — sont souvent les sources de friction les plus impactantes et les plus difficiles à détecter sans une vue d'ensemble. Elle est utile à toutes les phases d'un projet, de la conception initiale à l'optimisation continue."
-    },
-    {
-        question: "Dans une UJM e-commerce (recherche d'un produit → livraison), quelle phase concentre généralement le plus de frictions selon les études ?",
-        answers: [
-            "La phase de découverte produit sur le moteur de recherche",
-            "La phase de paiement et confirmation de commande",
-            "La phase post-achat : attente de livraison et résolution de problèmes",
-            "La phase de navigation dans le catalogue de produits"
-        ],
-        correct: 2,
-        explanation: "La phase post-achat (suivi de commande, livraison, gestion des retours, service après-vente) est systématiquement celle qui concentre le plus de frictions dans les UJM e-commerce. L'utilisateur passe d'un environnement digital maîtrisé (le site) à une expérience physique avec de nombreux acteurs (transporteurs, entrepôts) et perd le contrôle. C'est souvent là que la promesse de l'expérience digitale se heurte aux contraintes opérationnelles réelles."
+        explanation: "Une UJM se concentre sur l'expérience visible de l'utilisateur (frontstage). Un Service Blueprint étend cette vision en y ajoutant deux couches organisationnelles : les processus des employés visibles par l'utilisateur, et les systèmes backstage qui rendent le service possible. C'est utile quand les frictions utilisateur ont une cause organisationnelle interne — ex : un délai de livraison long dû à un processus logistique interne défaillant."
     }
 ];
 

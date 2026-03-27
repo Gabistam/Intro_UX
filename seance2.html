@@ -907,100 +907,38 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     08 · POUR ALLER PLUS LOIN
-═══════════════════════════════════════════ -->
-<section id="pour-aller-plus-loin" class="section">
-    <h2 class="section-title">08 · Pour aller plus loin</h2>
 
-    <div class="dropdown active">
-        <h3 class="dropdown-title">📚 Livres de référence</h3>
-        <div class="dropdown-content">
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <h4>Just Enough Research</h4>
-                    <ul>
-                        <li><strong>Auteur :</strong> Erika Hall (2013, rééd. 2019)</li>
-                        <li>La référence pratique de la recherche UX</li>
-                        <li>Comment faire de la recherche avec peu de ressources</li>
-                        <li>Lecture essentielle pour tout designer</li>
-                    </ul>
-                </div>
-                <div class="card card-secondary">
-                    <h4>The Mom Test</h4>
-                    <ul>
-                        <li><strong>Auteur :</strong> Rob Fitzpatrick (2019)</li>
-                        <li>Comment poser des questions qui ne biaisent pas</li>
-                        <li>Orienté startup, très accessible</li>
-                        <li>Lecture rapide, pragmatique et amusante</li>
-                    </ul>
-                </div>
-                <div class="card card-accent">
-                    <h4>Designing with the Mind in Mind</h4>
-                    <ul>
-                        <li><strong>Auteur :</strong> Jeff Johnson (2014)</li>
-                        <li>Psychologie cognitive appliquée au design</li>
-                        <li>Comprendre comment le cerveau traite l'information</li>
-                        <li>Indispensable pour justifier ses choix UX</li>
-                    </ul>
-                </div>
-                <div class="card card-gradient">
-                    <h4>Interviewing Users</h4>
-                    <ul>
-                        <li><strong>Auteur :</strong> Steve Portigal (2013)</li>
-                        <li>La Bible des entretiens utilisateurs</li>
-                        <li>Techniques, exemples, pièges à éviter</li>
-                        <li>Idéal pour progresser rapidement en entretien</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+<!-- ═══════════════════════════════════════════
+     8 · QCM 2 — AVANCÉ
+═══════════════════════════════════════════ -->
+<section id="qcm2" class="section">
+    <h2 class="section-title">08 · QCM — Bilan final</h2>
+
+    <div class="alert alert-info" style="margin-bottom:1.5rem;">
+        <strong>ℹ️ QCM 2 — Niveau avancé.</strong> 5 questions de synthèse tirées au sort dans une banque de 8, mobilisant plusieurs concepts à la fois. Ces questions requièrent de mettre en relation des notions vues tout au long de la séance.
     </div>
 
-    <div class="dropdown active">
-        <h3 class="dropdown-title">🌐 Ressources en ligne</h3>
-        <div class="dropdown-content">
-            <div class="cards-grid">
-                <div class="card card-primary">
-                    <h4>Nielsen Norman Group</h4>
-                    <ul>
-                        <li><strong>nngroup.com</strong></li>
-                        <li>Articles sur chaque méthode de recherche</li>
-                        <li>Règle des 5 utilisateurs (article fondateur)</li>
-                        <li>Guides sur les entretiens et les personas</li>
-                    </ul>
-                </div>
-                <div class="card card-secondary">
-                    <h4>UX Research Field Guide</h4>
-                    <ul>
-                        <li><strong>dovetailapp.com/research</strong></li>
-                        <li>Guide complet des méthodes de recherche</li>
-                        <li>Templates d'entretiens et de personas gratuits</li>
-                        <li>Exemples concrets de livrables</li>
-                    </ul>
-                </div>
-                <div class="card card-accent">
-                    <h4>Templates Figma Communauté</h4>
-                    <ul>
-                        <li>Rechercher « Persona template » sur Figma Community</li>
-                        <li>Centaines de templates gratuits et personnalisables</li>
-                        <li>Formats pour entretiens, affinity maps, user journeys</li>
-                        <li>Directement utilisables en projet</li>
-                    </ul>
-                </div>
-                <div class="card card-gradient">
-                    <h4>Optimal Workshop</h4>
-                    <ul>
-                        <li><strong>optimalworkshop.com</strong></li>
-                        <li>Outils gratuits de card sorting et tree testing</li>
-                        <li>Utilisable directement en cours pratique</li>
-                        <li>Génère des visualisations automatiques</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="alert alert-success">
-                <strong>✅ Recommandation pratique :</strong> Commencez par lire <em>The Mom Test</em> (2h de lecture) pour comprendre comment poser de bonnes questions. Puis utilisez les templates Figma Community pour créer vos premiers personas en projet.
-            </div>
+    <div class="quiz-container">
+        <div class="quiz-header-band">
+            <h3>🎓 Synthèse — Recherche UX, biais &amp; posture</h3>
+            <span class="quiz-badge">5 questions · niveau avancé</span>
+        </div>
+        <div id="qcm2-question" class="quiz-question">
+            <p id="qcm2-question-text"></p>
+            <div id="qcm2-answers" class="quiz-answers"></div>
+            <button id="qcm2-submit" class="quiz-btn" disabled>Valider la réponse</button>
+        </div>
+        <div id="qcm2-result" class="quiz-result" style="display:none;">
+            <div id="qcm2-explanation" class="explanation"></div>
+            <button id="qcm2-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
+        </div>
+        <div id="qcm2-final" style="display:none;"></div>
+        <div class="quiz-progress">
+            <span id="qcm2-progress">Question 1/5</span>
+            <span id="qcm2-score" class="quiz-score">Score : 0/0</span>
+        </div>
+        <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar-fill" id="qcm2-bar" style="width:0%"></div>
         </div>
     </div>
 </section>
@@ -1102,40 +1040,7 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     10 · QCM 2 — AVANCÉ
-═══════════════════════════════════════════ -->
-<section id="qcm2" class="section">
-    <h2 class="section-title">10 · QCM — Bilan final</h2>
 
-    <div class="alert alert-info" style="margin-bottom:1.5rem;">
-        <strong>ℹ️ QCM 2 — Niveau avancé.</strong> 5 questions de synthèse tirées au sort dans une banque de 8, mobilisant plusieurs concepts à la fois. Ces questions requièrent de mettre en relation des notions vues tout au long de la séance.
-    </div>
-
-    <div class="quiz-container">
-        <div class="quiz-header-band">
-            <h3>🎓 Synthèse — Recherche UX, biais &amp; posture</h3>
-            <span class="quiz-badge">5 questions · niveau avancé</span>
-        </div>
-        <div id="qcm2-question" class="quiz-question">
-            <p id="qcm2-question-text"></p>
-            <div id="qcm2-answers" class="quiz-answers"></div>
-            <button id="qcm2-submit" class="quiz-btn" disabled>Valider la réponse</button>
-        </div>
-        <div id="qcm2-result" class="quiz-result" style="display:none;">
-            <div id="qcm2-explanation" class="explanation"></div>
-            <button id="qcm2-next" class="quiz-btn" style="margin-top:1rem;">Question suivante</button>
-        </div>
-        <div id="qcm2-final" style="display:none;"></div>
-        <div class="quiz-progress">
-            <span id="qcm2-progress">Question 1/5</span>
-            <span id="qcm2-score" class="quiz-score">Score : 0/0</span>
-        </div>
-        <div class="quiz-progress-bar-wrap">
-            <div class="quiz-progress-bar-fill" id="qcm2-bar" style="width:0%"></div>
-        </div>
-    </div>
-</section>
 
 </main>
 
