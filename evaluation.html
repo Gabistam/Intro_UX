@@ -119,6 +119,8 @@ main{max-width:860px;margin:0 auto;padding:52px 28px 140px;display:none}
 .word-chip{font-family:'DM Mono',monospace;font-size:11px;background:rgba(240,124,74,.1);border:1px solid rgba(240,124,74,.3);color:var(--p3);padding:4px 12px;border-radius:99px;cursor:pointer;transition:all .15s;user-select:none}
 .word-chip:hover{background:rgba(240,124,74,.2)}
 .word-chip.used{opacity:.35;cursor:default;text-decoration:line-through}
+.word-chip.active{background:rgba(240,124,74,.45);border-color:var(--p3);color:#fff;box-shadow:0 0 0 2px var(--p3);cursor:default}
+.ptrou-input.drop-ready{border-bottom-color:var(--gold);background:rgba(232,201,106,.08);cursor:pointer}
 
 /* ── QUESTION OUVERTE ── */
 textarea.ans{width:100%;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;line-height:1.7;padding:14px 16px;resize:vertical;min-height:160px;outline:none;transition:border-color .2s;border-radius:4px}
@@ -251,8 +253,8 @@ textarea.ans:focus{border-color:var(--p4)}
     <div class="consignes-grid">
       <div class="cstat"><div class="cstat-val">14</div><div class="cstat-lbl">QCM<br><small>7 pts</small></div></div>
       <div class="cstat"><div class="cstat-val">10</div><div class="cstat-lbl">Associations<br><small>5 pts</small></div></div>
-      <div class="cstat"><div class="cstat-val">5</div><div class="cstat-lbl">Phrases à trou<br><small>5 pts</small></div></div>
-      <div class="cstat"><div class="cstat-val">1</div><div class="cstat-lbl">Question ouverte<br><small>3 pts</small></div></div>
+      <div class="cstat"><div class="cstat-val">10</div><div class="cstat-lbl">Phrases à trou<br><small>5 pts</small></div></div>
+      <div class="cstat"><div class="cstat-val">2</div><div class="cstat-lbl">Questions courtes<br><small>3 pts</small></div></div>
     </div>
   </div>
 
@@ -269,160 +271,7 @@ textarea.ans:focus{border-color:var(--p4)}
       </div>
     </div>
     <div class="instr"><strong>Consigne :</strong> Pour chaque question, cochez la <strong>seule réponse correcte</strong>. Une réponse incorrecte ne retire pas de point.</div>
-
-    <!-- Q1 -->
-    <div class="qcm-block" id="qcm1">
-      <div class="qcm-head"><span class="qnum">Q01</span><span class="qtitle">Quelle est la définition la plus complète de l'UX Design ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(1,0)"><input type="radio" name="q1" id="q1a"> <label for="q1a">La discipline qui crée uniquement des interfaces graphiques esthétiques</label></div>
-        <div class="qcm-option" onclick="selectQCM(1,1)"><input type="radio" name="q1" id="q1b"> <label for="q1b">L'ensemble des perceptions et comportements d'un utilisateur avant, pendant et après l'utilisation d'un produit</label></div>
-        <div class="qcm-option" onclick="selectQCM(1,2)"><input type="radio" name="q1" id="q1c"> <label for="q1c">Le processus de développement d'applications mobiles</label></div>
-        <div class="qcm-option" onclick="selectQCM(1,3)"><input type="radio" name="q1" id="q1d"> <label for="q1d">Une méthode d'amélioration du référencement naturel (SEO)</label></div>
-      </div>
-    </div>
-
-    <!-- Q2 -->
-    <div class="qcm-block" id="qcm2">
-      <div class="qcm-head"><span class="qnum">Q02</span><span class="qtitle">Qui a popularisé le terme « User Experience » et créé le premier poste d'UX Architect ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(2,0)"><input type="radio" name="q2" id="q2a"> <label for="q2a">Steve Jobs chez Apple</label></div>
-        <div class="qcm-option" onclick="selectQCM(2,1)"><input type="radio" name="q2" id="q2b"> <label for="q2b">Tim Berners-Lee au CERN</label></div>
-        <div class="qcm-option" onclick="selectQCM(2,2)"><input type="radio" name="q2" id="q2c"> <label for="q2c">Don Norman chez Apple</label></div>
-        <div class="qcm-option" onclick="selectQCM(2,3)"><input type="radio" name="q2" id="q2d"> <label for="q2d">Jakob Nielsen au Xerox PARC</label></div>
-      </div>
-    </div>
-
-    <!-- Q3 -->
-    <div class="qcm-block" id="qcm3">
-      <div class="qcm-head"><span class="qnum">Q03</span><span class="qtitle">Quelles sont les trois dimensions fondamentales de l'UX selon Peter Morville ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(3,0)"><input type="radio" name="q3" id="q3a"> <label for="q3a">Rapidité, compatibilité et sécurité</label></div>
-        <div class="qcm-option" onclick="selectQCM(3,1)"><input type="radio" name="q3" id="q3b"> <label for="q3b">Utilité, utilisabilité et désirabilité</label></div>
-        <div class="qcm-option" onclick="selectQCM(3,2)"><input type="radio" name="q3" id="q3c"> <label for="q3c">Design, développement et déploiement</label></div>
-        <div class="qcm-option" onclick="selectQCM(3,3)"><input type="radio" name="q3" id="q3d"> <label for="q3d">Accessibilité, lisibilité et interactivité</label></div>
-      </div>
-    </div>
-
-    <!-- Q4 -->
-    <div class="qcm-block" id="qcm4">
-      <div class="qcm-head"><span class="qnum">Q04</span><span class="qtitle">Quelle heuristique de Nielsen stipule que le système doit toujours informer l'utilisateur de ce qui se passe ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(4,0)"><input type="radio" name="q4" id="q4a"> <label for="q4a">Heuristique 4 — Cohérence et standards</label></div>
-        <div class="qcm-option" onclick="selectQCM(4,1)"><input type="radio" name="q4" id="q4b"> <label for="q4b">Heuristique 8 — Esthétique et design minimaliste</label></div>
-        <div class="qcm-option" onclick="selectQCM(4,2)"><input type="radio" name="q4" id="q4c"> <label for="q4c">Heuristique 1 — Visibilité de l'état du système</label></div>
-        <div class="qcm-option" onclick="selectQCM(4,3)"><input type="radio" name="q4" id="q4d"> <label for="q4d">Heuristique 5 — Prévention des erreurs</label></div>
-      </div>
-    </div>
-
-    <!-- Q5 -->
-    <div class="qcm-block" id="qcm5">
-      <div class="qcm-head"><span class="qnum">Q05</span><span class="qtitle">Quelle est la principale différence entre UX Design et UI Design ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(5,0)"><input type="radio" name="q5" id="q5a"> <label for="q5a">L'UX traite des couleurs et typographies, l'UI des wireframes</label></div>
-        <div class="qcm-option" onclick="selectQCM(5,1)"><input type="radio" name="q5" id="q5b"> <label for="q5b">L'UX se concentre sur l'expérience et les besoins ; l'UI sur l'aspect visuel de l'interface</label></div>
-        <div class="qcm-option" onclick="selectQCM(5,2)"><input type="radio" name="q5" id="q5c"> <label for="q5c">L'UX est réservé aux applications mobiles, l'UI aux sites web</label></div>
-        <div class="qcm-option" onclick="selectQCM(5,3)"><input type="radio" name="q5" id="q5d"> <label for="q5d">Il n'y a aucune différence entre les deux disciplines</label></div>
-      </div>
-    </div>
-
-    <!-- Q6 -->
-    <div class="qcm-block" id="qcm6">
-      <div class="qcm-head"><span class="qnum">Q06</span><span class="qtitle">Qu'est-ce qu'une « affordance » en UX Design ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(6,0)"><input type="radio" name="q6" id="q6a"> <label for="q6a">Le coût total d'un projet UX</label></div>
-        <div class="qcm-option" onclick="selectQCM(6,1)"><input type="radio" name="q6" id="q6b"> <label for="q6b">Un test de performance réalisé sur une interface</label></div>
-        <div class="qcm-option" onclick="selectQCM(6,2)"><input type="radio" name="q6" id="q6c"> <label for="q6c">La propriété d'un élément d'interface qui suggère naturellement comment il doit être utilisé</label></div>
-        <div class="qcm-option" onclick="selectQCM(6,3)"><input type="radio" name="q6" id="q6d"> <label for="q6d">La version finale d'un prototype haute fidélité</label></div>
-      </div>
-    </div>
-
-    <!-- Q7 -->
-    <div class="qcm-block" id="qcm7">
-      <div class="qcm-head"><span class="qnum">Q07</span><span class="qtitle">Selon Forrester Research, quel est le ROI moyen pour chaque euro investi en UX ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(7,0)"><input type="radio" name="q7" id="q7a"> <label for="q7a">Environ 28 % de retour</label></div>
-        <div class="qcm-option" onclick="selectQCM(7,1)"><input type="radio" name="q7" id="q7b"> <label for="q7b">Environ 228 % de retour</label></div>
-        <div class="qcm-option" onclick="selectQCM(7,2)"><input type="radio" name="q7" id="q7c"> <label for="q7c">Environ 2 % de retour</label></div>
-        <div class="qcm-option" onclick="selectQCM(7,3)"><input type="radio" name="q7" id="q7d"> <label for="q7d">Environ 50 % de retour</label></div>
-      </div>
-    </div>
-
-    <!-- Q8 -->
-    <div class="qcm-block" id="qcm8">
-      <div class="qcm-head"><span class="qnum">Q08</span><span class="qtitle">Qu'est-ce qu'une évaluation heuristique ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(8,0)"><input type="radio" name="q8" id="q8a"> <label for="q8a">Un test utilisateur avec 50 participants en laboratoire</label></div>
-        <div class="qcm-option" onclick="selectQCM(8,1)"><input type="radio" name="q8" id="q8b"> <label for="q8b">Une inspection par des experts qui évaluent l'interface selon des principes généraux d'utilisabilité</label></div>
-        <div class="qcm-option" onclick="selectQCM(8,2)"><input type="radio" name="q8" id="q8c"> <label for="q8c">Un sondage quantitatif envoyé aux utilisateurs</label></div>
-        <div class="qcm-option" onclick="selectQCM(8,3)"><input type="radio" name="q8" id="q8d"> <label for="q8d">Une analyse automatique du code source</label></div>
-      </div>
-    </div>
-
-    <!-- Q9 -->
-    <div class="qcm-block" id="qcm9">
-      <div class="qcm-head"><span class="qnum">Q09</span><span class="qtitle">Quel outil UX représente le parcours complet d'un utilisateur avec ses émotions et points de contact ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(9,0)"><input type="radio" name="q9" id="q9a"> <label for="q9a">Le Wireframe</label></div>
-        <div class="qcm-option" onclick="selectQCM(9,1)"><input type="radio" name="q9" id="q9b"> <label for="q9b">La User Journey Map</label></div>
-        <div class="qcm-option" onclick="selectQCM(9,2)"><input type="radio" name="q9" id="q9c"> <label for="q9c">Le Design System</label></div>
-        <div class="qcm-option" onclick="selectQCM(9,3)"><input type="radio" name="q9" id="q9d"> <label for="q9d">Le Test A/B</label></div>
-      </div>
-    </div>
-
-    <!-- Q10 -->
-    <div class="qcm-block" id="qcm10">
-      <div class="qcm-head"><span class="qnum">Q10</span><span class="qtitle">Qu'est-ce qu'un "Dark Pattern" en UX Design ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(10,0)"><input type="radio" name="q10" id="q10a"> <label for="q10a">Un thème d'interface en mode sombre (dark mode)</label></div>
-        <div class="qcm-option" onclick="selectQCM(10,1)"><input type="radio" name="q10" id="q10b"> <label for="q10b">Une technique de design délibérément conçue pour tromper ou manipuler l'utilisateur</label></div>
-        <div class="qcm-option" onclick="selectQCM(10,2)"><input type="radio" name="q10" id="q10c"> <label for="q10c">Un type de wireframe basse fidélité en niveaux de gris</label></div>
-        <div class="qcm-option" onclick="selectQCM(10,3)"><input type="radio" name="q10" id="q10d"> <label for="q10d">Une méthode de test utilisateur en conditions réelles</label></div>
-      </div>
-    </div>
-
-    <!-- Q11 -->
-    <div class="qcm-block" id="qcm11">
-      <div class="qcm-head"><span class="qnum">Q11</span><span class="qtitle">Qu'est-ce qu'un Persona en UX Design ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(11,0)"><input type="radio" name="q11" id="q11a"> <label for="q11a">Une représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur</label></div>
-        <div class="qcm-option" onclick="selectQCM(11,1)"><input type="radio" name="q11" id="q11b"> <label for="q11b">Un compte utilisateur fictif pour tester une application</label></div>
-        <div class="qcm-option" onclick="selectQCM(11,2)"><input type="radio" name="q11" id="q11c"> <label for="q11c">Un prototype haute fidélité présenté au client</label></div>
-        <div class="qcm-option" onclick="selectQCM(11,3)"><input type="radio" name="q11" id="q11d"> <label for="q11d">Un document listant les fonctionnalités d'une application</label></div>
-      </div>
-    </div>
-
-    <!-- Q12 -->
-    <div class="qcm-block" id="qcm12">
-      <div class="qcm-head"><span class="qnum">Q12</span><span class="qtitle">Quel outil UX est une maquette schématique en niveaux de gris montrant la structure d'une page ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(12,0)"><input type="radio" name="q12" id="q12a"> <label for="q12a">Le Persona</label></div>
-        <div class="qcm-option" onclick="selectQCM(12,1)"><input type="radio" name="q12" id="q12b"> <label for="q12b">La Carte d'empathie</label></div>
-        <div class="qcm-option" onclick="selectQCM(12,2)"><input type="radio" name="q12" id="q12c"> <label for="q12c">Le Wireframe</label></div>
-        <div class="qcm-option" onclick="selectQCM(12,3)"><input type="radio" name="q12" id="q12d"> <label for="q12d">Le Design System</label></div>
-      </div>
-    </div>
-
-    <!-- Q13 -->
-    <div class="qcm-block" id="qcm13">
-      <div class="qcm-head"><span class="qnum">Q13</span><span class="qtitle">Quelle heuristique de Nielsen recommande de ne pas surcharger l'interface d'informations inutiles ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(13,0)"><input type="radio" name="q13" id="q13a"> <label for="q13a">Heuristique 3 — Contrôle et liberté de l'utilisateur</label></div>
-        <div class="qcm-option" onclick="selectQCM(13,1)"><input type="radio" name="q13" id="q13b"> <label for="q13b">Heuristique 8 — Esthétique et design minimaliste</label></div>
-        <div class="qcm-option" onclick="selectQCM(13,2)"><input type="radio" name="q13" id="q13c"> <label for="q13c">Heuristique 6 — Reconnaissance plutôt que rappel</label></div>
-        <div class="qcm-option" onclick="selectQCM(13,3)"><input type="radio" name="q13" id="q13d"> <label for="q13d">Heuristique 10 — Aide et documentation</label></div>
-      </div>
-    </div>
-
-    <!-- Q14 -->
-    <div class="qcm-block" id="qcm14">
-      <div class="qcm-head"><span class="qnum">Q14</span><span class="qtitle">Quel est le principe fondamental concernant l'ordre UX / UI dans un projet ?</span></div>
-      <div class="qcm-options">
-        <div class="qcm-option" onclick="selectQCM(14,0)"><input type="radio" name="q14" id="q14a"> <label for="q14a">L'UI précède l'UX car l'esthétique guide la stratégie produit</label></div>
-        <div class="qcm-option" onclick="selectQCM(14,1)"><input type="radio" name="q14" id="q14b"> <label for="q14b">L'UX et l'UI se font simultanément pour gagner du temps</label></div>
-        <div class="qcm-option" onclick="selectQCM(14,2)"><input type="radio" name="q14" id="q14c"> <label for="q14c">L'UX précède toujours l'UI : on comprend les besoins avant de dessiner</label></div>
-        <div class="qcm-option" onclick="selectQCM(14,3)"><input type="radio" name="q14" id="q14d"> <label for="q14d">Le développement précède toujours les deux phases de design</label></div>
-      </div>
-    </div>
+    <div id="qcm-container"></div>
   </section>
 
   <div class="div-line" data-p="→ Partie 2"></div>
@@ -439,118 +288,118 @@ textarea.ans:focus{border-color:var(--p4)}
         <div class="partie-pts">10 termes · 0,5 point par bonne association</div>
       </div>
     </div>
-    <div class="instr"><strong>Consigne :</strong> Associez chaque terme UX (colonne gauche) à sa définition correcte (colonne droite) en sélectionnant la lettre correspondante dans le menu déroulant.</div>
+    <div class="instr"><strong>Consigne :</strong> Pour chaque définition, sélectionnez dans le menu déroulant le terme UX qui correspond.</div>
 
-    <div class="assoc-grid">
-      <div>
-        <div class="assoc-col"><h4>Termes</h4></div>
-        <div class="assoc-terms">
-          <div class="assoc-term">A — UX Design</div>
-          <div class="assoc-term">B — Affordance</div>
-          <div class="assoc-term">C — Design System</div>
-          <div class="assoc-term">D — Persona</div>
-          <div class="assoc-term">E — Wireframe</div>
-          <div class="assoc-term">F — User Journey Map</div>
-          <div class="assoc-term">G — Dark Pattern</div>
-          <div class="assoc-term">H — Test A/B</div>
-          <div class="assoc-term">I — Human-Centered Design</div>
-          <div class="assoc-term">J — Carte d'empathie</div>
-        </div>
+    <div class="assoc-defs" style="display:flex;flex-direction:column;gap:10px">
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 1</span>
+        <select class="assoc-select" id="ass1" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Bibliothèque centralisée de composants d'interface avec règles d'utilisation pour garantir la cohérence visuelle</span>
       </div>
-      <div>
-        <div class="assoc-col"><h4>Définitions — associez la lettre</h4></div>
-        <div class="assoc-defs">
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 1</span>
-            <select class="assoc-select" id="ass1" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Bibliothèque centralisée de composants d'interface avec règles d'utilisation pour garantir la cohérence visuelle</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 2</span>
-            <select class="assoc-select" id="ass2" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Approche de conception qui place les besoins et comportements des utilisateurs au centre de chaque décision</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 3</span>
-            <select class="assoc-select" id="ass3" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Représentation visuelle du parcours d'un utilisateur pour accomplir un objectif, incluant émotions et points de friction</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 4</span>
-            <select class="assoc-select" id="ass4" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Outil visuel structuré en 4 à 6 quadrants (pense, voit, dit, fait, douleurs, gains) pour comprendre l'état mental d'un utilisateur</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 5</span>
-            <select class="assoc-select" id="ass5" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Discipline visant à concevoir des produits utiles, utilisables et désirables pour les utilisateurs</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 6</span>
-            <select class="assoc-select" id="ass6" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Propriété d'un objet ou élément d'interface qui suggère naturellement son utilisation sans instruction</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 7</span>
-            <select class="assoc-select" id="ass7" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Technique de design délibérément conçue pour tromper l'utilisateur — case pré-cochée, désinscription complexe…</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 8</span>
-            <select class="assoc-select" id="ass8" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Maquette schématique en niveaux de gris représentant la structure et l'organisation d'une page sans éléments graphiques définitifs</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 9</span>
-            <select class="assoc-select" id="ass9" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur cible</span>
-          </div>
-          <div class="assoc-def-row">
-            <span class="assoc-def-label">Déf. 10</span>
-            <select class="assoc-select" id="ass10" onchange="save()">
-              <option value="">—</option>
-              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
-              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
-            </select>
-            <span class="assoc-def-text">Méthode d'expérimentation qui compare deux variantes d'une interface pour mesurer laquelle obtient les meilleures performances</span>
-          </div>
-        </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 2</span>
+        <select class="assoc-select" id="ass2" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Approche de conception qui place les besoins et comportements des utilisateurs au centre de chaque décision</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 3</span>
+        <select class="assoc-select" id="ass3" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Représentation visuelle du parcours d'un utilisateur pour accomplir un objectif, incluant émotions et points de friction</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 4</span>
+        <select class="assoc-select" id="ass4" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Outil visuel structuré en 4 à 6 quadrants (pense, voit, dit, fait, douleurs, gains) pour comprendre l'état mental d'un utilisateur</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 5</span>
+        <select class="assoc-select" id="ass5" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Discipline visant à concevoir des produits utiles, utilisables et désirables pour les utilisateurs</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 6</span>
+        <select class="assoc-select" id="ass6" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Propriété d'un objet ou élément d'interface qui suggère naturellement son utilisation sans instruction</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 7</span>
+        <select class="assoc-select" id="ass7" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Technique de design délibérément conçue pour tromper l'utilisateur — case pré-cochée, désinscription complexe…</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 8</span>
+        <select class="assoc-select" id="ass8" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Maquette schématique en niveaux de gris représentant la structure et l'organisation d'une page sans éléments graphiques définitifs</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 9</span>
+        <select class="assoc-select" id="ass9" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur cible</span>
+      </div>
+      <div class="assoc-def-row">
+        <span class="assoc-def-label">Déf. 10</span>
+        <select class="assoc-select" id="ass10" onchange="save()">
+          <option value="">— Choisir —</option>
+          <option>UX Design</option><option>Affordance</option><option>Design System</option>
+          <option>Persona</option><option>Wireframe</option><option>User Journey Map</option>
+          <option>Dark Pattern</option><option>Test A/B</option>
+          <option>Human-Centered Design</option><option>Carte d'empathie</option>
+        </select>
+        <span class="assoc-def-text">Méthode d'expérimentation qui compare deux variantes d'une interface pour mesurer laquelle obtient les meilleures performances</span>
       </div>
     </div>
   </section>
@@ -558,7 +407,7 @@ textarea.ans:focus{border-color:var(--p4)}
   <div class="div-line" data-p="→ Partie 3"></div>
 
   <!-- ═══════════════════════════════════════
-       PARTIE 3 — PHRASES À TROU (5 · 5 pts)
+       PARTIE 3 — PHRASES À TROU (10 · 5 pts)
   ════════════════════════════════════════ -->
   <section class="partie" id="p3">
     <div class="partie-head">
@@ -566,42 +415,73 @@ textarea.ans:focus{border-color:var(--p4)}
       <div>
         <div class="partie-pill pp3">Partie 3 · 5 points</div>
         <h2 class="partie-title">Phrases à compléter</h2>
-        <div class="partie-pts">5 phrases · 1 point par réponse correcte</div>
+        <div class="partie-pts">10 phrases · 0,5 point par réponse correcte</div>
       </div>
     </div>
-    <div class="instr"><strong>Consigne :</strong> Complétez chaque phrase en saisissant le terme manquant. Les mots disponibles sont listés dans la banque de mots ci-dessous. Chaque mot n'est utilisé qu'une seule fois.</div>
+    <div class="instr"><strong>Consigne :</strong> Complétez chaque phrase en cliquant sur le mot correspondant dans la banque ci-dessous, ou en le saisissant directement. Chaque mot n'est utilisé qu'une seule fois.</div>
 
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px">① Cliquez sur un mot pour le sélectionner · ② Cliquez sur le champ de votre choix pour l'y déposer</p>
     <div class="word-bank" id="word-bank">
-      <span class="word-chip" onclick="useWord(this,'trou1','Nielsen')">Nielsen</span>
-      <span class="word-chip" onclick="useWord(this,'trou2','Persona')">Persona</span>
-      <span class="word-chip" onclick="useWord(this,'trou3','Empathie')">Empathie</span>
-      <span class="word-chip" onclick="useWord(this,'trou4','wireframe')">wireframe</span>
-      <span class="word-chip" onclick="useWord(this,'trou5','WCAG')">WCAG</span>
+      <span class="word-chip" onclick="pickWord(this,'Nielsen')">Nielsen</span>
+      <span class="word-chip" onclick="pickWord(this,'Persona')">Persona</span>
+      <span class="word-chip" onclick="pickWord(this,'Empathie')">Empathie</span>
+      <span class="word-chip" onclick="pickWord(this,'wireframe')">wireframe</span>
+      <span class="word-chip" onclick="pickWord(this,'WCAG')">WCAG</span>
+      <span class="word-chip" onclick="pickWord(this,'Don Norman')">Don Norman</span>
+      <span class="word-chip" onclick="pickWord(this,'User Journey Map')">User Journey Map</span>
+      <span class="word-chip" onclick="pickWord(this,'affordance')">affordance</span>
+      <span class="word-chip" onclick="pickWord(this,'dark pattern')">dark pattern</span>
+      <span class="word-chip" onclick="pickWord(this,'ouvertes')">ouvertes</span>
     </div>
 
     <div class="ptrou-block">
       <div class="ptrou-phrase">
-        1. Les 10 heuristiques publiées par Jakob <input class="ptrou-input" id="trou1" placeholder="…" oninput="save()" autocomplete="off"> constituent la grille d'évaluation de référence pour toute interface numérique.
+        1. Les 10 heuristiques publiées par Jakob <input class="ptrou-input" id="trou1" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> constituent la grille d'évaluation de référence pour identifier les problèmes d'utilisabilité d'une interface.
       </div>
     </div>
     <div class="ptrou-block">
       <div class="ptrou-phrase">
-        2. Un <input class="ptrou-input" id="trou2" placeholder="…" oninput="save()" autocomplete="off"> est une représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur cible, permettant d'orienter les décisions de conception.
+        2. Un <input class="ptrou-input" id="trou2" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> est une représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur, utilisée pour orienter les décisions de conception.
       </div>
     </div>
     <div class="ptrou-block">
       <div class="ptrou-phrase">
-        3. La carte d'<input class="ptrou-input" id="trou3" placeholder="…" oninput="save()" autocomplete="off"> est un outil visuel qui capture l'état mental d'un utilisateur à travers les quadrants « Pense », « Voit », « Dit », « Fait », « Douleurs » et « Gains ».
+        3. La carte d'<input class="ptrou-input" id="trou3" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> est un outil visuel structuré en quadrants — « Pense », « Voit », « Dit », « Fait », « Douleurs » et « Gains » — qui capture l'état mental d'un utilisateur.
       </div>
     </div>
     <div class="ptrou-block">
       <div class="ptrou-phrase">
-        4. Un <input class="ptrou-input" id="trou4" placeholder="…" oninput="save()" autocomplete="off"> est une maquette schématique en niveaux de gris qui représente la structure et l'organisation d'une page sans éléments graphiques définitifs.
+        4. Un <input class="ptrou-input" id="trou4" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> est une maquette schématique en niveaux de gris représentant la structure d'une page, sans couleurs ni éléments graphiques définitifs.
       </div>
     </div>
     <div class="ptrou-block">
       <div class="ptrou-phrase">
-        5. Les critères d'accessibilité numérique <input class="ptrou-input" id="trou5" placeholder="…" oninput="save()" autocomplete="off"> (Web Content Accessibility Guidelines) définissent les normes internationales pour rendre les interfaces accessibles à tous les profils d'utilisateurs.
+        5. Les critères d'accessibilité numérique <input class="ptrou-input" id="trou5" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> (Web Content Accessibility Guidelines) définissent les normes internationales pour rendre les interfaces accessibles à tous.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        6. C'est <input class="ptrou-input" id="trou6" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off" style="min-width:120px"> qui a popularisé le terme « User Experience » chez Apple dans les années 1990 et introduit les concepts d'affordance, de feedback et de modèle mental.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        7. La <input class="ptrou-input" id="trou7" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off" style="min-width:160px"> cartographie, de façon chronologique, les étapes d'un parcours utilisateur ainsi que ses émotions, points de contact et zones de friction.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        8. Une bonne <input class="ptrou-input" id="trou8" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> réduit la courbe d'apprentissage : un bouton en relief, par exemple, invite naturellement à cliquer sans qu'aucune instruction ne soit nécessaire.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        9. Une case pré-cochée pour souscrire à un abonnement payant ou un bouton de désinscription délibérément caché sont des exemples typiques de <input class="ptrou-input" id="trou9" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off">, pratique contraire à l'éthique du design centré utilisateur.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        10. Lors d'un entretien utilisateur, il est essentiel de poser des questions <input class="ptrou-input" id="trou10" placeholder="…" onclick="dropWord(this)" oninput="save()" autocomplete="off"> afin de laisser l'interviewé s'exprimer librement, sans orienter ou biaiser ses réponses.
       </div>
     </div>
   </section>
@@ -609,32 +489,49 @@ textarea.ans:focus{border-color:var(--p4)}
   <div class="div-line" data-p="→ Partie 4"></div>
 
   <!-- ═══════════════════════════════════════
-       PARTIE 4 — QUESTION OUVERTE (1 · 3 pts)
+       PARTIE 4 — QUESTIONS OUVERTES (2 · 3 pts)
   ════════════════════════════════════════ -->
   <section class="partie" id="p4">
     <div class="partie-head">
       <div class="partie-n n4">04</div>
       <div>
         <div class="partie-pill pp4">Partie 4 · 3 points</div>
-        <h2 class="partie-title">Question ouverte</h2>
-        <div class="partie-pts">1 question de synthèse · réponse rédigée attendue</div>
+        <h2 class="partie-title">Questions ouvertes courtes</h2>
+        <div class="partie-pts">2 questions · réponse courte attendue (5 à 8 lignes maximum)</div>
       </div>
     </div>
-    <div class="instr"><strong>Consigne :</strong> Rédigez une réponse structurée et argumentée en vous appuyant sur les notions vues en cours. La qualité de la formulation, la précision des exemples et la rigueur de l'argumentation sont évaluées.</div>
+    <div class="instr"><strong>Consigne :</strong> Répondez de façon concise et précise en 5 à 8 lignes maximum. Mobilisez le vocabulaire du cours et appuyez-vous sur au moins un exemple concret par question.</div>
 
-    <div class="qcm-head" style="margin-bottom:14px">
-      <span class="qnum q4">Q01</span>
-      <span class="qtitle">Un chef de projet vous dit : « L'UX c'est juste du graphisme, mon graphiste peut s'en occuper. » Comment lui expliquez-vous — en 8 à 12 lignes — en quoi cette affirmation est inexacte ? Appuyez-vous sur au moins deux exemples ou concepts concrets vus en cours.</span>
+    <!-- Question ouverte 1 -->
+    <div class="qcm-block">
+      <div class="qcm-head" style="margin-bottom:14px">
+        <span class="qnum q4">Q01</span>
+        <span class="qtitle">Un chef de projet vous dit : « L'UX c'est juste du graphisme, mon graphiste peut s'en occuper. » Expliquez-lui, en quelques lignes, pourquoi cette affirmation est inexacte. Citez au moins un concept vu en cours.</span>
+      </div>
+      <textarea class="ans" id="open1" style="min-height:120px" placeholder="Pistes : distinction UX / UI, dimensions de l'UX (utilité, utilisabilité, désirabilité), processus centré utilisateur, heuristiques, ROI…" oninput="updateCC();save()"></textarea>
+      <div class="cc" id="cc-open1">0 caractère</div>
+      <div class="open-crit">
+        <div class="open-crit-title">Critères — Q01 · 1,5 pt</div>
+        <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">0,5 pt</strong> — Distinction claire UX ≠ graphisme / UI Design</span></div>
+        <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">0,5 pt</strong> — Au moins un concept ou exemple du cours cité avec précision</span></div>
+        <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">0,5 pt</strong> — Clarté et cohérence de la réponse</span></div>
+      </div>
     </div>
 
-    <textarea class="ans" id="open1" placeholder="Rédigez votre réponse ici…&#10;Pistes : distinction UX / UI / Webdesign, dimensions de l'UX (utilité, utilisabilité, désirabilité), heuristiques, ROI de l'UX, processus centré utilisateur…" oninput="updateCC();save()"></textarea>
-    <div class="cc" id="cc-open1">0 caractère</div>
-
-    <div class="open-crit">
-      <div class="open-crit-title">Critères d'évaluation</div>
-      <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">1 pt</strong> — Distinction claire entre UX Design et design graphique / UI Design</span></div>
-      <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">1 pt</strong> — Utilisation d'au moins un concept ou exemple concret du cours (heuristiques, ROI, processus, etc.)</span></div>
-      <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">1 pt</strong> — Qualité de la formulation, structure et cohérence de l'argumentation</span></div>
+    <!-- Question ouverte 2 -->
+    <div class="qcm-block" style="margin-top:32px">
+      <div class="qcm-head" style="margin-bottom:14px">
+        <span class="qnum q4">Q02</span>
+        <span class="qtitle">Vous devez conduire un entretien utilisateur pour comprendre les difficultés rencontrées sur une application mobile de commande en ligne. Décrivez en quelques lignes comment vous préparez et menez cet entretien : quel type de questions posez-vous, et pourquoi ?</span>
+      </div>
+      <textarea class="ans" id="open2" style="min-height:120px" placeholder="Pistes : questions ouvertes vs fermées, ne pas biaiser les réponses, guide d'entretien, contexte de passation, observation des comportements, verbatims…" oninput="updateCC2();save()"></textarea>
+      <div class="cc" id="cc-open2">0 caractère</div>
+      <div class="open-crit">
+        <div class="open-crit-title">Critères — Q02 · 1,5 pt</div>
+        <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">0,5 pt</strong> — Distinction questions ouvertes / fermées et justification du choix</span></div>
+        <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">0,5 pt</strong> — Mention d'au moins un biais à éviter ou d'une bonne pratique d'entretien</span></div>
+        <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">0,5 pt</strong> — Clarté et cohérence de la réponse</span></div>
+      </div>
     </div>
   </section>
 
@@ -682,57 +579,315 @@ textarea.ans:focus{border-color:var(--p4)}
 
 <script>
 // ══════════════════════════════════════════════════════
-//  RÉPONSES CORRECTES
+//  RÉPONSES CORRECTES — Associations & Trous
 // ══════════════════════════════════════════════════════
 const CORRECT = {
-  // QCM — index de la bonne option (0-based)
-  qcm: {1:1, 2:2, 3:1, 4:2, 5:1, 6:2, 7:1, 8:1, 9:1, 10:1, 11:0, 12:2, 13:1, 14:2},
-  // Associations — terme lettre → définition numéro
-  // Déf1=C, Déf2=I, Déf3=F, Déf4=J, Déf5=A, Déf6=B, Déf7=G, Déf8=E, Déf9=D, Déf10=H
-  assoc: {ass1:'C', ass2:'I', ass3:'F', ass4:'J', ass5:'A', ass6:'B', ass7:'G', ass8:'E', ass9:'D', ass10:'H'},
-  // Phrases à trou
-  trou: {trou1:'nielsen', trou2:'persona', trou3:'empathie', trou4:'wireframe', trou5:'wcag'}
+  assoc: {
+    ass1:'Design System', ass2:'Human-Centered Design', ass3:'User Journey Map',
+    ass4:"Carte d'empathie", ass5:'UX Design', ass6:'Affordance',
+    ass7:'Dark Pattern', ass8:'Wireframe', ass9:'Persona', ass10:'Test A/B'
+  },
+  trou: {
+    trou1:'nielsen', trou2:'persona', trou3:'empathie', trou4:'wireframe', trou5:'wcag',
+    trou6:'don norman', trou7:'user journey map', trou8:'affordance',
+    trou9:'dark pattern', trou10:'ouvertes'
+  }
 };
 
-// État QCM
-const qcmState = {};
+// ══════════════════════════════════════════════════════
+//  QCM — DONNÉES (options équilibrées en longueur)
+// ══════════════════════════════════════════════════════
+const QCM_DATA = [
+  {
+    id: 1,
+    q: "Quelle est la définition la plus précise de l'UX Design ?",
+    opts: [
+      { text: "La création de chartes graphiques et de logos pour une marque", correct: false },
+      { text: "La conception d'expériences utiles, utilisables et désirables pour l'utilisateur", correct: true },
+      { text: "Le développement d'applications mobiles en langage natif", correct: false },
+      { text: "La rédaction de spécifications fonctionnelles pour les développeurs", correct: false }
+    ]
+  },
+  {
+    id: 2,
+    q: "Combien de principes heuristiques Jakob Nielsen a-t-il définis pour évaluer l'utilisabilité ?",
+    opts: [
+      { text: "5 principes regroupant les règles de base de l'ergonomie logicielle", correct: false },
+      { text: "7 principes issus des travaux de Don Norman sur la cognition", correct: false },
+      { text: "10 principes constituant la grille d'évaluation de référence", correct: true },
+      { text: "12 principes couvrant accessibilité et conformité internationale", correct: false }
+    ]
+  },
+  {
+    id: 3,
+    q: "Qu'est-ce qu'un Persona en UX Design ?",
+    opts: [
+      { text: "Un profil réel d'un client existant issu du CRM de l'entreprise", correct: false },
+      { text: "Un archétype d'utilisateur fictif fondé sur des données de recherche terrain", correct: true },
+      { text: "Un rapport d'analyse des performances d'une interface en production", correct: false },
+      { text: "Un diagramme décrivant l'architecture technique d'une application", correct: false }
+    ]
+  },
+  {
+    id: 4,
+    q: "Quel outil UX représente le parcours d'un utilisateur de façon chronologique, avec ses émotions et points de contact ?",
+    opts: [
+      { text: "Le wireframe, maquette structurelle en niveaux de gris", correct: false },
+      { text: "La carte d'empathie structurée en quadrants cognitifs", correct: false },
+      { text: "L'User Journey Map, visualisation du parcours et des émotions", correct: true },
+      { text: "Le Design System, bibliothèque de composants réutilisables", correct: false }
+    ]
+  },
+  {
+    id: 5,
+    q: "Qu'est-ce que l'affordance selon Don Norman ?",
+    opts: [
+      { text: "La capacité d'un objet à suggérer son utilisation par sa forme ou apparence", correct: true },
+      { text: "La mesure de la vitesse de chargement d'une page web mobile", correct: false },
+      { text: "Un indicateur de performance mesurant la satisfaction utilisateur", correct: false },
+      { text: "Le processus itératif de validation des maquettes par les parties prenantes", correct: false }
+    ]
+  },
+  {
+    id: 6,
+    q: "Quelle méthode compare deux versions d'une interface pour mesurer laquelle performe le mieux ?",
+    opts: [
+      { text: "L'entretien contextuel mené en situation réelle avec l'utilisateur", correct: false },
+      { text: "Le tri par cartes pour structurer l'architecture de l'information", correct: false },
+      { text: "Le test A/B, expérimentation contrôlée sur deux variantes d'interface", correct: true },
+      { text: "L'audit heuristique évaluant l'interface selon les critères Nielsen", correct: false }
+    ]
+  },
+  {
+    id: 7,
+    q: "Lors d'un entretien utilisateur, quel type de questions faut-il privilégier ?",
+    opts: [
+      { text: "Des questions fermées pour obtenir des réponses rapides et chiffrées", correct: false },
+      { text: "Des questions ouvertes pour encourager l'expression libre sans biais", correct: true },
+      { text: "Des questions suggestives pour guider l'utilisateur vers la réponse", correct: false },
+      { text: "Des questions binaires (oui/non) pour simplifier l'analyse des données", correct: false }
+    ]
+  },
+  {
+    id: 8,
+    q: "Qu'est-ce qu'un wireframe ?",
+    opts: [
+      { text: "Un prototype haute-fidélité intégrant couleurs et animations finales", correct: false },
+      { text: "Une maquette schématique en niveaux de gris représentant la structure", correct: true },
+      { text: "Un rapport d'analyse des comportements utilisateur sur le produit", correct: false },
+      { text: "Une charte typographique définissant les polices du projet final", correct: false }
+    ]
+  },
+  {
+    id: 9,
+    q: "Quel sigle désigne les normes internationales d'accessibilité numérique du W3C ?",
+    opts: [
+      { text: "WCAG — Web Content Accessibility Guidelines du W3C", correct: true },
+      { text: "RGPD — Règlement Général sur la Protection des Données", correct: false },
+      { text: "ARIA — Accessible Rich Internet Applications du W3C", correct: false },
+      { text: "ISO 9241 — norme ergonomique pour les systèmes interactifs", correct: false }
+    ]
+  },
+  {
+    id: 10,
+    q: "Qu'est-ce qu'un dark pattern ?",
+    opts: [
+      { text: "Un thème sombre appliqué à l'interface pour réduire la fatigue visuelle", correct: false },
+      { text: "Une technique de design trompeuse manipulant les choix de l'utilisateur", correct: true },
+      { text: "Un modèle de navigation complexe réservé aux interfaces expertes", correct: false },
+      { text: "Un motif graphique répétitif utilisé pour le fond des écrans d'accueil", correct: false }
+    ]
+  },
+  {
+    id: 11,
+    q: "Quel concept désigne la cohérence entre la perception d'un système et son fonctionnement réel ?",
+    opts: [
+      { text: "Le modèle mental, représentation interne du fonctionnement d'un système", correct: true },
+      { text: "L'affordance, propriété d'un objet suggérant son mode d'utilisation", correct: false },
+      { text: "Le feedback, retour d'information après une action de l'utilisateur", correct: false },
+      { text: "La contrainte, limitation qui oriente l'utilisateur vers la bonne action", correct: false }
+    ]
+  },
+  {
+    id: 12,
+    q: "Quelle est la principale différence entre UX Design et UI Design ?",
+    opts: [
+      { text: "L'UI Design est réservé aux applications mobiles, l'UX aux sites web", correct: false },
+      { text: "L'UX Design se pratique en agence, l'UI Design en entreprise interne", correct: false },
+      { text: "L'UX porte sur l'expérience globale, l'UI sur l'interface visuelle seule", correct: true },
+      { text: "L'UI Design inclut la recherche utilisateur, l'UX Design non", correct: false }
+    ]
+  },
+  {
+    id: 13,
+    q: "Qu'est-ce que la carte d'empathie ?",
+    opts: [
+      { text: "Un graphique de données mesurant le niveau de satisfaction utilisateur", correct: false },
+      { text: "Un outil visuel capturant ce que pense, voit, dit et fait un utilisateur", correct: true },
+      { text: "Un tableau de bord de métriques d'engagement sur une application live", correct: false },
+      { text: "Un document listant les fonctionnalités prioritaires d'un MVP produit", correct: false }
+    ]
+  },
+  {
+    id: 14,
+    q: "Quel chercheur a popularisé le terme « User Experience » en travaillant chez Apple ?",
+    opts: [
+      { text: "Jakob Nielsen, expert en utilisabilité et co-fondateur du Nielsen Norman Group", correct: false },
+      { text: "Steve Jobs, fondateur d'Apple ayant popularisé le design centré utilisateur", correct: false },
+      { text: "Don Norman, auteur de « The Design of Everyday Things » chez Apple", correct: true },
+      { text: "Alan Cooper, créateur des personas et auteur de « The Inmates Are Running the Asylum »", correct: false }
+    ]
+  }
+];
 
 // ══════════════════════════════════════════════════════
-//  QCM — SÉLECTION
+//  QCM — ÉTAT & RENDU DYNAMIQUE
 // ══════════════════════════════════════════════════════
-function selectQCM(qNum, optIdx) {
-  const block = document.getElementById('qcm' + qNum);
-  block.querySelectorAll('.qcm-option').forEach((el, i) => {
-    el.classList.toggle('selected', i === optIdx);
-    el.querySelector('input[type="radio"]').checked = (i === optIdx);
+const qcmState = {};      // qcmState[qId] = { chosenText, correctText }
+let qcmRenderedOrder = []; // ordre affiché des questions (array d'objets QCM_DATA shufflés)
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQCM() {
+  const container = document.getElementById('qcm-container');
+  container.innerHTML = '';
+  qcmRenderedOrder = shuffle(QCM_DATA);
+
+  qcmRenderedOrder.forEach((q, displayIdx) => {
+    const num = displayIdx + 1;
+    const shuffledOpts = shuffle(q.opts);
+    const correctText = q.opts.find(o => o.correct).text;
+
+    // Stocker la bonne réponse par qId pour la correction
+    qcmState[q.id] = qcmState[q.id] || { chosenText: null, correctText };
+
+    const block = document.createElement('div');
+    block.className = 'qcm-block';
+    block.id = 'qcm' + q.id;
+    block.dataset.correctText = correctText;
+
+    const colorClass = ['q1','q2','q3','q4'][displayIdx % 4];
+    let optsHTML = shuffledOpts.map((opt, i) => `
+      <div class="qcm-option" onclick="selectQCM(${q.id}, this)">
+        <input type="radio" name="q${q.id}" id="q${q.id}_o${i}">
+        <label for="q${q.id}_o${i}">${opt.text}</label>
+      </div>`).join('');
+
+    block.innerHTML = `
+      <div class="qcm-head">
+        <span class="qnum ${colorClass}">Q${String(num).padStart(2,'0')}</span>
+        <span class="qtitle">${q.q}</span>
+      </div>
+      <div class="qcm-options">${optsHTML}</div>`;
+
+    container.appendChild(block);
   });
-  qcmState[qNum] = optIdx;
+}
+
+function selectQCM(qId, optEl) {
+  const block = document.getElementById('qcm' + qId);
+  const chosenText = optEl.querySelector('label').textContent;
+  block.querySelectorAll('.qcm-option').forEach(el => {
+    const selected = el === optEl;
+    el.classList.toggle('selected', selected);
+    el.querySelector('input[type="radio"]').checked = selected;
+  });
+  if (!qcmState[qId]) qcmState[qId] = { chosenText: null, correctText: block.dataset.correctText };
+  qcmState[qId].chosenText = chosenText;
   save();
   updateProg();
 }
 
 // ══════════════════════════════════════════════════════
-//  BANQUE DE MOTS — CLIC SUR CHIP
+//  BANQUE DE MOTS — LOGIQUE SÉLECTION → DÉPÔT
 // ══════════════════════════════════════════════════════
-function useWord(chip, inputId, word) {
-  const inp = document.getElementById(inputId);
+let selectedChip = null;   // chip actuellement sélectionnée
+let selectedWord = null;   // mot correspondant
+
+// Étape ① : clic sur une chip → la sélectionner (ou désélectionner si déjà active)
+function pickWord(chip, word) {
+  // Si la chip est déjà utilisée dans un champ → la libérer au clic
   if (chip.classList.contains('used')) {
-    // Si déjà utilisé, vider le champ et remettre disponible
-    if (inp.value.toLowerCase() === word.toLowerCase()) {
-      inp.value = '';
-      chip.classList.remove('used');
-    }
+    releaseChip(chip, word);
     return;
   }
-  // Libérer le chip précédent si ce champ avait déjà une valeur
-  document.querySelectorAll('.word-chip').forEach(c => {
-    if (c !== chip && inp.value && c.textContent.toLowerCase() === inp.value.toLowerCase()) {
-      c.classList.remove('used');
+  // Désélectionner la chip précédemment sélectionnée
+  if (selectedChip) {
+    selectedChip.classList.remove('active');
+  }
+  if (selectedChip === chip) {
+    // double-clic sur la même chip : désélectionner
+    selectedChip = null;
+    selectedWord = null;
+    clearDropReady();
+    return;
+  }
+  selectedChip = chip;
+  selectedWord = word;
+  chip.classList.add('active');
+  // Mettre en surbrillance tous les champs libres
+  document.querySelectorAll('.ptrou-input:not([data-filled])').forEach(inp => {
+    inp.classList.add('drop-ready');
+  });
+}
+
+// Étape ② : clic sur un champ → y déposer le mot sélectionné
+function dropWord(inp) {
+  if (!selectedChip) return;   // rien de sélectionné, comportement normal
+  // Libérer l'éventuel mot déjà dans ce champ
+  if (inp.dataset.filled) {
+    const oldWord = inp.dataset.filled;
+    document.querySelectorAll('.word-chip').forEach(c => {
+      if (c.textContent.trim().toLowerCase() === oldWord.toLowerCase()) {
+        c.classList.remove('used');
+        c.classList.remove('active');
+      }
+    });
+  }
+  // Déposer le nouveau mot
+  inp.value = selectedWord;
+  inp.dataset.filled = selectedWord;
+  selectedChip.classList.remove('active');
+  selectedChip.classList.add('used');
+  selectedChip = null;
+  selectedWord = null;
+  clearDropReady();
+  save();
+}
+
+// Libérer une chip déjà placée (clic dessus quand elle est "used")
+function releaseChip(chip, word) {
+  document.querySelectorAll('.ptrou-input').forEach(inp => {
+    if (inp.dataset.filled && inp.dataset.filled.toLowerCase() === word.toLowerCase()) {
+      inp.value = '';
+      delete inp.dataset.filled;
     }
   });
-  inp.value = word;
-  chip.classList.add('used');
+  chip.classList.remove('used');
+  chip.classList.remove('active');
+  if (selectedChip === chip) { selectedChip = null; selectedWord = null; }
+  clearDropReady();
   save();
+}
+
+function clearDropReady() {
+  document.querySelectorAll('.ptrou-input').forEach(inp => inp.classList.remove('drop-ready'));
+}
+
+// Compatibilité : useWord conservé pour le load() de localStorage
+function useWord(chip, inputId, word) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  inp.value = word;
+  inp.dataset.filled = word;
+  chip.classList.add('used');
 }
 
 // ══════════════════════════════════════════════════════
@@ -786,8 +941,10 @@ function updateProg() {
 function save() {
   const d = {};
   document.querySelectorAll('input[type="text"],textarea,select').forEach(el => { if (el.id) d[el.id] = el.value; });
-  // Sauvegarder l'état des radios
-  for (const [qNum, idx] of Object.entries(qcmState)) { d['qcm_state_' + qNum] = idx; }
+  // Sauvegarder l'état QCM par texte de réponse choisie
+  for (const [qId, state] of Object.entries(qcmState)) {
+    if (state && state.chosenText) d['qcm_text_' + qId] = state.chosenText;
+  }
   try {
     localStorage.setItem('ux_eval_v1', JSON.stringify(d));
     const n = new Date();
@@ -801,21 +958,29 @@ function load() {
     if (!raw) return;
     const d = JSON.parse(raw);
     Object.entries(d).forEach(([id, v]) => {
-      if (id.startsWith('qcm_state_')) {
-        const qNum = parseInt(id.replace('qcm_state_', ''));
-        selectQCM(qNum, parseInt(v));
+      if (id.startsWith('qcm_text_')) {
+        const qId = parseInt(id.replace('qcm_text_', ''));
+        const block = document.getElementById('qcm' + qId);
+        if (!block) return;
+        block.querySelectorAll('.qcm-option').forEach(opt => {
+          if (opt.querySelector('label').textContent === v) {
+            opt.click();
+          }
+        });
       } else {
         const el = document.getElementById(id);
         if (el) el.value = v;
       }
     });
     updateCC();
-    // Remettre les chips utilisées
-    ['trou1','trou2','trou3','trou4','trou5'].forEach(id => {
+    updateCC2();
+    // Remettre les chips utilisées et data-filled
+    ['trou1','trou2','trou3','trou4','trou5','trou6','trou7','trou8','trou9','trou10'].forEach(id => {
       const inp = document.getElementById(id);
       if (inp && inp.value) {
+        inp.dataset.filled = inp.value;
         document.querySelectorAll('.word-chip').forEach(c => {
-          if (c.textContent.toLowerCase() === inp.value.toLowerCase()) c.classList.add('used');
+          if (c.textContent.trim().toLowerCase() === inp.value.toLowerCase()) c.classList.add('used');
         });
       }
     });
@@ -830,6 +995,13 @@ function updateCC() {
   if (!el) return;
   const n = el.value.length;
   document.getElementById('cc-open1').textContent = n + ' caractère' + (n > 1 ? 's' : '');
+}
+
+function updateCC2() {
+  const el = document.getElementById('open2');
+  if (!el) return;
+  const n = el.value.length;
+  document.getElementById('cc-open2').textContent = n + ' caractère' + (n > 1 ? 's' : '');
 }
 
 // ══════════════════════════════════════════════════════
@@ -861,6 +1033,7 @@ function startEval() {
     document.getElementById('prog-wrap').style.display = 'block';
     document.getElementById('main').style.display = 'block';
     document.getElementById('fab').style.display = 'flex';
+    buildQCM();
     load();
     startTimer();
     updateCC();
@@ -878,30 +1051,33 @@ function submitEval() {
 
   let correct = 0, wrong = 0, blank = 0;
 
-  // Correction QCM
-  for (let q = 1; q <= 14; q++) {
-    const correctIdx = CORRECT.qcm[q];
-    const chosen = qcmState[q];
-    const block = document.getElementById('qcm' + q);
+  // Correction QCM (comparaison par texte, indépendante de l'ordre affiché)
+  qcmRenderedOrder.forEach(q => {
+    const state = qcmState[q.id];
+    const correctText = q.opts.find(o => o.correct).text;
+    const chosenText = state ? state.chosenText : null;
+    const block = document.getElementById('qcm' + q.id);
+    if (!block) return;
     const options = block.querySelectorAll('.qcm-option');
 
-    options.forEach((opt, i) => {
+    options.forEach(opt => {
+      const labelText = opt.querySelector('label').textContent;
       opt.style.pointerEvents = 'none';
-      if (i === correctIdx) {
+      if (labelText === correctText) {
         opt.style.borderColor = 'var(--green)';
         opt.style.background = 'rgba(74,201,139,.1)';
         opt.querySelector('label').style.color = 'var(--green)';
-      } else if (i === chosen && chosen !== correctIdx) {
+      } else if (labelText === chosenText && chosenText !== correctText) {
         opt.style.borderColor = 'var(--red)';
         opt.style.background = 'rgba(240,90,90,.1)';
         opt.querySelector('label').style.color = 'var(--red)';
       }
     });
 
-    if (chosen === undefined) blank++;
-    else if (chosen === correctIdx) correct++;
+    if (!chosenText) blank++;
+    else if (chosenText === correctText) correct++;
     else wrong++;
-  }
+  });
 
   const pts = (correct * 0.5).toFixed(1);
   const pct = Math.round((correct / 14) * 100);
@@ -964,6 +1140,7 @@ function exportPDF() {
 // ══════════════════════════════════════════════════════
 document.addEventListener('input', e => {
   if (e.target.id === 'open1') updateCC();
+  if (e.target.id === 'open2') updateCC2();
   save();
 });
 document.addEventListener('change', save);
