@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cas Pratiques — Symfony · VERSION PROF · B3 Dev Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1e40af;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e3a8a;
+  --secondary: #059669;
+  --secondary-light: #10b981;
+  --accent: #d97706;
+  --accent-light: #f59e0b;
+  --danger: #dc2626;
+  --danger-light: #ef4444;
+  --purple: #7c3aed;
+  --purple-light: #8b5cf6;
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-surface: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #334155;
+  --border-light: #475569;
+  --f1: #1e40af; --f1-bg: #1e3a8a22;
+  --f2: #059669; --f2-bg: #05966922;
+  --f3: #d97706; --f3-bg: #d9770622;
+  --f4: #7c3aed; --f4-bg: #7c3aed22;
+  --f5: #dc2626; --f5-bg: #dc262622;
+  --f6: #0891b2; --f6-bg: #0891b222;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
+  padding: 2.5rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.header-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(59,130,246,0.2); border: 1px solid rgba(59,130,246,0.4);
+  color: #93c5fd; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.35rem 0.9rem; border-radius: 999px;
+  margin-bottom: 1rem;
+}
+.header-badge span { font-size: 1rem; }
+.header h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800; line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+.header h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header-sub {
+  color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1.2rem;
+}
+.meta-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pill {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-secondary); font-size: 0.75rem; font-weight: 500;
+  padding: 0.3rem 0.75rem; border-radius: 999px;
+}
+.pill.green { background: rgba(5,150,105,0.15); border-color: rgba(5,150,105,0.3); color: #34d399; }
+.pill.amber { background: rgba(217,119,6,0.15); border-color: rgba(217,119,6,0.3); color: #fbbf24; }
+.pill.red { background: rgba(220,38,38,0.15); border-color: rgba(220,38,38,0.3); color: #f87171; }
+
+/* TABS */
+.tabs-wrapper { background: #0d1829; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.tabs { max-width: 1100px; margin: 0 auto; display: flex; }
+.tab-btn {
+  flex: 1; padding: 1rem 0.5rem; background: none; border: none;
+  color: var(--text-muted); font-family: 'Sora', sans-serif;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s; display: flex; align-items: center;
+  justify-content: center; gap: 0.4rem; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+.tab-btn.active { color: var(--primary-light); border-bottom-color: var(--primary-light); background: rgba(59,130,246,0.05); }
+.tab-btn.locked { color: var(--text-muted); cursor: not-allowed; }
+.tab-btn.unlocked { color: var(--secondary-light); border-bottom-color: var(--secondary-light); }
+.tab-status { font-size: 0.7rem; }
+
+/* MAIN */
+.main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* SECTION HEADER */
+.section-header {
+  display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;
+}
+.icon-bg {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+}
+.icon-bg.blue { background: rgba(30,64,175,0.3); border: 1px solid rgba(59,130,246,0.3); }
+.icon-bg.green { background: rgba(5,150,105,0.3); border: 1px solid rgba(16,185,129,0.3); }
+.icon-bg.amber { background: rgba(217,119,6,0.3); border: 1px solid rgba(245,158,11,0.3); }
+.icon-bg.purple { background: rgba(124,58,237,0.3); border: 1px solid rgba(139,92,246,0.3); }
+
+.section-title { font-size: 1.3rem; font-weight: 700; line-height: 1.2; }
+.section-sub { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.3rem; }
+
+/* INFO BOXES */
+.objective-box {
+  background: rgba(30,64,175,0.15); border: 1px solid rgba(59,130,246,0.25);
+  border-left: 4px solid var(--primary-light);
+  border-radius: 8px; padding: 0.9rem 1.2rem;
+  font-size: 0.85rem; color: #93c5fd; margin-bottom: 1rem;
+}
+.instruction-box {
+  background: rgba(217,119,6,0.1); border: 1px solid rgba(245,158,11,0.25);
+  border-left: 4px solid var(--accent-light);
+  border-radius: 8px; padding: 0.9rem 1.2rem;
+  font-size: 0.84rem; color: #fcd34d; margin-bottom: 1.5rem;
+}
+
+/* PROGRESS */
+.progress-bar-wrap {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 0.9rem 1.2rem; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1rem; border: 1px solid var(--border);
+}
+.progress-label { font-size: 0.8rem; color: var(--text-secondary); min-width: 80px; }
+.progress-track { flex: 1; height: 8px; background: var(--bg-surface); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--secondary-light)); border-radius: 4px; transition: width 0.4s ease; width: 0%; }
+.progress-count { font-size: 0.8rem; font-weight: 600; color: var(--secondary-light); min-width: 50px; text-align: right; }
+
+/* ROUND INFO */
+.round-info {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.7rem 1.2rem; margin-bottom: 1.2rem;
+  font-size: 0.82rem;
+}
+.round-info span { color: var(--text-secondary); }
+.round-info strong { color: var(--primary-light); }
+
+/* CAS 1 — CORRESPONDANCE */
+.match-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
+}
+.match-col h3 {
+  font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+.match-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.match-item {
+  background: var(--bg-card); border: 2px solid var(--border);
+  border-radius: 8px; padding: 0.7rem 1rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+  cursor: pointer; transition: all 0.18s; user-select: none;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.match-item:hover { border-color: var(--primary-light); background: rgba(59,130,246,0.05); }
+.match-item.selected { border-color: var(--primary-light); background: rgba(59,130,246,0.12); color: #93c5fd; }
+.match-item.correct { border-color: var(--secondary); background: rgba(5,150,105,0.12); color: #6ee7b7; cursor: default; }
+.match-item.wrong { border-color: var(--danger); background: rgba(220,38,38,0.1); animation: shake 0.3s; }
+.match-item.disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+.match-item.def-item {
+  font-family: 'Sora', sans-serif; font-size: 0.8rem;
+  line-height: 1.4; cursor: pointer;
+}
+.match-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg-surface); color: var(--text-muted);
+  font-size: 0.68rem; font-weight: 700; font-family: 'Sora',sans-serif;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.match-item.correct .match-num { background: var(--secondary); color: #fff; }
+.match-item.selected .match-num { background: var(--primary); color: #fff; }
+
+/* CAS 2 — IDENTIFICATION */
+.cas2-group { margin-bottom: 2rem; }
+.cas2-group-title {
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted);
+  margin-bottom: 0.3rem; padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.cas2-scenario {
+  background: rgba(30,64,175,0.1); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 8px; padding: 0.8rem 1rem; margin-bottom: 0.8rem;
+  font-size: 0.84rem; color: #93c5fd; font-style: italic;
+}
+.cas2-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 0.6rem; }
+.cas2-item {
+  background: var(--bg-card); border: 2px solid var(--border);
+  border-radius: 8px; padding: 0.65rem 1rem;
+  cursor: pointer; transition: all 0.18s;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.cas2-item:hover { border-color: var(--accent-light); background: rgba(217,119,6,0.05); }
+.cas2-item.selected-wrong { border-color: var(--accent); background: rgba(217,119,6,0.12); }
+.cas2-item.correct-reveal { border-color: var(--secondary); background: rgba(5,150,105,0.12); }
+.cas2-item.wrong-reveal { border-color: var(--danger); background: rgba(220,38,38,0.1); }
+.cas2-item.confirmed { border-color: var(--secondary); background: rgba(5,150,105,0.12); cursor: default; }
+.cas2-term { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500; flex: 1; }
+.cas2-badge {
+  font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem;
+  border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.cas2-badge.f1 { background: var(--f1-bg); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+.cas2-badge.f2 { background: var(--f2-bg); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+.cas2-badge.f3 { background: var(--f3-bg); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.cas2-badge.f4 { background: var(--f4-bg); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.cas2-badge.f5 { background: var(--f5-bg); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+.cas2-badge.f6 { background: var(--f6-bg); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); }
+
+/* CAS 3 — VRAI/FAUX */
+.vf-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; margin-bottom: 1rem; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.vf-item.answered-true { border-color: var(--secondary); }
+.vf-item.answered-false { border-color: var(--danger); }
+.vf-question { padding: 1rem 1.2rem; font-size: 0.88rem; line-height: 1.5; }
+.vf-question code {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+  background: rgba(255,255,255,0.08); padding: 0.1em 0.4em; border-radius: 4px; color: #93c5fd;
+}
+.vf-actions { padding: 0 1.2rem 1rem; display: flex; gap: 0.6rem; align-items: center; }
+.vf-btn {
+  padding: 0.45rem 1.1rem; border-radius: 7px; border: 2px solid;
+  font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.18s;
+}
+.vf-btn.vrai { border-color: var(--secondary); color: var(--secondary-light); background: rgba(5,150,105,0.1); }
+.vf-btn.faux { border-color: var(--danger); color: var(--danger-light); background: rgba(220,38,38,0.1); }
+.vf-btn:hover.vrai { background: rgba(5,150,105,0.25); }
+.vf-btn:hover.faux { background: rgba(220,38,38,0.2); }
+.vf-btn.active-vrai { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+.vf-btn.active-faux { background: var(--danger); color: #fff; border-color: var(--danger); }
+.vf-btn:disabled { opacity: 0.5; cursor: default; }
+.vf-explication {
+  display: none; padding: 0.75rem 1.2rem; font-size: 0.82rem;
+  border-top: 1px solid var(--border); line-height: 1.5; color: var(--text-secondary);
+}
+.vf-explication.show { display: block; }
+.vf-explication.correct { border-top-color: var(--secondary); background: rgba(5,150,105,0.06); color: #a7f3d0; }
+.vf-explication.incorrect { border-top-color: var(--danger); background: rgba(220,38,38,0.06); color: #fca5a5; }
+.vf-icon { margin-right: 0.4rem; }
+.vf-reveal-btn {
+  display: none; padding: 0.35rem 0.9rem; border-radius: 6px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-muted); font-size: 0.75rem; font-family: 'Sora',sans-serif;
+  cursor: pointer; margin-left: auto; transition: all 0.2s;
+}
+.vf-reveal-btn:hover { border-color: var(--accent); color: var(--accent-light); }
+
+/* RESULT PANEL */
+.result-panel {
+  background: var(--bg-dark); border: 1px solid var(--border);
+  border-radius: 12px; padding: 2rem; text-align: center; margin-top: 1.5rem;
+}
+.result-score {
+  font-size: 3rem; font-weight: 800; color: #34d399;
+  font-family: 'JetBrains Mono', monospace; line-height: 1;
+}
+.result-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; margin-top: 0.3rem; }
+.result-msg { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; }
+.result-detail {
+  display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.result-stat { text-align: center; }
+.result-stat-val { font-size: 1.4rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.result-stat-val.good { color: var(--secondary-light); }
+.result-stat-val.bad { color: var(--danger-light); }
+.result-stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+/* ACTIONS ROW */
+.actions-row {
+  display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; align-items: center;
+}
+.btn {
+  padding: 0.6rem 1.4rem; border-radius: 8px; border: none;
+  font-family: 'Sora', sans-serif; font-size: 0.84rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-secondary { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--border-light); color: var(--text-primary); }
+.btn-success { background: var(--secondary); color: #fff; }
+.btn-success:hover { background: var(--secondary-light); }
+.btn-danger { background: rgba(220,38,38,0.15); color: var(--danger-light); border: 1px solid rgba(220,38,38,0.3); }
+.btn-danger:hover { background: rgba(220,38,38,0.25); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* GLOSSAIRE */
+.gloss-locked-msg {
+  background: var(--bg-card); border: 2px dashed var(--border-light);
+  border-radius: 12px; padding: 3rem 2rem; text-align: center;
+}
+.gloss-lock-icon { font-size: 3rem; margin-bottom: 1rem; }
+.gloss-locked-msg h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.gloss-locked-msg p { color: var(--text-secondary); font-size: 0.85rem; }
+.gloss-checklist { display: flex; flex-direction: column; gap: 0.5rem; margin: 1.2rem auto; max-width: 300px; }
+.gloss-check {
+  display: flex; align-items: center; gap: 0.7rem;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 7px; padding: 0.5rem 0.9rem; font-size: 0.83rem;
+}
+.gloss-check.done { border-color: var(--secondary); background: rgba(5,150,105,0.08); color: #6ee7b7; }
+.gloss-check-icon { font-size: 1rem; }
+
+.gloss-family { margin-bottom: 2rem; }
+.gloss-family-title {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-bottom: 0.9rem; padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+.family-tag {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.6rem;
+  border-radius: 5px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.family-tag.f1 { background: var(--f1-bg); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+.family-tag.f2 { background: var(--f2-bg); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+.family-tag.f3 { background: var(--f3-bg); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.family-tag.f4 { background: var(--f4-bg); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.family-tag.f5 { background: var(--f5-bg); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+.family-tag.f6 { background: var(--f6-bg); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); }
+
+.gloss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 0.75rem; }
+.gloss-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.9rem 1.1rem; transition: border-color 0.2s;
+}
+.gloss-card:hover { border-color: var(--border-light); }
+.gloss-term {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.84rem;
+  font-weight: 700; color: var(--primary-light); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.gloss-def { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+.gloss-example {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+  color: var(--accent-light); margin-top: 0.4rem;
+  background: rgba(217,119,6,0.08); border: 1px solid rgba(217,119,6,0.2);
+  border-radius: 4px; padding: 0.25rem 0.5rem;
+}
+
+/* PROF MODE */
+.prof-banner {
+  background: linear-gradient(135deg, #78350f, #92400e, #b45309);
+  border-bottom: 2px solid #f59e0b;
+  padding: 0.6rem 2rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.82rem; font-weight: 600; color: #fef3c7;
+}
+.prof-banner-icon { font-size: 1.2rem; }
+.prof-badge-inline {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4);
+  color: #fbbf24; font-size: 0.7rem; font-weight: 700;
+  padding: 0.2rem 0.6rem; border-radius: 999px; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-left: auto;
+}
+.answer-key {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; margin-bottom: 2rem;
+}
+.answer-key-header {
+  background: rgba(217,119,6,0.15); border-bottom: 1px solid rgba(217,119,6,0.3);
+  padding: 0.7rem 1.2rem; font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: #fbbf24;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.answer-key-table { width: 100%; border-collapse: collapse; }
+.answer-key-table th {
+  text-align: left; padding: 0.55rem 1rem; font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--text-muted); background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+}
+.answer-key-table td {
+  padding: 0.55rem 1rem; font-size: 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top;
+}
+.answer-key-table tr:last-child td { border-bottom: none; }
+.answer-key-table tr:hover td { background: rgba(255,255,255,0.02); }
+.ak-term { font-family: 'JetBrains Mono', monospace; color: var(--primary-light); font-weight: 600; }
+.ak-def { color: var(--text-secondary); line-height: 1.4; }
+.ak-example { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-light); }
+.cas2-prof-answer {
+  background: rgba(5,150,105,0.08); border: 1px solid rgba(5,150,105,0.25);
+  border-radius: 6px; padding: 0.5rem 0.8rem; font-size: 0.8rem;
+  color: #6ee7b7; margin-top: 0.5rem;
+}
+.cas2-intruse-tag {
+  display: inline-block; background: rgba(220,38,38,0.15);
+  border: 1px solid rgba(220,38,38,0.3); color: #f87171;
+  font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem;
+  border-radius: 4px; margin-left: 0.4rem; text-transform: uppercase;
+}
+.vf-prof-row {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0.9rem 1.1rem; margin-bottom: 0.75rem;
+}
+.vf-prof-answer {
+  flex-shrink: 0; min-width: 54px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.vf-prof-answer.vrai { background: rgba(5,150,105,0.2); color: #34d399; border: 1px solid rgba(5,150,105,0.4); }
+.vf-prof-answer.faux { background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.3); }
+.vf-prof-content { flex: 1; }
+.vf-prof-q { font-size: 0.85rem; line-height: 1.5; margin-bottom: 0.4rem; }
+.vf-prof-expl { font-size: 0.79rem; color: var(--text-secondary); line-height: 1.5; font-style: italic; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.fade-in { animation: fadeIn 0.3s ease forwards; }
+
+.cas-complete-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(5,150,105,0.15); border: 1px solid rgba(5,150,105,0.3);
+  color: #34d399; font-size: 0.75rem; font-weight: 600;
+  padding: 0.25rem 0.75rem; border-radius: 999px; margin-left: 0.5rem;
+}
+</style>
+</head>
+<body>
+
+<!-- PROF BANNER -->
+<div class="prof-banner"><span class="prof-banner-icon">👨‍🏫</span> <strong>Mode Formateur</strong> — Corrigés affichés, glossaire débloqué. Ne pas distribuer aux étudiants.<span class="prof-badge-inline">🔑 CORRIGÉ</span></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge"><span>🎓</span> B3 Développeur Web · MDS 2025-2026</div>
+    <h1>Cas Pratiques — <em>Symfony</em></h1>
+    <p class="header-sub">Framework PHP · Architecture MVC · Doctrine · Sécurité · Déploiement</p>
+    <div class="meta-pills">
+      <span class="pill amber"><span>👨‍🏫</span> VERSION FORMATEUR</span>
+      <span class="pill green"><span>📦</span> 50 termes</span>
+      <span class="pill green"><span>✅</span> Corrigés visibles</span>
+      <span class="pill green"><span>🔓</span> Glossaire débloqué</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('cas1',this)" id="tab-cas1">🧩 Cas 1 — Correspondance <span class="tab-status" id="status-cas1"></span></button>
+    <button class="tab-btn" onclick="showTab('cas2',this)" id="tab-cas2">🔍 Cas 2 — Identification <span class="tab-status" id="status-cas2"></span></button>
+    <button class="tab-btn" onclick="showTab('cas3',this)" id="tab-cas3">✅ Cas 3 — Vrai / Faux <span class="tab-status" id="status-cas3"></span></button>
+    <button class="tab-btn unlocked" id="tab-glossaire" onclick="showTab('glossaire',this)">📖 Glossaire <span class="tab-status" id="status-gloss">🔓</span></button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- ======================== CAS 1 ======================== -->
+<div class="tab-panel active" id="panel-cas1">
+  <div class="section-header">
+    <div class="icon-bg blue">🧩</div>
+    <div>
+      <div class="section-title">Correspondance — Termes & Définitions</div>
+      <div class="section-sub">Associe chaque terme Symfony à sa définition correcte</div>
+    </div>
+  </div>
+  <div class="objective-box">🎯 <strong>Objectif :</strong> Reconnaître et associer les concepts clés de Symfony à leur définition précise.</div>
+  <div class="instruction-box">💡 <strong>Mode :</strong> Clique sur un terme (colonne gauche) puis sur la définition correspondante (colonne droite). 50 termes répartis en rounds de 10.</div>
+  <div class="progress-bar-wrap">
+    <span class="progress-label">Progression</span>
+    <div class="progress-track"><div class="progress-fill" id="cas1-progress"></div></div>
+    <span class="progress-count" id="cas1-count">0 / 50</span>
+  </div>
+  <div class="round-info">
+    <span>Round <strong id="cas1-round">1</strong> / 5</span>
+    <span>Paires correctes : <strong id="cas1-correct">0</strong></span>
+    <span>Paires restantes : <strong id="cas1-remain">10</strong></span>
+  </div>
+  <div class="match-grid" id="cas1-grid">
+    <div><h3>📌 Termes</h3><div class="match-list" id="cas1-terms"></div></div>
+    <div><h3>📝 Définitions</h3><div class="match-list" id="cas1-defs"></div></div>
+  </div>
+  <div class="actions-row">
+    <button class="btn btn-primary" id="cas1-next-btn" onclick="cas1NextRound()" style="display:none">Round suivant →</button>
+    <button class="btn btn-secondary" onclick="cas1Reset()">🔄 Recommencer</button>
+  </div>
+  <div id="cas1-result" style="display:none" class="result-panel fade-in">
+    <div class="result-score" id="cas1-score-val">0/50</div>
+    <div class="result-label">Score final</div>
+    <div class="result-msg" id="cas1-msg"></div>
+    <div class="result-detail">
+      <div class="result-stat"><div class="result-stat-val good" id="cas1-ok">0</div><div class="result-stat-lbl">Correctes</div></div>
+      <div class="result-stat"><div class="result-stat-val bad" id="cas1-ko">0</div><div class="result-stat-lbl">Erreurs</div></div>
+    </div>
+    <div class="actions-row" style="justify-content:center">
+      <button class="btn btn-secondary" onclick="cas1Reset()">🔄 Refaire</button>
+      <button class="btn btn-primary" onclick="showTab('cas2',document.getElementById('tab-cas2'))">→ Cas 2</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== CAS 2 ======================== -->
+<div class="tab-panel" id="panel-cas2">
+  <div class="section-header">
+    <div class="icon-bg green">🔍</div>
+    <div>
+      <div class="section-title">Identification — Trouve l'intruse</div>
+      <div class="section-sub">Dans chaque groupe de situations, identifie l'élément qui ne correspond pas</div>
+    </div>
+  </div>
+  <div class="objective-box">🎯 <strong>Objectif :</strong> Distinguer les usages corrects des mauvaises pratiques ou termes hors contexte dans Symfony.</div>
+  <div class="instruction-box">💡 <strong>Mode :</strong> Chaque groupe contient 4 items. Un seul est l'intruse — clique sur celui qui ne correspond pas au contexte décrit.</div>
+  <div class="progress-bar-wrap">
+    <span class="progress-label">Progression</span>
+    <div class="progress-track"><div class="progress-fill" id="cas2-progress"></div></div>
+    <span class="progress-count" id="cas2-count">0 / 10</span>
+  </div>
+  <div id="cas2-groups"></div>
+  <div class="actions-row">
+    <button class="btn btn-secondary" onclick="cas2Reset()">🔄 Recommencer</button>
+  </div>
+  <div id="cas2-result" style="display:none" class="result-panel fade-in">
+    <div class="result-score" id="cas2-score-val">0/10</div>
+    <div class="result-label">Score final</div>
+    <div class="result-msg" id="cas2-msg"></div>
+    <div class="result-detail">
+      <div class="result-stat"><div class="result-stat-val good" id="cas2-ok">0</div><div class="result-stat-lbl">Correctes</div></div>
+      <div class="result-stat"><div class="result-stat-val bad" id="cas2-ko">0</div><div class="result-stat-lbl">Erreurs</div></div>
+    </div>
+    <div class="actions-row" style="justify-content:center">
+      <button class="btn btn-secondary" onclick="cas2Reset()">🔄 Refaire</button>
+      <button class="btn btn-primary" onclick="showTab('cas3',document.getElementById('tab-cas3'))">→ Cas 3</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== CAS 3 ======================== -->
+<div class="tab-panel" id="panel-cas3">
+  <div class="section-header">
+    <div class="icon-bg amber">✅</div>
+    <div>
+      <div class="section-title">Vrai / Faux — Assertions Symfony</div>
+      <div class="section-sub">Valide ou invalide chaque affirmation sur Symfony</div>
+    </div>
+  </div>
+  <div class="objective-box">🎯 <strong>Objectif :</strong> Tester la compréhension des comportements, bonnes pratiques et mécanismes de Symfony.</div>
+  <div class="instruction-box">👨‍🏫 <strong>Mode formateur :</strong> Toutes les réponses et explications sont affichées ci-dessous. Les boutons restent fonctionnels pour la démonstration.</div>
+  <div class="progress-bar-wrap">
+    <span class="progress-label">Progression</span>
+    <div class="progress-track"><div class="progress-fill" id="cas3-progress"></div></div>
+    <span class="progress-count" id="cas3-count">0 / 20</span>
+  </div>
+  <div id="cas3-items"></div>
+  <div class="actions-row">
+    <button class="btn btn-secondary" onclick="cas3Reset()">🔄 Recommencer</button>
+  </div>
+  <div id="cas3-result" style="display:none" class="result-panel fade-in">
+    <div class="result-score" id="cas3-score-val">0/20</div>
+    <div class="result-label">Score final</div>
+    <div class="result-msg" id="cas3-msg"></div>
+    <div class="result-detail">
+      <div class="result-stat"><div class="result-stat-val good" id="cas3-ok">0</div><div class="result-stat-lbl">Correctes</div></div>
+      <div class="result-stat"><div class="result-stat-val bad" id="cas3-ko">0</div><div class="result-stat-lbl">Erreurs</div></div>
+    </div>
+    <div class="actions-row" style="justify-content:center">
+      <button class="btn btn-secondary" onclick="cas3Reset()">🔄 Refaire</button>
+      <button class="btn btn-success" onclick="tryUnlockGlossaire()">📖 Accéder au Glossaire</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== GLOSSAIRE ======================== -->
+<div class="tab-panel" id="panel-glossaire">
+  <div id="gloss-locked" class="gloss-locked-msg">
+    <div class="gloss-lock-icon">🔒</div>
+    <h3>Glossaire verrouillé</h3>
+    <p>Complète les 3 cas pratiques pour débloquer le glossaire des 50 termes Symfony.</p>
+    <div class="gloss-checklist">
+      <div class="gloss-check" id="gloss-check1"><span class="gloss-check-icon">⏳</span> Cas 1 — Correspondance</div>
+      <div class="gloss-check" id="gloss-check2"><span class="gloss-check-icon">⏳</span> Cas 2 — Identification</div>
+      <div class="gloss-check" id="gloss-check3"><span class="gloss-check-icon">⏳</span> Cas 3 — Vrai / Faux</div>
+    </div>
+  </div>
+  <div id="gloss-content" style="display:none">
+    <div class="section-header">
+      <div class="icon-bg purple">📖</div>
+      <div>
+        <div class="section-title">Glossaire Symfony — 50 termes</div>
+        <div class="section-sub">Référence complète organisée par familles thématiques</div>
+      </div>
+    </div>
+    <div id="gloss-families"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ======================================================
+// DATA
+// ======================================================
+const allTerms = [
+  // F1 — Architecture & Fondamentaux
+  {id:1, term:'MVC', family:'f1', familyName:'Architecture & Fondamentaux', def:'Patron de conception qui sépare l\'application en 3 couches : Modèle (données), Vue (affichage) et Contrôleur (logique)', example:'Symfony suit le pattern MVC : Entity = M, Twig = V, Controller = C'},
+  {id:2, term:'Kernel', family:'f1', familyName:'Architecture & Fondamentaux', def:'Cœur de Symfony qui bootstrappe l\'application, charge les bundles et gère le cycle de vie d\'une requête HTTP', example:'class AppKernel extends Kernel { ... }'},
+  {id:3, term:'Bundle', family:'f1', familyName:'Architecture & Fondamentaux', def:'Module réutilisable encapsulant des fonctionnalités (contrôleurs, entités, config). Remplacé en partie par des packages Flex dans les versions récentes', example:'DoctrineBundle, TwigBundle, SecurityBundle'},
+  {id:4, term:'Service Container', family:'f1', familyName:'Architecture & Fondamentaux', def:'Registre centralisé qui instancie et injecte automatiquement les services de l\'application via la configuration ou l\'autowiring', example:'$container->get(MailerInterface::class)'},
+  {id:5, term:'Environment', family:'f1', familyName:'Architecture & Fondamentaux', def:'Contexte d\'exécution de l\'application (dev, test, prod) qui détermine le niveau de logs, le cache et les services activés', example:'APP_ENV=prod dans .env'},
+  {id:6, term:'Flex', family:'f1', familyName:'Architecture & Fondamentaux', def:'Plugin Composer qui automatise l\'installation des recettes Symfony (configuration, routes, variables d\'env) lors du require d\'un package', example:'composer require symfony/mailer → config auto via Flex'},
+  {id:7, term:'Composer', family:'f1', familyName:'Architecture & Fondamentaux', def:'Gestionnaire de dépendances PHP qui installe les packages et génère l\'autoloader PSR-4 utilisé par Symfony', example:'composer require doctrine/orm'},
+  {id:8, term:'DotEnv (.env)', family:'f1', familyName:'Architecture & Fondamentaux', def:'Fichier de configuration des variables d\'environnement (BDD, clés API, secrets) chargé automatiquement par Symfony au démarrage', example:'DATABASE_URL="mysql://user:pass@localhost/db"'},
+  {id:9, term:'Console Command', family:'f1', familyName:'Architecture & Fondamentaux', def:'Classe PHP permettant de créer des commandes CLI exécutables via bin/console pour automatiser des tâches (seeding, cron, migration)', example:'php bin/console app:import-users'},
+  {id:10, term:'Autowiring', family:'f1', familyName:'Architecture & Fondamentaux', def:'Mécanisme qui injecte automatiquement les dépendances dans les services via le type-hint PHP, sans configuration YAML explicite', example:'public function __construct(private MailerInterface $mailer) {}'},
+  // F2 — Routing & Contrôleurs
+  {id:11, term:'Route', family:'f2', familyName:'Routing & Contrôleurs', def:'Association entre une URL (et une méthode HTTP) et une action de contrôleur, définie via attribut PHP, YAML ou XML', example:'#[Route(\'/produits\', name: \'product_list\')]'},
+  {id:12, term:'Controller', family:'f2', familyName:'Routing & Contrôleurs', def:'Classe PHP dont les méthodes traitent les requêtes HTTP et retournent une Response (HTML, JSON, redirect…)', example:'class ProductController extends AbstractController { ... }'},
+  {id:13, term:'Request', family:'f2', familyName:'Routing & Contrôleurs', def:'Objet Symfony (HttpFoundation) encapsulant toutes les données de la requête HTTP : GET, POST, headers, cookies, fichiers', example:'$request->get(\'search\')'},
+  {id:14, term:'Response', family:'f2', familyName:'Routing & Contrôleurs', def:'Objet retourné par un contrôleur représentant la réponse HTTP : code statut, headers, corps de la réponse', example:'return new Response(\'OK\', 200)'},
+  {id:15, term:'Attribute #[Route]', family:'f2', familyName:'Routing & Contrôleurs', def:'Annotation PHP 8 native utilisée directement sur une méthode de contrôleur pour définir son URL, méthode HTTP et paramètres', example:'#[Route(\'/user/{id}\', methods: [\'GET\'])]'},
+  {id:16, term:'ParamConverter', family:'f2', familyName:'Routing & Contrôleurs', def:'Mécanisme qui convertit automatiquement un paramètre de route (ex: id) en objet Doctrine correspondant, injecté dans la méthode', example:'public function show(Product $product) {} → fetch auto en DB'},
+  {id:17, term:'Redirect', family:'f2', familyName:'Routing & Contrôleurs', def:'Réponse HTTP 301/302 qui redirige le client vers une autre URL, générée via redirectToRoute() dans AbstractController', example:'return $this->redirectToRoute(\'app_home\')'},
+  {id:18, term:'JsonResponse', family:'f2', familyName:'Routing & Contrôleurs', def:'Sous-classe de Response qui sérialise automatiquement un tableau PHP en JSON avec le header Content-Type correct', example:'return new JsonResponse([\'status\' => \'ok\'])'},
+  {id:19, term:'AbstractController', family:'f2', familyName:'Routing & Contrôleurs', def:'Classe de base Symfony à étendre dans les contrôleurs pour accéder aux helpers render(), redirectToRoute(), generateUrl(), etc.', example:'class HomeController extends AbstractController'},
+  // F3 — Doctrine & Base de données
+  {id:20, term:'Entity', family:'f3', familyName:'Doctrine & Base de données', def:'Classe PHP mappée à une table de base de données via des attributs Doctrine (#[ORM\\Entity], #[ORM\\Column]…)', example:'#[ORM\\Entity] class Product { #[ORM\\Column] public string $name; }'},
+  {id:21, term:'Repository', family:'f3', familyName:'Doctrine & Base de données', def:'Classe associée à une entité fournissant des méthodes de requête : find(), findAll(), findBy(), findOneBy() + méthodes personnalisées', example:'$productRepo->findBy([\'category\' => \'tech\'])'},
+  {id:22, term:'EntityManager', family:'f3', familyName:'Doctrine & Base de données', def:'Service central de Doctrine qui gère le cycle de vie des entités : persist (enregistrer), flush (exécuter SQL), remove (supprimer)', example:'$em->persist($product); $em->flush();'},
+  {id:23, term:'Migration', family:'f3', familyName:'Doctrine & Base de données', def:'Fichier PHP versionné généré par Doctrine représentant les modifications de schéma à appliquer en base (up/down)', example:'php bin/console make:migration && doctrine:migrations:migrate'},
+  {id:24, term:'QueryBuilder', family:'f3', familyName:'Doctrine & Base de données', def:'API fluide de Doctrine pour construire des requêtes SQL dynamiques en PHP sans écrire de DQL ou SQL brut', example:'$qb->select(\'p\')->from(\'Product\',\'p\')->where(\'p.price > :min\')'},
+  {id:25, term:'Relation ManyToOne', family:'f3', familyName:'Doctrine & Base de données', def:'Association Doctrine où plusieurs entités (ex: produits) sont liées à une seule entité (ex: catégorie), mappée par une clé étrangère', example:'#[ORM\\ManyToOne(targetEntity: Category::class)]'},
+  {id:26, term:'Fixture', family:'f3', familyName:'Doctrine & Base de données', def:'Classe permettant d\'insérer des données de test ou d\'initialisation en base via DoctrineFixturesBundle', example:'php bin/console doctrine:fixtures:load'},
+  {id:27, term:'Eager Loading', family:'f3', familyName:'Doctrine & Base de données', def:'Stratégie de chargement qui récupère les entités liées en une seule requête SQL (JOIN) pour éviter le problème N+1', example:'fetch: \'EAGER\' dans les annotations Doctrine'},
+  {id:28, term:'Lazy Loading', family:'f3', familyName:'Doctrine & Base de données', def:'Stratégie par défaut de Doctrine : les entités liées ne sont chargées en base que lorsqu\'on y accède réellement dans le code', example:'$product->getCategory()->getName() → déclenche une requête SQL'},
+  {id:29, term:'DQL', family:'f3', familyName:'Doctrine & Base de données', def:'Doctrine Query Language : langage de requête orienté objet propre à Doctrine qui travaille sur des entités et non des tables SQL', example:'SELECT p FROM App\\Entity\\Product p WHERE p.price > 50'},
+  // F4 — Templating & Formulaires
+  {id:30, term:'Twig', family:'f4', familyName:'Templating & Formulaires', def:'Moteur de templates PHP utilisé par Symfony, offrant une syntaxe sécurisée (auto-échappement XSS), des filtres, des tags et l\'héritage de templates', example:'{{ product.name | upper }} {% for item in items %}'},
+  {id:31, term:'extends / block', family:'f4', familyName:'Templating & Formulaires', def:'Mécanisme d\'héritage Twig : extends hérite d\'un template parent, block définit les zones remplaçables par les templates enfants', example:'{% extends \'base.html.twig\' %} {% block content %}...{% endblock %}'},
+  {id:32, term:'FormType', family:'f4', familyName:'Templating & Formulaires', def:'Classe PHP définissant la structure d\'un formulaire Symfony (champs, types, options) séparément du contrôleur', example:'class ProductType extends AbstractType { buildForm(...) }'},
+  {id:33, term:'FormBuilder', family:'f4', familyName:'Templating & Formulaires', def:'Service injecté dans FormType qui construit le formulaire champ par champ via une API fluide (add, setAction…)', example:'$builder->add(\'name\', TextType::class)->add(\'price\', MoneyType::class)'},
+  {id:34, term:'CSRF Token', family:'f4', familyName:'Templating & Formulaires', def:'Jeton anti-CSRF généré automatiquement par Symfony dans les formulaires pour prévenir les attaques Cross-Site Request Forgery', example:'{{ form_rest(form) }} inclut automatiquement le token caché'},
+  {id:35, term:'Validation Constraint', family:'f4', familyName:'Templating & Formulaires', def:'Règle de validation appliquée sur une propriété d\'entité ou un champ de formulaire via des attributs PHP (#[Assert\\NotBlank], etc.)', example:'#[Assert\\Length(min: 3, max: 50)]'},
+  {id:36, term:'Asset', family:'f4', familyName:'Templating & Formulaires', def:'Fonction Twig (asset()) qui génère les URLs des fichiers statiques (CSS, JS, images) en gérant automatiquement le versioning', example:'<link href="{{ asset(\'build/app.css\') }}">'},
+  {id:37, term:'Macro Twig', family:'f4', familyName:'Templating & Formulaires', def:'Fonctions réutilisables définies dans un template Twig permettant de factoriser des blocs HTML paramétrables', example:'{% macro input(name, value) %}<input name="{{ name }}">{% endmacro %}'},
+  {id:38, term:'flash()', family:'f4', familyName:'Templating & Formulaires', def:'Méthode de AbstractController qui stocke un message temporaire (succès, erreur) en session pour l\'afficher après une redirection', example:'$this->addFlash(\'success\', \'Produit sauvegardé !\')'},
+  {id:39, term:'render() partiel', family:'f4', familyName:'Templating & Formulaires', def:'Inclusion d\'un sous-template dans Twig via {% include %} ou {{ render(controller(...)) }} pour factoriser des blocs d\'interface', example:'{{ render(controller(\'App\\Controller\\Widget::topProducts\')) }}'},
+  // F5 — Sécurité & Services
+  {id:40, term:'Firewall', family:'f5', familyName:'Sécurité & Services', def:'Section du composant Security de Symfony qui définit les règles d\'authentification pour un pattern d\'URL donné (form_login, jwt, etc.)', example:'firewalls: main: form_login: ... dans security.yaml'},
+  {id:41, term:'Access Control', family:'f5', familyName:'Sécurité & Services', def:'Configuration Symfony qui restreint l\'accès aux URLs selon les rôles de l\'utilisateur connecté (IS_AUTHENTICATED, ROLE_ADMIN…)', example:'access_control: - { path: ^/admin, roles: ROLE_ADMIN }'},
+  {id:42, term:'Voter', family:'f5', familyName:'Sécurité & Services', def:'Service Symfony qui implémente une logique d\'autorisation fine (au-delà des simples rôles) sur des objets métier spécifiques', example:'class PostVoter extends Voter { supports(), voteOn() }'},
+  {id:43, term:'Security Attribute', family:'f5', familyName:'Sécurité & Services', def:'Annotation PHP #[IsGranted] ou appel à denyAccessUnlessGranted() pour restreindre l\'accès à une action de contrôleur', example:'#[IsGranted(\'ROLE_ADMIN\')] public function admin()'},
+  {id:44, term:'Event Listener', family:'f5', familyName:'Sécurité & Services', def:'Service Symfony qui écoute et réagit aux événements du cycle de vie Symfony (kernel.request, kernel.response, doctrine.preUpdate…)', example:'class RequestListener { onKernelRequest(RequestEvent $e) }'},
+  {id:45, term:'Dependency Injection', family:'f5', familyName:'Sécurité & Services', def:'Patron de conception où les dépendances d\'un service sont injectées (constructeur, setter) plutôt qu\'instanciées en interne', example:'public function __construct(private LoggerInterface $logger) {}'},
+  {id:46, term:'JWT', family:'f5', familyName:'Sécurité & Services', def:'JSON Web Token : token signé utilisé pour l\'authentification stateless dans les APIs Symfony (via LexikJWTAuthenticationBundle)', example:'Authorization: Bearer eyJhbGc... dans le header HTTP'},
+  {id:47, term:'Roles & Hierarchy', family:'f5', familyName:'Sécurité & Services', def:'Système de rôles Symfony permettant de définir des hiérarchies (ROLE_ADMIN > ROLE_USER) dans security.yaml pour hériter des permissions', example:'role_hierarchy: ROLE_ADMIN: [ROLE_USER, ROLE_EDITOR]'},
+  {id:48, term:'Password Hasher', family:'f5', familyName:'Sécurité & Services', def:'Service Symfony (UserPasswordHasherInterface) qui hache les mots de passe avec bcrypt/argon2 lors de l\'inscription ou du changement', example:'$hasher->hashPassword($user, $plainPassword)'},
+  // F6 — Performance & Déploiement
+  {id:49, term:'Cache', family:'f6', familyName:'Performance & Déploiement', def:'Composant Symfony (CacheInterface) permettant de stocker des résultats coûteux (requêtes, calculs) en mémoire (Redis, APCu, fichier)', example:'$cache->get(\'stats\', fn() => $this->computeStats())'},
+  {id:50, term:'Profiler / Debug Toolbar', family:'f6', familyName:'Performance & Déploiement', def:'Outil de développement Symfony (barre en bas de page) affichant les infos de performance : requêtes SQL, temps d\'exécution, logs, routes', example:'Accessible uniquement en APP_ENV=dev, via /_profiler'},
+];
+
+// CAS 2 — Groupes avec intruse
+const cas2Data = [
+  {
+    id:1, family:'f1', label:'F1',
+    scenario:'Un développeur configure l\'environnement Symfony. Identifie l\'intrus parmi ces éléments de configuration.',
+    items:[
+      {term:'APP_ENV=dev', correct:true},
+      {term:'DotEnv (.env)', correct:true},
+      {term:'Flex (recettes)', correct:true},
+      {term:'QueryBuilder', correct:false, explication:'QueryBuilder appartient à Doctrine (F3), pas à la configuration d\'environnement Symfony.'},
+    ]
+  },
+  {
+    id:2, family:'f1', label:'F1',
+    scenario:'L\'équipe veut automatiser des tâches via la CLI Symfony. Quel élément n\'appartient pas à ce contexte ?',
+    items:[
+      {term:'Console Command', correct:true},
+      {term:'bin/console', correct:true},
+      {term:'Autowiring', correct:true},
+      {term:'Twig', correct:false, explication:'Twig est un moteur de templates (F4), sans lien direct avec les commandes CLI Symfony.'},
+    ]
+  },
+  {
+    id:3, family:'f2', label:'F2',
+    scenario:'Un développeur code un contrôleur REST qui retourne du JSON. Quel terme est hors-sujet ici ?',
+    items:[
+      {term:'JsonResponse', correct:true},
+      {term:'AbstractController', correct:true},
+      {term:'Route #[Route]', correct:true},
+      {term:'Fixture', correct:false, explication:'Les Fixtures servent à alimenter la BDD en données de test (F3), pas à coder des contrôleurs REST.'},
+    ]
+  },
+  {
+    id:4, family:'f2', label:'F2',
+    scenario:'Pour gérer la navigation entre pages et le passage de paramètres URL, on utilise… Trouve l\'intrus.',
+    items:[
+      {term:'redirectToRoute()', correct:true},
+      {term:'ParamConverter', correct:true},
+      {term:'Request', correct:true},
+      {term:'Password Hasher', correct:false, explication:'Password Hasher est un service de sécurité (F5) qui hache les mots de passe, sans rapport avec le routing.'},
+    ]
+  },
+  {
+    id:5, family:'f3', label:'F3',
+    scenario:'L\'équipe travaille sur la couche persistence Doctrine. Quel élément ne fait pas partie de cet écosystème ?',
+    items:[
+      {term:'EntityManager', correct:true},
+      {term:'DQL', correct:true},
+      {term:'Repository', correct:true},
+      {term:'Firewall', correct:false, explication:'Le Firewall est un concept de sécurité Symfony (F5) qui définit les règles d\'authentification par URL.'},
+    ]
+  },
+  {
+    id:6, family:'f3', label:'F3',
+    scenario:'Pour optimiser les performances des requêtes Doctrine, on peut jouer sur la stratégie de chargement. Quel terme est mal placé ?',
+    items:[
+      {term:'Eager Loading', correct:true},
+      {term:'Lazy Loading', correct:true},
+      {term:'QueryBuilder', correct:true},
+      {term:'CSRF Token', correct:false, explication:'Le CSRF Token est une protection de sécurité des formulaires (F4), sans rapport avec les stratégies de chargement Doctrine.'},
+    ]
+  },
+  {
+    id:7, family:'f4', label:'F4',
+    scenario:'Un développeur front crée ses templates et formulaires Symfony. Quel élément ne lui appartient pas ?',
+    items:[
+      {term:'extends / block', correct:true},
+      {term:'FormType', correct:true},
+      {term:'Macro Twig', correct:true},
+      {term:'Voter', correct:false, explication:'Le Voter est un service d\'autorisation métier (F5), pas un outil de templating ou formulaire Twig.'},
+    ]
+  },
+  {
+    id:8, family:'f4', label:'F4',
+    scenario:'Pour afficher des messages de confirmation après un POST-Redirect-GET, on utilise. Quel terme est l\'intrus ?',
+    items:[
+      {term:'flash()', correct:true},
+      {term:'addFlash()', correct:true},
+      {term:'render() partiel', correct:true},
+      {term:'Migration', correct:false, explication:'Les Migrations sont des fichiers Doctrine de modification de schéma BDD (F3), non des outils d\'affichage de messages.'},
+    ]
+  },
+  {
+    id:9, family:'f5', label:'F5',
+    scenario:'L\'équipe sécurise l\'API Symfony avec authentification stateless. Quel élément sort de ce contexte ?',
+    items:[
+      {term:'JWT', correct:true},
+      {term:'Firewall', correct:true},
+      {term:'Password Hasher', correct:true},
+      {term:'Asset', correct:false, explication:'Asset() est une fonction Twig pour gérer les URLs de fichiers statiques (F4), sans lien avec la sécurité API.'},
+    ]
+  },
+  {
+    id:10, family:'f6', label:'F6',
+    scenario:'Pour diagnostiquer les performances en environnement de développement, on utilise. Quel outil est hors-sujet ?',
+    items:[
+      {term:'Profiler / Debug Toolbar', correct:true},
+      {term:'APP_ENV=dev', correct:true},
+      {term:'Cache (CacheInterface)', correct:true},
+      {term:'Bundle', correct:false, explication:'Un Bundle est un module réutilisable de l\'architecture Symfony (F1), pas un outil spécifique de diagnostic de performance.'},
+    ]
+  },
+];
+
+// CAS 3 — Vrai/Faux
+const cas3Data = [
+  {q:'Dans Symfony, un Bundle est obligatoire pour créer un contrôleur depuis Symfony 4+.', answer:false, expl:'Faux. Depuis Symfony 4, la structure "bundle-less" est recommandée : les contrôleurs, entités et services sont directement dans src/ sans encapsulation Bundle.'},
+  {q:'L\'autowiring permet à Symfony d\'injecter automatiquement les dépendances via le type-hint sans fichier YAML.', answer:true, expl:'Vrai. L\'autowiring analyse le type des arguments du constructeur et injecte le service correspondant depuis le Service Container automatiquement.'},
+  {q:'La commande php bin/console doctrine:fixtures:load permet d\'appliquer les migrations de schéma BDD.', answer:false, expl:'Faux. Les migrations s\'appliquent via doctrine:migrations:migrate. doctrine:fixtures:load charge des données de test (fixtures) dans la base.'},
+  {q:'Un Repository Doctrine peut contenir des méthodes de requête personnalisées en DQL ou QueryBuilder.', answer:true, expl:'Vrai. On étend ServiceEntityRepository et on y ajoute des méthodes findBy* personnalisées utilisant DQL ou le QueryBuilder pour des requêtes complexes.'},
+  {q:'Le CSRF Token généré par Symfony est visible en clair dans le DOM HTML du formulaire.', answer:true, expl:'Vrai. Le token est dans un champ hidden du formulaire. Sa sécurité repose sur son caractère aléatoire et sa vérification côté serveur, pas sur sa dissimulation.'},
+  {q:'Twig échappe automatiquement toutes les variables affichées avec {{ }}, protégeant contre les injections XSS.', answer:true, expl:'Vrai. L\'auto-escaping de Twig est activé par défaut. Pour afficher du HTML brut, il faut explicitement utiliser le filtre |raw.'},
+  {q:'APP_ENV=prod active la Debug Toolbar de Symfony pour faciliter le diagnostic en production.', answer:false, expl:'Faux. La Debug Toolbar n\'est disponible qu\'en APP_ENV=dev. En production, elle est désactivée pour des raisons de sécurité et de performance.'},
+  {q:'Un Voter Symfony est utilisé pour définir des règles d\'autorisation sur des objets métier spécifiques.', answer:true, expl:'Vrai. Le Voter permet une logique fine : "cet utilisateur peut-il éditer CE post ?" en implémentant supports() et voteOnAttribute().'},
+  {q:'La stratégie Lazy Loading de Doctrine charge toutes les entités liées dès la première requête SQL pour optimiser les performances.', answer:false, expl:'Faux. Lazy Loading charge les entités liées à la demande (N+1 potentiel). C\'est Eager Loading qui charge tout en un seul JOIN dès la requête initiale.'},
+  {q:'Le fichier .env.local est versionné dans Git pour partager la configuration entre développeurs.', answer:false, expl:'Faux. .env.local est dans .gitignore car il contient des secrets spécifiques à chaque environnement. Seul .env (avec des valeurs par défaut) est versionné.'},
+  {q:'Dans Symfony, redirectToRoute() génère automatiquement la réponse HTTP avec le code 302 par défaut.', answer:true, expl:'Vrai. redirectToRoute() retourne un RedirectResponse avec statut 302 (Found) par défaut. On peut passer 301 en second paramètre pour une redirection permanente.'},
+  {q:'Le ParamConverter Doctrine transforme automatiquement un paramètre d\'URL {id} en objet Entity correspondant.', answer:true, expl:'Vrai. SensioFrameworkExtraBundle (ou symfony/routing en mode moderne) convertit l\'id de route en entité via find($id), déclenchant une 404 si absent.'},
+  {q:'Les Flash messages Symfony sont stockés de façon permanente en base de données.', answer:false, expl:'Faux. Les Flash messages sont stockés temporairement en session et supprimés dès la première lecture. Ils sont conçus pour le pattern POST-Redirect-GET.'},
+  {q:'JWT (JSON Web Token) permet une authentification stateless, sans session côté serveur.', answer:true, expl:'Vrai. Le JWT encode les informations de l\'utilisateur dans un token signé. Le serveur vérifie la signature sans stocker de session, idéal pour les APIs REST.'},
+  {q:'La commande make:migration compare le schéma des entités PHP avec la BDD et génère le fichier de migration correspondant.', answer:true, expl:'Vrai. Doctrine compare le mapping des entités (@ORM) avec l\'état actuel de la BDD et génère le SQL différentiel dans un fichier de migration versionné.'},
+  {q:'En Symfony, le Service Container instancie tous les services au démarrage de l\'application pour améliorer les performances.', answer:false, expl:'Faux. Le container utilise le lazy loading : les services sont instanciés uniquement à la première fois qu\'ils sont demandés, pas tous au démarrage.'},
+  {q:'L\'héritage de templates Twig avec {% extends %} et {% block %} permet de définir un layout commun réutilisé dans toutes les pages.', answer:true, expl:'Vrai. base.html.twig définit le layout global (head, header, footer) avec des blocs. Chaque page étend ce template et remplace uniquement les blocs nécessaires.'},
+  {q:'Access Control dans security.yaml permet de restreindre l\'accès à des URLs selon les rôles sans modifier les contrôleurs.', answer:true, expl:'Vrai. access_control applique des règles de sécurité centralisées au niveau de la configuration, permettant de sécuriser des routes sans toucher au code PHP.'},
+  {q:'Le Profiler Symfony en mode dev expose des informations sensibles, c\'est pourquoi il est désactivé en production.', answer:true, expl:'Vrai. Le Profiler révèle les requêtes SQL, variables de session, paramètres de configuration, etc. Il serait une faille de sécurité majeure s\'il était actif en production.'},
+  {q:'FormBuilder est une sous-classe de AbstractController qui permet de créer des formulaires directement dans le contrôleur.', answer:false, expl:'Faux. FormBuilder est un service injecté dans la méthode buildForm() d\'une classe FormType (qui étend AbstractType), pas une sous-classe d\'AbstractController.'},
+];
+
+// ======================================================
+// STATE
+// ======================================================
+const state = {
+  cas1: { round:0, correctTotal:0, errors:0, currentPairs:[], selectedTerm:null, selectedDef:null, roundCorrect:0 },
+  cas2: { answered:0, correct:0, done:false },
+  cas3: { answered:0, correct:0, done:false },
+  completed: { cas1:false, cas2:false, cas3:false }
+};
+
+// ======================================================
+// TABS
+// ======================================================
+function showTab(id, btn) {
+  if (id === 'glossaire' && !allCasCompleted()) return;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function allCasCompleted() {
+  return state.completed.cas1 && state.completed.cas2 && state.completed.cas3;
+}
+
+function updateGlossaireTab() {
+  const btn = document.getElementById('tab-glossaire');
+  const s1 = document.getElementById('status-gloss');
+  if (allCasCompleted()) {
+    btn.classList.remove('locked');
+    btn.classList.add('unlocked');
+    s1.textContent = '✅';
+  }
+  // update checklist
+  if (state.completed.cas1) { let c=document.getElementById('gloss-check1'); c.classList.add('done'); c.innerHTML='<span class="gloss-check-icon">✅</span> Cas 1 — Correspondance'; }
+  if (state.completed.cas2) { let c=document.getElementById('gloss-check2'); c.classList.add('done'); c.innerHTML='<span class="gloss-check-icon">✅</span> Cas 2 — Identification'; }
+  if (state.completed.cas3) { let c=document.getElementById('gloss-check3'); c.classList.add('done'); c.innerHTML='<span class="gloss-check-icon">✅</span> Cas 3 — Vrai / Faux'; }
+}
+
+function tryUnlockGlossaire() {
+  if (allCasCompleted()) {
+    buildGlossaire();
+    document.getElementById('gloss-locked').style.display='none';
+    document.getElementById('gloss-content').style.display='block';
+    showTab('glossaire', document.getElementById('tab-glossaire'));
+  } else {
+    alert('Complète les 3 cas pour débloquer le glossaire !');
+  }
+}
+
+// ======================================================
+// UTILS
+// ======================================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i=a.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+// ======================================================
+// CAS 1 — CORRESPONDANCE
+// ======================================================
+const ROUND_SIZE = 10;
+const TOTAL_ROUNDS = Math.ceil(allTerms.length / ROUND_SIZE);
+let shuffledTerms = [];
+
+function cas1Init() {
+  shuffledTerms = shuffle(allTerms);
+  state.cas1 = { round:0, correctTotal:0, errors:0, currentPairs:[], selectedTerm:null, selectedDef:null, roundCorrect:0 };
+  document.getElementById('cas1-result').style.display='none';
+  document.getElementById('cas1-next-btn').style.display='none';
+  document.getElementById('cas1-grid').style.display='grid';
+  cas1RenderRound();
+}
+
+function cas1RenderRound() {
+  const r = state.cas1.round;
+  const pairs = shuffledTerms.slice(r*ROUND_SIZE, r*ROUND_SIZE+ROUND_SIZE);
+  state.cas1.currentPairs = pairs;
+  state.cas1.roundCorrect = 0;
+  state.cas1.selectedTerm = null;
+  state.cas1.selectedDef = null;
+  document.getElementById('cas1-round').textContent = r+1;
+  document.getElementById('cas1-remain').textContent = pairs.length;
+  document.getElementById('cas1-next-btn').style.display='none';
+
+  const shuffledDefs = shuffle(pairs);
+  const termList = document.getElementById('cas1-terms');
+  const defList = document.getElementById('cas1-defs');
+  termList.innerHTML=''; defList.innerHTML='';
+
+  pairs.forEach((p,i) => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.dataset.id = p.id;
+    el.innerHTML = `<span class="match-num">${i+1}</span><span>${p.term}</span>`;
+    el.onclick = () => selectTerm(el, p.id);
+    termList.appendChild(el);
+  });
+
+  shuffledDefs.forEach((p,i) => {
+    const el = document.createElement('div');
+    el.className = 'match-item def-item';
+    el.dataset.id = p.id;
+    el.innerHTML = `<span class="match-num">${String.fromCharCode(65+i)}</span><span>${p.def.substring(0,100)}…</span>`;
+    el.onclick = () => selectDef(el, p.id);
+    defList.appendChild(el);
+  });
+}
+
+function selectTerm(el, id) {
+  if (el.classList.contains('correct') || el.classList.contains('disabled')) return;
+  document.querySelectorAll('#cas1-terms .match-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  state.cas1.selectedTerm = id;
+  if (state.cas1.selectedDef !== null) checkMatch();
+}
+
+function selectDef(el, id) {
+  if (el.classList.contains('correct') || el.classList.contains('disabled')) return;
+  document.querySelectorAll('#cas1-defs .match-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  state.cas1.selectedDef = id;
+  if (state.cas1.selectedTerm !== null) checkMatch();
+}
+
+function checkMatch() {
+  const tId = state.cas1.selectedTerm;
+  const dId = state.cas1.selectedDef;
+  const termEl = document.querySelector(`#cas1-terms .match-item[data-id="${tId}"]`);
+  const defEl = document.querySelector(`#cas1-defs .match-item[data-id="${dId}"]`);
+  state.cas1.selectedTerm = null;
+  state.cas1.selectedDef = null;
+  if (tId === dId) {
+    // Correct
+    termEl.classList.remove('selected'); termEl.classList.add('correct');
+    defEl.classList.remove('selected'); defEl.classList.add('correct');
+    state.cas1.correctTotal++;
+    state.cas1.roundCorrect++;
+    document.getElementById('cas1-correct').textContent = state.cas1.correctTotal;
+    document.getElementById('cas1-remain').textContent = state.cas1.currentPairs.length - state.cas1.roundCorrect;
+    updateCas1Progress();
+    if (state.cas1.roundCorrect === state.cas1.currentPairs.length) {
+      if (state.cas1.round+1 < TOTAL_ROUNDS) {
+        document.getElementById('cas1-next-btn').style.display='inline-flex';
+      } else {
+        cas1ShowResult();
+      }
+    }
+  } else {
+    // Wrong
+    termEl.classList.remove('selected'); termEl.classList.add('wrong');
+    defEl.classList.remove('selected'); defEl.classList.add('wrong');
+    state.cas1.errors++;
+    setTimeout(() => {
+      termEl.classList.remove('wrong');
+      defEl.classList.remove('wrong');
+    }, 600);
+  }
+}
+
+function cas1NextRound() {
+  state.cas1.round++;
+  document.getElementById('cas1-next-btn').style.display='none';
+  cas1RenderRound();
+}
+
+function updateCas1Progress() {
+  const pct = (state.cas1.correctTotal / allTerms.length) * 100;
+  document.getElementById('cas1-progress').style.width = pct+'%';
+  document.getElementById('cas1-count').textContent = state.cas1.correctTotal+' / '+allTerms.length;
+}
+
+function cas1ShowResult() {
+  const score = state.cas1.correctTotal;
+  const pct = Math.round((score/allTerms.length)*100);
+  document.getElementById('cas1-grid').style.display='none';
+  document.getElementById('cas1-result').style.display='block';
+  document.getElementById('cas1-score-val').textContent = score+'/'+allTerms.length;
+  document.getElementById('cas1-ok').textContent = score;
+  document.getElementById('cas1-ko').textContent = state.cas1.errors;
+  const msgs = ['🚀 Excellent maîtrise de Symfony !','💪 Très bon résultat !','👍 Bien joué !','📚 Continue à réviser !'];
+  document.getElementById('cas1-msg').textContent = pct>=90?msgs[0]:pct>=70?msgs[1]:pct>=50?msgs[2]:msgs[3];
+  state.completed.cas1 = true;
+  document.getElementById('status-cas1').textContent = ' ✅';
+  updateGlossaireTab();
+}
+
+function cas1Reset() {
+  state.completed.cas1 = false;
+  document.getElementById('status-cas1').textContent = '';
+  updateCas1Progress();
+  cas1Init();
+}
+
+// ======================================================
+// CAS 2 — IDENTIFICATION
+// ======================================================
+function cas2Init() {
+  state.cas2 = { answered:0, correct:0, done:false };
+  document.getElementById('cas2-result').style.display='none';
+  document.getElementById('cas2-progress').style.width='0%';
+  document.getElementById('cas2-count').textContent='0 / 10';
+  const container = document.getElementById('cas2-groups');
+  container.innerHTML='';
+  cas2Data.forEach((g,gi) => {
+    const shuffled = shuffle(g.items);
+    const div = document.createElement('div');
+    div.className='cas2-group';
+    div.innerHTML=`<div class="cas2-group-title"><span class="family-tag ${g.family}">${g.label}</span> Groupe ${g.id}</div>
+    <div class="cas2-scenario">${g.scenario}</div>
+    <div class="cas2-items" id="cas2-g${gi}"></div>
+    <div id="cas2-explain-${gi}" style="display:none;padding:0.7rem 0;font-size:0.82rem;color:var(--text-secondary);"></div>`;
+    container.appendChild(div);
+    const itemsEl = document.getElementById(`cas2-g${gi}`);
+    shuffled.forEach(item => {
+      const el = document.createElement('div');
+      el.className = `cas2-item`;
+      el.innerHTML = `<span class="cas2-term">${item.term}</span><span class="cas2-badge ${g.family}">${g.label}</span>`;
+      el.onclick = () => cas2Select(el, item, gi, g.items);
+      itemsEl.appendChild(el);
+    });
+  });
+}
+
+function cas2Select(el, item, gi, allItems) {
+  const group = document.getElementById(`cas2-g${gi}`);
+  if (group.dataset.done) return;
+  group.dataset.done = '1';
+  const explain = document.getElementById(`cas2-explain-${gi}`);
+  const intruse = allItems.find(i=>!i.correct);
+  if (!item.correct) {
+    // correct choice
+    el.classList.add('confirmed');
+    el.innerHTML += ' <span style="color:#34d399">✓</span>';
+    group.querySelectorAll('.cas2-item').forEach(e=>e.onclick=null);
+    explain.style.display='block';
+    explain.style.color='#a7f3d0';
+    explain.innerHTML=`<strong style="color:#34d399">✅ Bonne réponse !</strong> ${item.explication}`;
+    state.cas2.correct++;
+  } else {
+    // wrong
+    el.classList.add('wrong-reveal');
+    // reveal correct
+    group.querySelectorAll('.cas2-item').forEach(e=>{
+      if(e.querySelector('.cas2-term').textContent===intruse.term) e.classList.add('correct-reveal');
+      e.onclick=null;
+    });
+    explain.style.display='block';
+    explain.style.color='#fca5a5';
+    explain.innerHTML=`<strong style="color:#f87171">❌ Mauvaise réponse.</strong> L'intruse était <strong>${intruse.term}</strong>. ${intruse.explication}`;
+  }
+  state.cas2.answered++;
+  const pct=(state.cas2.answered/cas2Data.length)*100;
+  document.getElementById('cas2-progress').style.width=pct+'%';
+  document.getElementById('cas2-count').textContent=state.cas2.answered+' / '+cas2Data.length;
+  if(state.cas2.answered===cas2Data.length) {
+    setTimeout(()=>{
+      document.getElementById('cas2-result').style.display='block';
+      document.getElementById('cas2-score-val').textContent=state.cas2.correct+'/'+cas2Data.length;
+      document.getElementById('cas2-ok').textContent=state.cas2.correct;
+      document.getElementById('cas2-ko').textContent=cas2Data.length-state.cas2.correct;
+      const p=Math.round(state.cas2.correct/cas2Data.length*100);
+      document.getElementById('cas2-msg').textContent=p>=80?'🎯 Excellent sens de l\'analyse !':p>=60?'👍 Bon repérage !':'📚 Revois les familles de concepts !';
+      state.completed.cas2=true;
+      document.getElementById('status-cas2').textContent=' ✅';
+      updateGlossaireTab();
+    },400);
+  }
+}
+
+function cas2Reset() {
+  state.completed.cas2=false;
+  document.getElementById('status-cas2').textContent='';
+  cas2Init();
+}
+
+// ======================================================
+// CAS 3 — VRAI / FAUX
+// ======================================================
+function cas3Init() {
+  state.cas3={answered:0,correct:0,done:false};
+  document.getElementById('cas3-result').style.display='none';
+  document.getElementById('cas3-progress').style.width='0%';
+  document.getElementById('cas3-count').textContent='0 / 20';
+  const shuffled=shuffle(cas3Data);
+  const container=document.getElementById('cas3-items');
+  container.innerHTML='';
+  shuffled.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='vf-item';
+    div.id=`vf-${i}`;
+    div.innerHTML=`<div class="vf-question"><strong style="color:var(--text-muted);font-size:0.75rem;">Q${i+1}</strong> ${q.q.replace(/`([^`]+)`/g,'<code>$1</code>')}</div>
+    <div class="vf-actions">
+      <button class="vf-btn vrai" onclick="cas3Answer(${i},true,${q.answer})">✅ Vrai</button>
+      <button class="vf-btn faux" onclick="cas3Answer(${i},false,${q.answer})">❌ Faux</button>
+    </div>
+    <div class="vf-explication" id="vf-expl-${i}">${q.expl}</div>`;
+    container.appendChild(div);
+  });
+}
+
+function cas3Answer(i, chosen, correct) {
+  const item=document.getElementById(`vf-${i}`);
+  if(item.dataset.done) return;
+  item.dataset.done='1';
+  const btns=item.querySelectorAll('.vf-btn');
+  btns.forEach(b=>b.disabled=true);
+  const expl=document.getElementById(`vf-expl-${i}`);
+  const isCorrect=(chosen===correct);
+  if(isCorrect){
+    item.classList.add(chosen?'answered-true':'answered-false');
+    expl.classList.add('show','correct');
+    expl.innerHTML='<span class="vf-icon">✅</span>'+expl.innerHTML;
+    if(chosen) btns[0].classList.add('active-vrai'); else btns[1].classList.add('active-faux');
+    state.cas3.correct++;
+  } else {
+    item.classList.add(chosen?'answered-true':'answered-false');
+    expl.classList.add('show','incorrect');
+    expl.innerHTML='<span class="vf-icon">❌</span>'+expl.innerHTML;
+    if(chosen) btns[0].classList.add('active-vrai'); else btns[1].classList.add('active-faux');
+  }
+  state.cas3.answered++;
+  const pct=(state.cas3.answered/cas3Data.length)*100;
+  document.getElementById('cas3-progress').style.width=pct+'%';
+  document.getElementById('cas3-count').textContent=state.cas3.answered+' / '+cas3Data.length;
+  if(state.cas3.answered===cas3Data.length){
+    setTimeout(()=>{
+      document.getElementById('cas3-result').style.display='block';
+      document.getElementById('cas3-score-val').textContent=state.cas3.correct+'/'+cas3Data.length;
+      document.getElementById('cas3-ok').textContent=state.cas3.correct;
+      document.getElementById('cas3-ko').textContent=cas3Data.length-state.cas3.correct;
+      const p=Math.round(state.cas3.correct/cas3Data.length*100);
+      document.getElementById('cas3-msg').textContent=p>=90?'🚀 Maîtrise parfaite de Symfony !':p>=70?'💪 Très bonne connaissance !':p>=50?'👍 Bien, quelques zones à revoir':' 📚 Revois les concepts fondamentaux';
+      state.completed.cas3=true;
+      document.getElementById('status-cas3').textContent=' ✅';
+      updateGlossaireTab();
+    },400);
+  }
+}
+
+function cas3Reset(){
+  state.completed.cas3=false;
+  document.getElementById('status-cas3').textContent='';
+  cas3Init();
+}
+
+// ======================================================
+// GLOSSAIRE
+// ======================================================
+function buildGlossaire() {
+  const families = {};
+  allTerms.forEach(t=>{
+    if(!families[t.family]) families[t.family]={name:t.familyName,items:[]};
+    families[t.family].items.push(t);
+  });
+  const familyIcons={f1:'⚙️',f2:'🛣️',f3:'🗄️',f4:'🎨',f5:'🔐',f6:'⚡'};
+  const container=document.getElementById('gloss-families');
+  container.innerHTML='';
+  Object.entries(families).forEach(([fk,fv])=>{
+    const div=document.createElement('div');
+    div.className='gloss-family';
+    div.innerHTML=`<div class="gloss-family-title"><span class="family-tag ${fk}">${fk.toUpperCase()}</span>${familyIcons[fk]||'📌'} ${fv.name} <span style="color:var(--text-muted);font-weight:400">(${fv.items.length} termes)</span></div>
+    <div class="gloss-grid">${fv.items.map(t=>`
+      <div class="gloss-card">
+        <div class="gloss-term"><span class="family-tag ${t.family}">${t.family.toUpperCase()}</span>${t.term}</div>
+        <div class="gloss-def">${t.def}</div>
+        ${t.example?`<div class="gloss-example">→ ${t.example}</div>`:''}
+      </div>`).join('')}
+    </div>`;
+    container.appendChild(div);
+  });
+}
+
+// ======================================================
+// INIT
+// ======================================================
+cas1Init();
+cas2Init();
+cas3Init();
+
+// ======================================================
+// PROF MODE — override panels with full answer keys
+// ======================================================
+function profMode() {
+  // Mark all completed
+  state.completed.cas1 = true;
+  state.completed.cas2 = true;
+  state.completed.cas3 = true;
+
+  // ---- CAS 1 PROF ----
+  const panel1 = document.getElementById('panel-cas1');
+  // Replace grid with full answer key table
+  document.getElementById('cas1-grid').style.display = 'none';
+  document.getElementById('cas1-result').style.display = 'none';
+  document.getElementById('cas1-next-btn').style.display = 'none';
+  document.getElementById('cas1-progress').style.width = '100%';
+  document.getElementById('cas1-count').textContent = '50 / 50';
+  document.getElementById('cas1-round').textContent = '5';
+  document.getElementById('cas1-correct').textContent = '50';
+  document.getElementById('cas1-remain').textContent = '0';
+
+  const ak = document.createElement('div');
+  ak.className = 'answer-key';
+  // Group by family
+  const families = {};
+  allTerms.forEach(t => {
+    if (!families[t.family]) families[t.family] = { name: t.familyName, items: [] };
+    families[t.family].items.push(t);
+  });
+  const fIcons = { f1:'⚙️', f2:'🛣️', f3:'🗄️', f4:'🎨', f5:'🔐', f6:'⚡' };
+  let html = '';
+  Object.entries(families).forEach(([fk, fv]) => {
+    html += `<div class="answer-key-header">${fIcons[fk]||'📌'} <span class="family-tag ${fk}">${fk.toUpperCase()}</span> ${fv.name}</div>
+    <table class="answer-key-table">
+      <thead><tr><th>#</th><th>Terme</th><th>Définition</th><th>Exemple</th></tr></thead>
+      <tbody>`;
+    fv.items.forEach((t, i) => {
+      html += `<tr>
+        <td style="color:var(--text-muted);font-size:0.72rem;font-family:'JetBrains Mono',monospace">${t.id}</td>
+        <td><span class="ak-term">${t.term}</span><br><span class="family-tag ${fk}" style="margin-top:0.3rem;display:inline-flex">${fk.toUpperCase()}</span></td>
+        <td><span class="ak-def">${t.def}</span></td>
+        <td><span class="ak-example">${t.example || '—'}</span></td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  });
+  ak.innerHTML = html;
+  panel1.querySelector('.actions-row').insertAdjacentElement('beforebegin', ak);
+  document.getElementById('status-cas1').textContent = ' ✅';
+
+  // ---- CAS 2 PROF ----
+  const container2 = document.getElementById('cas2-groups');
+  container2.innerHTML = '';
+  document.getElementById('cas2-progress').style.width = '100%';
+  document.getElementById('cas2-count').textContent = '10 / 10';
+  cas2Data.forEach((g, gi) => {
+    const intruse = g.items.find(i => !i.correct);
+    const corrects = g.items.filter(i => i.correct);
+    const div = document.createElement('div');
+    div.className = 'cas2-group';
+    div.innerHTML = `<div class="cas2-group-title"><span class="family-tag ${g.family}">${g.label}</span> Groupe ${g.id}</div>
+    <div class="cas2-scenario">${g.scenario}</div>
+    <div class="cas2-items">
+      ${g.items.map(item => `
+        <div class="cas2-item ${!item.correct ? 'wrong-reveal' : 'correct-reveal'}" style="cursor:default">
+          <span class="cas2-term">${item.term}</span>
+          ${!item.correct ? '<span class="cas2-intruse-tag">intruse</span>' : ''}
+          <span class="cas2-badge ${g.family}">${g.label}</span>
+        </div>`).join('')}
+    </div>
+    <div class="cas2-prof-answer">
+      ✅ <strong>Intruse :</strong> <code style="font-family:'JetBrains Mono',monospace;color:#f87171">${intruse.term}</code> — ${intruse.explication}
+    </div>`;
+    container2.appendChild(div);
+  });
+  document.getElementById('status-cas2').textContent = ' ✅';
+
+  // ---- CAS 3 PROF ----
+  const container3 = document.getElementById('cas3-items');
+  container3.innerHTML = '';
+  document.getElementById('cas3-progress').style.width = '100%';
+  document.getElementById('cas3-count').textContent = '20 / 20';
+  cas3Data.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'vf-prof-row';
+    div.innerHTML = `
+      <div class="vf-prof-answer ${q.answer ? 'vrai' : 'faux'}">${q.answer ? '✅ VRAI' : '❌ FAUX'}</div>
+      <div class="vf-prof-content">
+        <div class="vf-prof-q"><strong style="color:var(--text-muted);font-size:0.72rem">Q${i+1}</strong> ${q.q}</div>
+        <div class="vf-prof-expl">💡 ${q.expl}</div>
+      </div>`;
+    container3.appendChild(div);
+  });
+  document.getElementById('status-cas3').textContent = ' ✅';
+
+  // ---- GLOSSAIRE unlock ----
+  updateGlossaireTab();
+  buildGlossaire();
+  document.getElementById('gloss-locked').style.display = 'none';
+  document.getElementById('gloss-content').style.display = 'block';
+}
+
+// Allow showTab for glossaire without check in prof mode
+const _origShowTab = showTab;
+window.showTab = function(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+};
+
+// Run prof mode on load
+profMode();
+</script>
+</body>
+</html>

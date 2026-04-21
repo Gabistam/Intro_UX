@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évaluation — Introduction à l'UX Design · B1 · EEMI</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0f14;--surface:#16171e;--card:#1c1e27;--border:#2a2c38;--border2:#363848;
+  --text:#e8e6f0;--muted:#7a7a96;--faint:#3a3b50;
+  --accent:#6c63ff;--accent2:#f07c4a;--gold:#e8c96a;--red:#f05a5a;--green:#4ac98b;
+  --p1:#6c63ff;--p2:#4ac9b8;--p3:#f07c4a;--p4:#f05a5a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* ── IDENTITY SCREEN ── */
+#screen-identity{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .5s ease}
+.id-wrap{width:100%;max-width:480px;padding:28px}
+.id-logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:28px;display:flex;align-items:center;gap:12px}
+.id-logo::before{content:'';display:block;width:32px;height:2px;background:var(--accent)}
+.id-title{font-family:'Fraunces',serif;font-size:34px;font-weight:600;line-height:1.1;margin-bottom:8px}
+.id-sub{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.6}
+.id-field{margin-bottom:16px}
+.id-field label{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.id-field input,.id-field select{width:100%;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;padding:12px 16px;outline:none;transition:border-color .2s;border-radius:4px}
+.id-field select option{background:var(--card)}
+.id-field input::placeholder{color:var(--faint)}
+.id-field input:focus,.id-field select:focus{border-color:var(--accent)}
+.btn-start{width:100%;margin-top:8px;padding:15px;background:var(--accent);color:white;border:none;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:opacity .2s;border-radius:4px}
+.btn-start:hover{opacity:.88}
+.id-note{margin-top:18px;font-size:12px;color:var(--faint);text-align:center;line-height:1.6}
+.id-note strong{color:var(--gold)}
+
+/* ── HEADER ── */
+#app-header{position:sticky;top:0;z-index:500;height:56px;background:rgba(14,15,20,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:none;align-items:center;padding:0 28px;gap:20px}
+.hdr-name{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.hdr-title{flex:1;text-align:center;font-size:12px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+#timer-display{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--gold);min-width:70px;text-align:right;transition:color .3s}
+#timer-display.warn{color:var(--accent2)}
+#timer-display.crit{color:var(--red);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.35}}
+.t-btn{background:var(--card);border:1px solid var(--border2);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 10px;cursor:pointer;transition:all .2s;border-radius:3px}
+.t-btn:hover{border-color:var(--accent);color:var(--accent)}
+#prog-wrap{height:3px;background:var(--border);position:sticky;top:56px;z-index:499;display:none}
+#prog-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .5s}
+
+/* ── MAIN ── */
+main{max-width:860px;margin:0 auto;padding:52px 28px 140px;display:none}
+.print-hdr{display:none;text-align:center;padding:18px 0;margin-bottom:20px;border-bottom:2px solid black;font-family:sans-serif}
+.print-hdr h1{font-size:18px;margin-bottom:4px}
+.print-hdr p{font-size:12px;color:#444}
+
+/* ── HERO ── */
+.hero{margin-bottom:52px}
+.hero-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-tag::after{content:'';flex:1;height:1px;background:var(--border)}
+.hero-title{font-family:'Fraunces',serif;font-size:40px;font-weight:600;line-height:1.1;margin-bottom:20px}
+.hero-title em{font-style:italic;color:var(--accent2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--border2);color:var(--muted);background:var(--card);border-radius:3px}
+
+/* ── CONSIGNES ── */
+.consignes-box{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--gold);padding:24px 28px;margin-bottom:52px;border-radius:4px}
+.consignes-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.consignes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.cstat{background:var(--bg);border:1px solid var(--border);padding:12px 14px;border-radius:4px}
+.cstat-val{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--accent2);line-height:1}
+.cstat-lbl{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* ── PARTIE ── */
+.partie{margin-bottom:64px}
+.partie-head{display:flex;align-items:flex-start;gap:20px;padding-bottom:20px;margin-bottom:32px;border-bottom:1px solid var(--border)}
+.partie-n{font-family:'Fraunces',serif;font-size:56px;line-height:.9;font-weight:600;flex-shrink:0}
+.partie-n.n1{color:var(--p1)}.partie-n.n2{color:var(--p2)}.partie-n.n3{color:var(--p3)}.partie-n.n4{color:var(--p4)}
+.partie-pill{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:3px;margin-bottom:8px}
+.partie-pill.pp1{background:var(--p1);color:#fff}.partie-pill.pp2{background:var(--p2);color:#0e0f14}.partie-pill.pp3{background:var(--p3);color:#fff}.partie-pill.pp4{background:var(--p4);color:#fff}
+.partie-title{font-family:'Fraunces',serif;font-size:22px;font-weight:600;line-height:1.2;margin-bottom:5px}
+.partie-pts{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.instr{background:var(--surface);border-left:3px solid var(--gold);padding:12px 16px;margin-bottom:28px;font-size:13px;line-height:1.7;color:#b0aec8;border-radius:0 4px 4px 0}
+.instr strong{color:var(--text)}
+
+/* ── QCM ── */
+.qcm-block{margin-bottom:28px}
+.qcm-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.qnum{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border:1px solid var(--p1);color:var(--p1);flex-shrink:0;margin-top:3px;border-radius:3px}
+.qnum.q2{border-color:var(--p2);color:var(--p2)}
+.qnum.q3{border-color:var(--p3);color:var(--p3)}
+.qnum.q4{border-color:var(--p4);color:var(--p4)}
+.qtitle{font-size:15px;font-weight:600;line-height:1.4}
+.qcm-options{display:flex;flex-direction:column;gap:8px;margin-top:12px;margin-left:36px}
+.qcm-option{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border2);padding:10px 14px;cursor:pointer;transition:all .18s;border-radius:4px}
+.qcm-option:hover{border-color:var(--accent);background:rgba(108,99,255,.06)}
+.qcm-option input[type="radio"]{accent-color:var(--accent);width:15px;height:15px;flex-shrink:0;margin-top:2px}
+.qcm-option label{cursor:pointer;font-size:14px;color:var(--text);line-height:1.5}
+.qcm-option.selected{border-color:var(--accent);background:rgba(108,99,255,.1)}
+
+/* ── ASSOCIATION ── */
+.assoc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:8px}
+.assoc-col h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.assoc-terms{display:flex;flex-direction:column;gap:6px}
+.assoc-term{font-family:'DM Mono',monospace;font-size:13px;background:var(--card);border:1px solid var(--border2);padding:9px 14px;border-radius:4px;color:var(--p2);font-weight:500}
+.assoc-defs{display:flex;flex-direction:column;gap:6px}
+.assoc-def-row{display:flex;align-items:center;gap:10px}
+.assoc-def-label{font-family:'DM Mono',monospace;font-size:12px;background:var(--surface);border:1px solid var(--border);padding:3px 8px;color:var(--muted);border-radius:3px;white-space:nowrap}
+.assoc-select{flex:1;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:8px 12px;outline:none;cursor:pointer;border-radius:4px}
+.assoc-select:focus{border-color:var(--p2)}
+.assoc-def-text{font-size:13px;color:#b0aec8;line-height:1.5;flex:1;padding:8px 0}
+
+/* ── PHRASES À TROU ── */
+.ptrou-block{margin-bottom:24px}
+.ptrou-phrase{font-size:14px;line-height:2.2;color:var(--text);background:var(--card);border:1px solid var(--border);padding:14px 18px;border-radius:4px}
+.ptrou-input{display:inline-block;background:transparent;border:none;border-bottom:2px solid var(--p3);color:var(--p3);font-family:'Outfit',sans-serif;font-size:14px;padding:0 4px;outline:none;min-width:140px;transition:border-color .2s;font-weight:600}
+.ptrou-input::placeholder{color:rgba(240,124,74,.4);font-weight:400}
+.ptrou-input:focus{border-bottom-color:var(--gold)}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.word-chip{font-family:'DM Mono',monospace;font-size:11px;background:rgba(240,124,74,.1);border:1px solid rgba(240,124,74,.3);color:var(--p3);padding:4px 12px;border-radius:99px;cursor:pointer;transition:all .15s;user-select:none}
+.word-chip:hover{background:rgba(240,124,74,.2)}
+.word-chip.used{opacity:.35;cursor:default;text-decoration:line-through}
+
+/* ── QUESTION OUVERTE ── */
+textarea.ans{width:100%;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;line-height:1.7;padding:14px 16px;resize:vertical;min-height:160px;outline:none;transition:border-color .2s;border-radius:4px}
+textarea.ans:focus{border-color:var(--p4)}
+.cc{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);text-align:right;margin-top:4px}
+.open-crit{margin-top:12px;background:var(--surface);border:1px solid var(--border);padding:14px 18px;border-radius:4px}
+.open-crit-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.crit-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:13px;color:#b0aec8}
+.crit-dot{width:6px;height:6px;border-radius:50%;background:var(--p4);flex-shrink:0;margin-top:6px}
+
+/* ── DIV LINE ── */
+.div-line{height:1px;background:var(--border);margin:56px 0;position:relative}
+.div-line::after{content:attr(data-p);position:absolute;right:0;top:-9px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);background:var(--bg);padding-left:10px}
+
+/* ── SCORE DISPLAY ── */
+#score-panel{display:none;background:var(--card);border:1px solid var(--border);border-top:3px solid var(--green);padding:28px;text-align:center;margin-top:40px;border-radius:4px}
+.score-val{font-family:'Fraunces',serif;font-size:64px;font-weight:700;color:var(--green);line-height:1}
+.score-max{font-family:'DM Mono',monospace;font-size:14px;color:var(--muted);margin-top:4px}
+.score-detail{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.score-part{background:var(--surface);border:1px solid var(--border);padding:12px;border-radius:4px}
+.score-part-val{font-family:'Fraunces',serif;font-size:22px;font-weight:600;line-height:1}
+.score-part-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── FAB ── */
+#fab{position:fixed;bottom:28px;right:28px;z-index:300;display:none;flex-direction:column;align-items:flex-end;gap:8px}
+#save-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:5px 10px;border-radius:3px}
+.fab-row{display:flex;gap:8px}
+.fab-btn{background:var(--accent);color:white;border:none;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(108,99,255,.4);transition:opacity .2s,transform .1s;border-radius:4px}
+.fab-btn:hover{opacity:.88;transform:translateY(-1px)}
+.fab-btn.alt{background:var(--card);border:1px solid var(--border2);color:var(--muted);box-shadow:none}
+.fab-btn.alt:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:40px 0 20px;font-family:'DM Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:1px;border-top:1px solid var(--border)}
+
+/* ── FEEDBACK INLINE ── */
+.feedback-correct{color:var(--green);font-size:12px;font-family:'DM Mono',monospace;margin-top:4px;display:none}
+.feedback-wrong{color:var(--red);font-size:12px;font-family:'DM Mono',monospace;margin-top:4px;display:none}
+
+/* ── PRINT ── */
+@media print{
+  #screen-identity,#app-header,#prog-wrap,#fab{display:none!important}
+  body{background:white!important;color:black!important}
+  .print-hdr{display:block!important}
+  main{padding:0!important;display:block!important}
+  .consignes-box{background:#f5f5f5!important;border-top:3px solid #d97706!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  textarea.ans{border:1px solid #ccc!important;background:white!important;color:black!important}
+  .assoc-select,.ptrou-input{border:1px solid #ccc!important;background:white!important;color:black!important}
+  .partie{break-before:page}
+  .partie:first-of-type{break-before:avoid}
+  .qcm-block{break-inside:avoid}
+  #score-panel{display:none!important}
+}
+@media(max-width:620px){
+  main{padding:32px 16px 120px}
+  .hero-title{font-size:28px}
+  .partie-n{font-size:42px}
+  .consignes-grid{grid-template-columns:1fr 1fr}
+  .assoc-grid{grid-template-columns:1fr}
+  #app-header{padding:0 14px}
+  .hdr-name{max-width:160px}
+  #fab{bottom:16px;right:16px}
+  .score-detail{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ ÉCRAN IDENTIFICATION ══════════════ -->
+<div id="screen-identity">
+  <div class="id-wrap">
+    <div class="id-logo">EEMI · Bachelor B1 · 2025-2026</div>
+    <h1 class="id-title">Évaluation<br>UX Design</h1>
+    <p class="id-sub">Identifiez-vous avant de commencer. La composition démarre dès que vous cliquez sur le bouton.</p>
+    <div class="id-field">
+      <label>Nom *</label>
+      <input type="text" id="f-nom" placeholder="DUPONT" autocomplete="family-name">
+    </div>
+    <div class="id-field">
+      <label>Prénom *</label>
+      <input type="text" id="f-prenom" placeholder="Marie" autocomplete="given-name">
+    </div>
+    <div class="id-field">
+      <label>Groupe *</label>
+      <select id="f-groupe">
+        <option value="">— Sélectionner —</option>
+        <option value="B1 G1">B1 G1</option>
+        <option value="B1 G2">B1 G2</option>
+      </select>
+    </div>
+    <button class="btn-start" onclick="startEval()">Commencer l'évaluation →</button>
+    <p class="id-note"><strong>Durée : 30 minutes</strong> · Travail individuel · Documents non autorisés</p>
+  </div>
+</div>
+
+<!-- ══════════════ HEADER STICKY ══════════════ -->
+<header id="app-header">
+  <div class="hdr-name" id="hdr-name">—</div>
+  <div class="hdr-title">Évaluation UX Design · EEMI B1</div>
+  <div class="hdr-right">
+    <button class="t-btn" id="t-btn" onclick="toggleTimer()">⏸ Pause</button>
+    <div id="timer-display">30:00</div>
+  </div>
+</header>
+<div id="prog-wrap"><div id="prog-bar"></div></div>
+
+<!-- ══════════════ CONTENU PRINCIPAL ══════════════ -->
+<main id="main">
+  <div class="print-hdr">
+    <h1>Évaluation — Introduction à l'UX Design</h1>
+    <p id="print-id"></p>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Module UX Design · Séances 1 – 3 · EEMI B1</div>
+    <h1 class="hero-title">Évaluation des bases<br><em>UX Design</em></h1>
+    <div class="chips">
+      <span class="chip">⏱ 30 min</span>
+      <span class="chip">👤 Individuel</span>
+      <span class="chip">📝 /20 points</span>
+      <span class="chip">🚫 Sans documents</span>
+    </div>
+  </div>
+
+  <!-- CONSIGNES -->
+  <div class="consignes-box">
+    <div class="consignes-label">Consignes générales</div>
+    <p style="font-size:14px;color:#b0aec8;line-height:1.75;margin-bottom:4px">Cette évaluation porte sur les séances 1, 2 et 3 du cours d'Introduction à l'UX Design. Elle se compose de <strong style="color:var(--text)">4 parties</strong> notées sur 20 points. Lisez chaque consigne avec attention avant de répondre. La qualité de la formulation est prise en compte dans la question ouverte.</p>
+    <div class="consignes-grid">
+      <div class="cstat"><div class="cstat-val">14</div><div class="cstat-lbl">QCM<br><small>7 pts</small></div></div>
+      <div class="cstat"><div class="cstat-val">10</div><div class="cstat-lbl">Associations<br><small>5 pts</small></div></div>
+      <div class="cstat"><div class="cstat-val">5</div><div class="cstat-lbl">Phrases à trou<br><small>5 pts</small></div></div>
+      <div class="cstat"><div class="cstat-val">1</div><div class="cstat-lbl">Question ouverte<br><small>3 pts</small></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PARTIE 1 — QCM (14 questions · 7 pts)
+  ════════════════════════════════════════ -->
+  <section class="partie" id="p1">
+    <div class="partie-head">
+      <div class="partie-n n1">01</div>
+      <div>
+        <div class="partie-pill pp1">Partie 1 · 7 points</div>
+        <h2 class="partie-title">Questions à choix multiples</h2>
+        <div class="partie-pts">14 questions · 0,5 point par bonne réponse · une seule réponse correcte par question</div>
+      </div>
+    </div>
+    <div class="instr"><strong>Consigne :</strong> Pour chaque question, cochez la <strong>seule réponse correcte</strong>. Une réponse incorrecte ne retire pas de point.</div>
+
+    <!-- Q1 -->
+    <div class="qcm-block" id="qcm1">
+      <div class="qcm-head"><span class="qnum">Q01</span><span class="qtitle">Quelle est la définition la plus complète de l'UX Design ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(1,0)"><input type="radio" name="q1" id="q1a"> <label for="q1a">La discipline qui crée uniquement des interfaces graphiques esthétiques</label></div>
+        <div class="qcm-option" onclick="selectQCM(1,1)"><input type="radio" name="q1" id="q1b"> <label for="q1b">L'ensemble des perceptions et comportements d'un utilisateur avant, pendant et après l'utilisation d'un produit</label></div>
+        <div class="qcm-option" onclick="selectQCM(1,2)"><input type="radio" name="q1" id="q1c"> <label for="q1c">Le processus de développement d'applications mobiles</label></div>
+        <div class="qcm-option" onclick="selectQCM(1,3)"><input type="radio" name="q1" id="q1d"> <label for="q1d">Une méthode d'amélioration du référencement naturel (SEO)</label></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qcm-block" id="qcm2">
+      <div class="qcm-head"><span class="qnum">Q02</span><span class="qtitle">Qui a popularisé le terme « User Experience » et créé le premier poste d'UX Architect ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(2,0)"><input type="radio" name="q2" id="q2a"> <label for="q2a">Steve Jobs chez Apple</label></div>
+        <div class="qcm-option" onclick="selectQCM(2,1)"><input type="radio" name="q2" id="q2b"> <label for="q2b">Tim Berners-Lee au CERN</label></div>
+        <div class="qcm-option" onclick="selectQCM(2,2)"><input type="radio" name="q2" id="q2c"> <label for="q2c">Don Norman chez Apple</label></div>
+        <div class="qcm-option" onclick="selectQCM(2,3)"><input type="radio" name="q2" id="q2d"> <label for="q2d">Jakob Nielsen au Xerox PARC</label></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qcm-block" id="qcm3">
+      <div class="qcm-head"><span class="qnum">Q03</span><span class="qtitle">Quelles sont les trois dimensions fondamentales de l'UX selon Peter Morville ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(3,0)"><input type="radio" name="q3" id="q3a"> <label for="q3a">Rapidité, compatibilité et sécurité</label></div>
+        <div class="qcm-option" onclick="selectQCM(3,1)"><input type="radio" name="q3" id="q3b"> <label for="q3b">Utilité, utilisabilité et désirabilité</label></div>
+        <div class="qcm-option" onclick="selectQCM(3,2)"><input type="radio" name="q3" id="q3c"> <label for="q3c">Design, développement et déploiement</label></div>
+        <div class="qcm-option" onclick="selectQCM(3,3)"><input type="radio" name="q3" id="q3d"> <label for="q3d">Accessibilité, lisibilité et interactivité</label></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qcm-block" id="qcm4">
+      <div class="qcm-head"><span class="qnum">Q04</span><span class="qtitle">Quelle heuristique de Nielsen stipule que le système doit toujours informer l'utilisateur de ce qui se passe ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(4,0)"><input type="radio" name="q4" id="q4a"> <label for="q4a">Heuristique 4 — Cohérence et standards</label></div>
+        <div class="qcm-option" onclick="selectQCM(4,1)"><input type="radio" name="q4" id="q4b"> <label for="q4b">Heuristique 8 — Esthétique et design minimaliste</label></div>
+        <div class="qcm-option" onclick="selectQCM(4,2)"><input type="radio" name="q4" id="q4c"> <label for="q4c">Heuristique 1 — Visibilité de l'état du système</label></div>
+        <div class="qcm-option" onclick="selectQCM(4,3)"><input type="radio" name="q4" id="q4d"> <label for="q4d">Heuristique 5 — Prévention des erreurs</label></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qcm-block" id="qcm5">
+      <div class="qcm-head"><span class="qnum">Q05</span><span class="qtitle">Quelle est la principale différence entre UX Design et UI Design ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(5,0)"><input type="radio" name="q5" id="q5a"> <label for="q5a">L'UX traite des couleurs et typographies, l'UI des wireframes</label></div>
+        <div class="qcm-option" onclick="selectQCM(5,1)"><input type="radio" name="q5" id="q5b"> <label for="q5b">L'UX se concentre sur l'expérience et les besoins ; l'UI sur l'aspect visuel de l'interface</label></div>
+        <div class="qcm-option" onclick="selectQCM(5,2)"><input type="radio" name="q5" id="q5c"> <label for="q5c">L'UX est réservé aux applications mobiles, l'UI aux sites web</label></div>
+        <div class="qcm-option" onclick="selectQCM(5,3)"><input type="radio" name="q5" id="q5d"> <label for="q5d">Il n'y a aucune différence entre les deux disciplines</label></div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qcm-block" id="qcm6">
+      <div class="qcm-head"><span class="qnum">Q06</span><span class="qtitle">Qu'est-ce qu'une « affordance » en UX Design ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(6,0)"><input type="radio" name="q6" id="q6a"> <label for="q6a">Le coût total d'un projet UX</label></div>
+        <div class="qcm-option" onclick="selectQCM(6,1)"><input type="radio" name="q6" id="q6b"> <label for="q6b">Un test de performance réalisé sur une interface</label></div>
+        <div class="qcm-option" onclick="selectQCM(6,2)"><input type="radio" name="q6" id="q6c"> <label for="q6c">La propriété d'un élément d'interface qui suggère naturellement comment il doit être utilisé</label></div>
+        <div class="qcm-option" onclick="selectQCM(6,3)"><input type="radio" name="q6" id="q6d"> <label for="q6d">La version finale d'un prototype haute fidélité</label></div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="qcm-block" id="qcm7">
+      <div class="qcm-head"><span class="qnum">Q07</span><span class="qtitle">Selon Forrester Research, quel est le ROI moyen pour chaque euro investi en UX ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(7,0)"><input type="radio" name="q7" id="q7a"> <label for="q7a">Environ 28 % de retour</label></div>
+        <div class="qcm-option" onclick="selectQCM(7,1)"><input type="radio" name="q7" id="q7b"> <label for="q7b">Environ 228 % de retour</label></div>
+        <div class="qcm-option" onclick="selectQCM(7,2)"><input type="radio" name="q7" id="q7c"> <label for="q7c">Environ 2 % de retour</label></div>
+        <div class="qcm-option" onclick="selectQCM(7,3)"><input type="radio" name="q7" id="q7d"> <label for="q7d">Environ 50 % de retour</label></div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="qcm-block" id="qcm8">
+      <div class="qcm-head"><span class="qnum">Q08</span><span class="qtitle">Qu'est-ce qu'une évaluation heuristique ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(8,0)"><input type="radio" name="q8" id="q8a"> <label for="q8a">Un test utilisateur avec 50 participants en laboratoire</label></div>
+        <div class="qcm-option" onclick="selectQCM(8,1)"><input type="radio" name="q8" id="q8b"> <label for="q8b">Une inspection par des experts qui évaluent l'interface selon des principes généraux d'utilisabilité</label></div>
+        <div class="qcm-option" onclick="selectQCM(8,2)"><input type="radio" name="q8" id="q8c"> <label for="q8c">Un sondage quantitatif envoyé aux utilisateurs</label></div>
+        <div class="qcm-option" onclick="selectQCM(8,3)"><input type="radio" name="q8" id="q8d"> <label for="q8d">Une analyse automatique du code source</label></div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="qcm-block" id="qcm9">
+      <div class="qcm-head"><span class="qnum">Q09</span><span class="qtitle">Quel outil UX représente le parcours complet d'un utilisateur avec ses émotions et points de contact ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(9,0)"><input type="radio" name="q9" id="q9a"> <label for="q9a">Le Wireframe</label></div>
+        <div class="qcm-option" onclick="selectQCM(9,1)"><input type="radio" name="q9" id="q9b"> <label for="q9b">La User Journey Map</label></div>
+        <div class="qcm-option" onclick="selectQCM(9,2)"><input type="radio" name="q9" id="q9c"> <label for="q9c">Le Design System</label></div>
+        <div class="qcm-option" onclick="selectQCM(9,3)"><input type="radio" name="q9" id="q9d"> <label for="q9d">Le Test A/B</label></div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="qcm-block" id="qcm10">
+      <div class="qcm-head"><span class="qnum">Q10</span><span class="qtitle">Qu'est-ce qu'un "Dark Pattern" en UX Design ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(10,0)"><input type="radio" name="q10" id="q10a"> <label for="q10a">Un thème d'interface en mode sombre (dark mode)</label></div>
+        <div class="qcm-option" onclick="selectQCM(10,1)"><input type="radio" name="q10" id="q10b"> <label for="q10b">Une technique de design délibérément conçue pour tromper ou manipuler l'utilisateur</label></div>
+        <div class="qcm-option" onclick="selectQCM(10,2)"><input type="radio" name="q10" id="q10c"> <label for="q10c">Un type de wireframe basse fidélité en niveaux de gris</label></div>
+        <div class="qcm-option" onclick="selectQCM(10,3)"><input type="radio" name="q10" id="q10d"> <label for="q10d">Une méthode de test utilisateur en conditions réelles</label></div>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="qcm-block" id="qcm11">
+      <div class="qcm-head"><span class="qnum">Q11</span><span class="qtitle">Qu'est-ce qu'un Persona en UX Design ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(11,0)"><input type="radio" name="q11" id="q11a"> <label for="q11a">Une représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur</label></div>
+        <div class="qcm-option" onclick="selectQCM(11,1)"><input type="radio" name="q11" id="q11b"> <label for="q11b">Un compte utilisateur fictif pour tester une application</label></div>
+        <div class="qcm-option" onclick="selectQCM(11,2)"><input type="radio" name="q11" id="q11c"> <label for="q11c">Un prototype haute fidélité présenté au client</label></div>
+        <div class="qcm-option" onclick="selectQCM(11,3)"><input type="radio" name="q11" id="q11d"> <label for="q11d">Un document listant les fonctionnalités d'une application</label></div>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="qcm-block" id="qcm12">
+      <div class="qcm-head"><span class="qnum">Q12</span><span class="qtitle">Quel outil UX est une maquette schématique en niveaux de gris montrant la structure d'une page ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(12,0)"><input type="radio" name="q12" id="q12a"> <label for="q12a">Le Persona</label></div>
+        <div class="qcm-option" onclick="selectQCM(12,1)"><input type="radio" name="q12" id="q12b"> <label for="q12b">La Carte d'empathie</label></div>
+        <div class="qcm-option" onclick="selectQCM(12,2)"><input type="radio" name="q12" id="q12c"> <label for="q12c">Le Wireframe</label></div>
+        <div class="qcm-option" onclick="selectQCM(12,3)"><input type="radio" name="q12" id="q12d"> <label for="q12d">Le Design System</label></div>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="qcm-block" id="qcm13">
+      <div class="qcm-head"><span class="qnum">Q13</span><span class="qtitle">Quelle heuristique de Nielsen recommande de ne pas surcharger l'interface d'informations inutiles ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(13,0)"><input type="radio" name="q13" id="q13a"> <label for="q13a">Heuristique 3 — Contrôle et liberté de l'utilisateur</label></div>
+        <div class="qcm-option" onclick="selectQCM(13,1)"><input type="radio" name="q13" id="q13b"> <label for="q13b">Heuristique 8 — Esthétique et design minimaliste</label></div>
+        <div class="qcm-option" onclick="selectQCM(13,2)"><input type="radio" name="q13" id="q13c"> <label for="q13c">Heuristique 6 — Reconnaissance plutôt que rappel</label></div>
+        <div class="qcm-option" onclick="selectQCM(13,3)"><input type="radio" name="q13" id="q13d"> <label for="q13d">Heuristique 10 — Aide et documentation</label></div>
+      </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="qcm-block" id="qcm14">
+      <div class="qcm-head"><span class="qnum">Q14</span><span class="qtitle">Quel est le principe fondamental concernant l'ordre UX / UI dans un projet ?</span></div>
+      <div class="qcm-options">
+        <div class="qcm-option" onclick="selectQCM(14,0)"><input type="radio" name="q14" id="q14a"> <label for="q14a">L'UI précède l'UX car l'esthétique guide la stratégie produit</label></div>
+        <div class="qcm-option" onclick="selectQCM(14,1)"><input type="radio" name="q14" id="q14b"> <label for="q14b">L'UX et l'UI se font simultanément pour gagner du temps</label></div>
+        <div class="qcm-option" onclick="selectQCM(14,2)"><input type="radio" name="q14" id="q14c"> <label for="q14c">L'UX précède toujours l'UI : on comprend les besoins avant de dessiner</label></div>
+        <div class="qcm-option" onclick="selectQCM(14,3)"><input type="radio" name="q14" id="q14d"> <label for="q14d">Le développement précède toujours les deux phases de design</label></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line" data-p="→ Partie 2"></div>
+
+  <!-- ═══════════════════════════════════════
+       PARTIE 2 — ASSOCIATIONS (10 termes · 5 pts)
+  ════════════════════════════════════════ -->
+  <section class="partie" id="p2">
+    <div class="partie-head">
+      <div class="partie-n n2">02</div>
+      <div>
+        <div class="partie-pill pp2">Partie 2 · 5 points</div>
+        <h2 class="partie-title">Termes à associer</h2>
+        <div class="partie-pts">10 termes · 0,5 point par bonne association</div>
+      </div>
+    </div>
+    <div class="instr"><strong>Consigne :</strong> Associez chaque terme UX (colonne gauche) à sa définition correcte (colonne droite) en sélectionnant la lettre correspondante dans le menu déroulant.</div>
+
+    <div class="assoc-grid">
+      <div>
+        <div class="assoc-col"><h4>Termes</h4></div>
+        <div class="assoc-terms">
+          <div class="assoc-term">A — UX Design</div>
+          <div class="assoc-term">B — Affordance</div>
+          <div class="assoc-term">C — Design System</div>
+          <div class="assoc-term">D — Persona</div>
+          <div class="assoc-term">E — Wireframe</div>
+          <div class="assoc-term">F — User Journey Map</div>
+          <div class="assoc-term">G — Dark Pattern</div>
+          <div class="assoc-term">H — Test A/B</div>
+          <div class="assoc-term">I — Human-Centered Design</div>
+          <div class="assoc-term">J — Carte d'empathie</div>
+        </div>
+      </div>
+      <div>
+        <div class="assoc-col"><h4>Définitions — associez la lettre</h4></div>
+        <div class="assoc-defs">
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 1</span>
+            <select class="assoc-select" id="ass1" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Bibliothèque centralisée de composants d'interface avec règles d'utilisation pour garantir la cohérence visuelle</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 2</span>
+            <select class="assoc-select" id="ass2" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Approche de conception qui place les besoins et comportements des utilisateurs au centre de chaque décision</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 3</span>
+            <select class="assoc-select" id="ass3" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Représentation visuelle du parcours d'un utilisateur pour accomplir un objectif, incluant émotions et points de friction</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 4</span>
+            <select class="assoc-select" id="ass4" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Outil visuel structuré en 4 à 6 quadrants (pense, voit, dit, fait, douleurs, gains) pour comprendre l'état mental d'un utilisateur</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 5</span>
+            <select class="assoc-select" id="ass5" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Discipline visant à concevoir des produits utiles, utilisables et désirables pour les utilisateurs</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 6</span>
+            <select class="assoc-select" id="ass6" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Propriété d'un objet ou élément d'interface qui suggère naturellement son utilisation sans instruction</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 7</span>
+            <select class="assoc-select" id="ass7" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Technique de design délibérément conçue pour tromper l'utilisateur — case pré-cochée, désinscription complexe…</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 8</span>
+            <select class="assoc-select" id="ass8" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Maquette schématique en niveaux de gris représentant la structure et l'organisation d'une page sans éléments graphiques définitifs</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 9</span>
+            <select class="assoc-select" id="ass9" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur cible</span>
+          </div>
+          <div class="assoc-def-row">
+            <span class="assoc-def-label">Déf. 10</span>
+            <select class="assoc-select" id="ass10" onchange="save()">
+              <option value="">—</option>
+              <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+              <option>F</option><option>G</option><option>H</option><option>I</option><option>J</option>
+            </select>
+            <span class="assoc-def-text">Méthode d'expérimentation qui compare deux variantes d'une interface pour mesurer laquelle obtient les meilleures performances</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line" data-p="→ Partie 3"></div>
+
+  <!-- ═══════════════════════════════════════
+       PARTIE 3 — PHRASES À TROU (5 · 5 pts)
+  ════════════════════════════════════════ -->
+  <section class="partie" id="p3">
+    <div class="partie-head">
+      <div class="partie-n n3">03</div>
+      <div>
+        <div class="partie-pill pp3">Partie 3 · 5 points</div>
+        <h2 class="partie-title">Phrases à compléter</h2>
+        <div class="partie-pts">5 phrases · 1 point par réponse correcte</div>
+      </div>
+    </div>
+    <div class="instr"><strong>Consigne :</strong> Complétez chaque phrase en saisissant le terme manquant. Les mots disponibles sont listés dans la banque de mots ci-dessous. Chaque mot n'est utilisé qu'une seule fois.</div>
+
+    <div class="word-bank" id="word-bank">
+      <span class="word-chip" onclick="useWord(this,'trou1','Nielsen')">Nielsen</span>
+      <span class="word-chip" onclick="useWord(this,'trou2','Persona')">Persona</span>
+      <span class="word-chip" onclick="useWord(this,'trou3','Empathie')">Empathie</span>
+      <span class="word-chip" onclick="useWord(this,'trou4','wireframe')">wireframe</span>
+      <span class="word-chip" onclick="useWord(this,'trou5','WCAG')">WCAG</span>
+    </div>
+
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        1. Les 10 heuristiques publiées par Jakob <input class="ptrou-input" id="trou1" placeholder="…" oninput="save()" autocomplete="off"> constituent la grille d'évaluation de référence pour toute interface numérique.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        2. Un <input class="ptrou-input" id="trou2" placeholder="…" oninput="save()" autocomplete="off"> est une représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur cible, permettant d'orienter les décisions de conception.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        3. La carte d'<input class="ptrou-input" id="trou3" placeholder="…" oninput="save()" autocomplete="off"> est un outil visuel qui capture l'état mental d'un utilisateur à travers les quadrants « Pense », « Voit », « Dit », « Fait », « Douleurs » et « Gains ».
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        4. Un <input class="ptrou-input" id="trou4" placeholder="…" oninput="save()" autocomplete="off"> est une maquette schématique en niveaux de gris qui représente la structure et l'organisation d'une page sans éléments graphiques définitifs.
+      </div>
+    </div>
+    <div class="ptrou-block">
+      <div class="ptrou-phrase">
+        5. Les critères d'accessibilité numérique <input class="ptrou-input" id="trou5" placeholder="…" oninput="save()" autocomplete="off"> (Web Content Accessibility Guidelines) définissent les normes internationales pour rendre les interfaces accessibles à tous les profils d'utilisateurs.
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line" data-p="→ Partie 4"></div>
+
+  <!-- ═══════════════════════════════════════
+       PARTIE 4 — QUESTION OUVERTE (1 · 3 pts)
+  ════════════════════════════════════════ -->
+  <section class="partie" id="p4">
+    <div class="partie-head">
+      <div class="partie-n n4">04</div>
+      <div>
+        <div class="partie-pill pp4">Partie 4 · 3 points</div>
+        <h2 class="partie-title">Question ouverte</h2>
+        <div class="partie-pts">1 question de synthèse · réponse rédigée attendue</div>
+      </div>
+    </div>
+    <div class="instr"><strong>Consigne :</strong> Rédigez une réponse structurée et argumentée en vous appuyant sur les notions vues en cours. La qualité de la formulation, la précision des exemples et la rigueur de l'argumentation sont évaluées.</div>
+
+    <div class="qcm-head" style="margin-bottom:14px">
+      <span class="qnum q4">Q01</span>
+      <span class="qtitle">Un chef de projet vous dit : « L'UX c'est juste du graphisme, mon graphiste peut s'en occuper. » Comment lui expliquez-vous — en 8 à 12 lignes — en quoi cette affirmation est inexacte ? Appuyez-vous sur au moins deux exemples ou concepts concrets vus en cours.</span>
+    </div>
+
+    <textarea class="ans" id="open1" placeholder="Rédigez votre réponse ici…&#10;Pistes : distinction UX / UI / Webdesign, dimensions de l'UX (utilité, utilisabilité, désirabilité), heuristiques, ROI de l'UX, processus centré utilisateur…" oninput="updateCC();save()"></textarea>
+    <div class="cc" id="cc-open1">0 caractère</div>
+
+    <div class="open-crit">
+      <div class="open-crit-title">Critères d'évaluation</div>
+      <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">1 pt</strong> — Distinction claire entre UX Design et design graphique / UI Design</span></div>
+      <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">1 pt</strong> — Utilisation d'au moins un concept ou exemple concret du cours (heuristiques, ROI, processus, etc.)</span></div>
+      <div class="crit-row"><div class="crit-dot"></div><span><strong style="color:var(--text)">1 pt</strong> — Qualité de la formulation, structure et cohérence de l'argumentation</span></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       PANNEAU RÉSULTAT (auto-correction QCM)
+  ════════════════════════════════════════ -->
+  <div id="score-panel">
+    <div class="score-val" id="score-qcm-val">—</div>
+    <div class="score-max">Points QCM (auto-corrigés) — /7 pts</div>
+    <div class="score-detail">
+      <div class="score-part">
+        <div class="score-part-val" id="sp-correct" style="color:var(--green)">—</div>
+        <div class="score-part-lbl">Bonnes réponses</div>
+      </div>
+      <div class="score-part">
+        <div class="score-part-val" id="sp-wrong" style="color:var(--red)">—</div>
+        <div class="score-part-lbl">Mauvaises réponses</div>
+      </div>
+      <div class="score-part">
+        <div class="score-part-val" id="sp-blank" style="color:var(--muted)">—</div>
+        <div class="score-part-lbl">Sans réponse</div>
+      </div>
+      <div class="score-part">
+        <div class="score-part-val" id="sp-pct" style="color:var(--accent2)">—</div>
+        <div class="score-part-lbl">Taux réussite</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:4px">Note : les parties 2, 3 et 4 sont corrigées par l'enseignant. L'export PDF contient l'intégralité de vos réponses.</p>
+  </div>
+
+  <div class="footer">Introduction à l'UX Design · Bachelor  B1 · EEMI 2025-2026<br>Évaluation individuelle à usage pédagogique exclusif</div>
+</main>
+
+<!-- FAB -->
+<div id="fab">
+  <div id="save-note">💾 Sauvegarde auto active</div>
+  <div class="fab-row">
+    <button class="fab-btn alt" onclick="submitEval()">✓ Terminer &amp; corriger</button>
+    <button class="fab-btn" onclick="exportPDF()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Exporter PDF
+    </button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  RÉPONSES CORRECTES
+// ══════════════════════════════════════════════════════
+const CORRECT = {
+  // QCM — index de la bonne option (0-based)
+  qcm: {1:1, 2:2, 3:1, 4:2, 5:1, 6:2, 7:1, 8:1, 9:1, 10:1, 11:0, 12:2, 13:1, 14:2},
+  // Associations — terme lettre → définition numéro
+  // Déf1=C, Déf2=I, Déf3=F, Déf4=J, Déf5=A, Déf6=B, Déf7=G, Déf8=E, Déf9=D, Déf10=H
+  assoc: {ass1:'C', ass2:'I', ass3:'F', ass4:'J', ass5:'A', ass6:'B', ass7:'G', ass8:'E', ass9:'D', ass10:'H'},
+  // Phrases à trou
+  trou: {trou1:'nielsen', trou2:'persona', trou3:'empathie', trou4:'wireframe', trou5:'wcag'}
+};
+
+// État QCM
+const qcmState = {};
+
+// ══════════════════════════════════════════════════════
+//  QCM — SÉLECTION
+// ══════════════════════════════════════════════════════
+function selectQCM(qNum, optIdx) {
+  const block = document.getElementById('qcm' + qNum);
+  block.querySelectorAll('.qcm-option').forEach((el, i) => {
+    el.classList.toggle('selected', i === optIdx);
+    el.querySelector('input[type="radio"]').checked = (i === optIdx);
+  });
+  qcmState[qNum] = optIdx;
+  save();
+  updateProg();
+}
+
+// ══════════════════════════════════════════════════════
+//  BANQUE DE MOTS — CLIC SUR CHIP
+// ══════════════════════════════════════════════════════
+function useWord(chip, inputId, word) {
+  const inp = document.getElementById(inputId);
+  if (chip.classList.contains('used')) {
+    // Si déjà utilisé, vider le champ et remettre disponible
+    if (inp.value.toLowerCase() === word.toLowerCase()) {
+      inp.value = '';
+      chip.classList.remove('used');
+    }
+    return;
+  }
+  // Libérer le chip précédent si ce champ avait déjà une valeur
+  document.querySelectorAll('.word-chip').forEach(c => {
+    if (c !== chip && inp.value && c.textContent.toLowerCase() === inp.value.toLowerCase()) {
+      c.classList.remove('used');
+    }
+  });
+  inp.value = word;
+  chip.classList.add('used');
+  save();
+}
+
+// ══════════════════════════════════════════════════════
+//  TIMER — 30 MIN
+// ══════════════════════════════════════════════════════
+let secs = 30 * 60, running = false, iv = null;
+
+function startTimer() {
+  running = true;
+  document.getElementById('t-btn').textContent = '⏸ Pause';
+  iv = setInterval(() => {
+    if (secs <= 0) {
+      clearInterval(iv);
+      document.getElementById('timer-display').textContent = '00:00';
+      alert('⏰ Temps écoulé ! Veuillez remettre votre copie.');
+      return;
+    }
+    secs--;
+    renderTimer();
+    updateProg();
+  }, 1000);
+}
+
+function toggleTimer() {
+  if (running) {
+    clearInterval(iv); running = false;
+    document.getElementById('t-btn').textContent = '▶ Reprendre';
+  } else { startTimer(); }
+}
+
+function renderTimer() {
+  const m = Math.floor(secs / 60), s = secs % 60;
+  const el = document.getElementById('timer-display');
+  el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  el.classList.remove('warn', 'crit');
+  if (secs <= 180) el.classList.add('crit');
+  else if (secs <= 600) el.classList.add('warn');
+}
+
+// ══════════════════════════════════════════════════════
+//  PROGRESSION (barre header)
+// ══════════════════════════════════════════════════════
+function updateProg() {
+  const elapsed = 30 * 60 - secs;
+  document.getElementById('prog-bar').style.width = Math.min((elapsed / (30 * 60)) * 100, 100) + '%';
+}
+
+// ══════════════════════════════════════════════════════
+//  SAUVEGARDE LOCALE
+// ══════════════════════════════════════════════════════
+function save() {
+  const d = {};
+  document.querySelectorAll('input[type="text"],textarea,select').forEach(el => { if (el.id) d[el.id] = el.value; });
+  // Sauvegarder l'état des radios
+  for (const [qNum, idx] of Object.entries(qcmState)) { d['qcm_state_' + qNum] = idx; }
+  try {
+    localStorage.setItem('ux_eval_v1', JSON.stringify(d));
+    const n = new Date();
+    document.getElementById('save-note').textContent = '💾 Sauvegardé ' + String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+  } catch(e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem('ux_eval_v1');
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    Object.entries(d).forEach(([id, v]) => {
+      if (id.startsWith('qcm_state_')) {
+        const qNum = parseInt(id.replace('qcm_state_', ''));
+        selectQCM(qNum, parseInt(v));
+      } else {
+        const el = document.getElementById(id);
+        if (el) el.value = v;
+      }
+    });
+    updateCC();
+    // Remettre les chips utilisées
+    ['trou1','trou2','trou3','trou4','trou5'].forEach(id => {
+      const inp = document.getElementById(id);
+      if (inp && inp.value) {
+        document.querySelectorAll('.word-chip').forEach(c => {
+          if (c.textContent.toLowerCase() === inp.value.toLowerCase()) c.classList.add('used');
+        });
+      }
+    });
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════
+//  COMPTEUR CARACTÈRES
+// ══════════════════════════════════════════════════════
+function updateCC() {
+  const el = document.getElementById('open1');
+  if (!el) return;
+  const n = el.value.length;
+  document.getElementById('cc-open1').textContent = n + ' caractère' + (n > 1 ? 's' : '');
+}
+
+// ══════════════════════════════════════════════════════
+//  DÉMARRAGE
+// ══════════════════════════════════════════════════════
+function startEval() {
+  const nom = document.getElementById('f-nom').value.trim();
+  const prenom = document.getElementById('f-prenom').value.trim();
+  const groupe = document.getElementById('f-groupe').value;
+  if (!nom || !prenom) {
+    alert('Veuillez renseigner votre Nom et Prénom avant de commencer.');
+    document.getElementById('f-nom').focus();
+    return;
+  }
+  if (!groupe) {
+    alert('Veuillez sélectionner votre groupe.');
+    document.getElementById('f-groupe').focus();
+    return;
+  }
+  const full = prenom + ' ' + nom.toUpperCase() + ' · ' + groupe;
+  document.getElementById('hdr-name').textContent = full;
+  document.getElementById('print-id').textContent = full + ' · Module UX Design · EEMI B1';
+
+  const scr = document.getElementById('screen-identity');
+  scr.style.opacity = '0';
+  setTimeout(() => {
+    scr.style.display = 'none';
+    document.getElementById('app-header').style.display = 'flex';
+    document.getElementById('prog-wrap').style.display = 'block';
+    document.getElementById('main').style.display = 'block';
+    document.getElementById('fab').style.display = 'flex';
+    load();
+    startTimer();
+    updateCC();
+  }, 500);
+}
+
+// ══════════════════════════════════════════════════════
+//  TERMINER & AUTO-CORRECTION QCM
+// ══════════════════════════════════════════════════════
+function submitEval() {
+  if (!confirm('Êtes-vous sûr de vouloir terminer et corriger la Partie 1 (QCM) ? Cette action est irréversible pour le QCM.')) return;
+
+  clearInterval(iv); running = false;
+  document.getElementById('t-btn').disabled = true;
+
+  let correct = 0, wrong = 0, blank = 0;
+
+  // Correction QCM
+  for (let q = 1; q <= 14; q++) {
+    const correctIdx = CORRECT.qcm[q];
+    const chosen = qcmState[q];
+    const block = document.getElementById('qcm' + q);
+    const options = block.querySelectorAll('.qcm-option');
+
+    options.forEach((opt, i) => {
+      opt.style.pointerEvents = 'none';
+      if (i === correctIdx) {
+        opt.style.borderColor = 'var(--green)';
+        opt.style.background = 'rgba(74,201,139,.1)';
+        opt.querySelector('label').style.color = 'var(--green)';
+      } else if (i === chosen && chosen !== correctIdx) {
+        opt.style.borderColor = 'var(--red)';
+        opt.style.background = 'rgba(240,90,90,.1)';
+        opt.querySelector('label').style.color = 'var(--red)';
+      }
+    });
+
+    if (chosen === undefined) blank++;
+    else if (chosen === correctIdx) correct++;
+    else wrong++;
+  }
+
+  const pts = (correct * 0.5).toFixed(1);
+  const pct = Math.round((correct / 14) * 100);
+
+  document.getElementById('score-panel').style.display = 'block';
+  document.getElementById('score-qcm-val').textContent = pts + ' /7';
+  document.getElementById('sp-correct').textContent = correct;
+  document.getElementById('sp-wrong').textContent = wrong;
+  document.getElementById('sp-blank').textContent = blank;
+  document.getElementById('sp-pct').textContent = pct + ' %';
+
+  document.getElementById('score-qcm-val').style.color =
+    pct >= 70 ? 'var(--green)' : pct >= 50 ? 'var(--accent2)' : 'var(--red)';
+
+  document.getElementById('score-panel').scrollIntoView({ behavior: 'smooth' });
+  save();
+}
+
+// ══════════════════════════════════════════════════════
+//  EXPORT PDF
+// ══════════════════════════════════════════════════════
+function exportPDF() {
+  save();
+  const reps = [];
+
+  document.querySelectorAll('textarea').forEach(ta => {
+    const p = document.createElement('div');
+    p.style.cssText = 'width:100%;border:1px solid #ccc;padding:10px 12px;font-family:sans-serif;font-size:13px;line-height:1.65;color:black;background:white;white-space:pre-wrap;word-break:break-word;min-height:40px';
+    p.textContent = ta.value || '';
+    if (!ta.value) p.style.color = '#aaa';
+    ta.parentNode.insertBefore(p, ta);
+    ta.style.display = 'none';
+    reps.push({ original: ta, proxy: p });
+  });
+
+  document.querySelectorAll('.ptrou-input').forEach(inp => {
+    const p = document.createElement('span');
+    p.style.cssText = 'border-bottom:2px solid #333;padding:0 4px;font-weight:600;color:black;min-width:80px;display:inline-block';
+    p.textContent = inp.value || '……………';
+    inp.parentNode.insertBefore(p, inp);
+    inp.style.display = 'none';
+    reps.push({ original: inp, proxy: p });
+  });
+
+  document.querySelectorAll('.assoc-select').forEach(sel => {
+    const p = document.createElement('span');
+    p.style.cssText = 'border:1px solid #ccc;padding:4px 10px;font-weight:600;color:black;font-family:monospace';
+    p.textContent = sel.value || '—';
+    sel.parentNode.insertBefore(p, sel);
+    sel.style.display = 'none';
+    reps.push({ original: sel, proxy: p });
+  });
+
+  window.print();
+  reps.forEach(({ original, proxy }) => { original.style.display = ''; proxy.remove(); });
+}
+
+// ══════════════════════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════════════════════
+document.addEventListener('input', e => {
+  if (e.target.id === 'open1') updateCC();
+  save();
+});
+document.addEventListener('change', save);
+
+document.getElementById('f-nom').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('f-prenom').focus(); });
+document.getElementById('f-prenom').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('f-groupe').focus(); });
+document.getElementById('f-groupe').addEventListener('keydown', e => { if (e.key === 'Enter') startEval(); });
+</script>
+</body>
+</html>
