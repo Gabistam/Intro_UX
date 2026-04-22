@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrigé — Évaluation UX Design · B1 · EEMI</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Georgia', serif;
+  font-size: 11pt;
+  color: #1a1a1a;
+  background: white;
+  line-height: 1.55;
+}
+
+/* ── PAGE LAYOUT ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm 18mm 20mm;
+}
+
+/* ── HEADER ── */
+.doc-header {
+  border-bottom: 2.5px solid #1a1a1a;
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.doc-header-left h1 {
+  font-size: 17pt;
+  font-weight: bold;
+  letter-spacing: .5px;
+}
+.doc-header-left p {
+  font-size: 9pt;
+  color: #555;
+  margin-top: 2px;
+  font-family: 'Courier New', monospace;
+}
+.doc-header-right {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+  color: #555;
+  line-height: 1.6;
+}
+.doc-header-right strong {
+  font-size: 11pt;
+  color: #1a1a1a;
+  display: block;
+}
+
+/* ── BANDEAU CONFIDENTIEL ── */
+.confidentiel {
+  background: #1a1a1a;
+  color: white;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 0;
+  margin-bottom: 14px;
+}
+
+/* ── BARÈME RÉCAPITULATIF ── */
+.bareme-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-size: 9.5pt;
+}
+.bareme-table th {
+  background: #1a1a1a;
+  color: white;
+  padding: 5px 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  letter-spacing: 1px;
+  text-align: left;
+}
+.bareme-table td {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
+.bareme-table tr:nth-child(even) td { background: #f8f8f8; }
+.bareme-table td:last-child { text-align: right; font-weight: bold; font-family: 'Courier New', monospace; }
+.bareme-total td {
+  background: #eee !important;
+  font-weight: bold;
+  border-top: 2px solid #1a1a1a;
+}
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 22px;
+  break-inside: avoid;
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1.5px solid #1a1a1a;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+.section-num {
+  font-size: 20pt;
+  font-weight: bold;
+  line-height: 1;
+  min-width: 28px;
+}
+.section-num.p1 { color: #5a52e0; }
+.section-num.p2 { color: #1a9e8f; }
+.section-num.p3 { color: #d96a30; }
+.section-num.p4 { color: #c94040; }
+.section-title { font-size: 12pt; font-weight: bold; }
+.section-pts {
+  margin-left: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* ── NOTE D'EXAMINATEUR ── */
+.examiner-note {
+  background: #fffbea;
+  border-left: 3px solid #d97706;
+  padding: 6px 10px;
+  font-size: 9pt;
+  color: #5a3e00;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* ── QCM ── */
+.qcm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.qcm-item {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 7px 9px;
+  font-size: 9.5pt;
+}
+.qcm-item-num {
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  color: #888;
+  margin-bottom: 2px;
+}
+.qcm-item-q {
+  font-size: 9pt;
+  color: #444;
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+.qcm-answer {
+  background: #e8f5ee;
+  border: 1px solid #4caf7d;
+  border-radius: 2px;
+  padding: 3px 8px;
+  font-weight: bold;
+  font-size: 9pt;
+  color: #1a5c35;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.qcm-answer::before {
+  content: '✓';
+  color: #27a55a;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* ── ASSOCIATIONS ── */
+.assoc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+.assoc-table th {
+  background: #1a9e8f;
+  color: white;
+  padding: 5px 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  text-align: left;
+  letter-spacing: .5px;
+}
+.assoc-table td {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
+.assoc-table tr:nth-child(even) td { background: #f4fdfb; }
+.assoc-answer {
+  font-weight: bold;
+  color: #1a5c50;
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+}
+.assoc-def { color: #444; line-height: 1.4; font-size: 9pt; }
+
+/* ── TROUS ── */
+.trou-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+.trou-table th {
+  background: #d96a30;
+  color: white;
+  padding: 5px 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  text-align: left;
+  letter-spacing: .5px;
+}
+.trou-table td {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+  line-height: 1.45;
+}
+.trou-table tr:nth-child(even) td { background: #fdf5f0; }
+.trou-word {
+  font-weight: bold;
+  color: #8a3500;
+  font-family: 'Courier New', monospace;
+  font-size: 9.5pt;
+  background: #fde8d6;
+  border-radius: 2px;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+.trou-phrase { color: #333; font-size: 9pt; }
+
+/* ── QUESTION OUVERTE ── */
+.open-block {
+  margin-bottom: 14px;
+  break-inside: avoid;
+}
+.open-q {
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 10pt;
+  color: #1a1a1a;
+}
+.open-q-label {
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  background: #c94040;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+.open-rubric {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  overflow: hidden;
+  font-size: 9pt;
+}
+.open-rubric-head {
+  background: #eee;
+  padding: 4px 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  color: #555;
+  letter-spacing: .5px;
+  border-bottom: 1px solid #ccc;
+}
+.rubric-row {
+  display: flex;
+  padding: 5px 10px;
+  border-bottom: 1px solid #eee;
+  gap: 10px;
+  align-items: flex-start;
+}
+.rubric-row:last-child { border-bottom: none; }
+.rubric-pts {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #c94040;
+  min-width: 40px;
+  flex-shrink: 0;
+  font-size: 9pt;
+}
+.rubric-text { color: #333; line-height: 1.45; }
+.open-elements {
+  margin-top: 8px;
+  background: #fff8f8;
+  border: 1px dashed #c94040;
+  border-radius: 3px;
+  padding: 7px 10px;
+  font-size: 9pt;
+}
+.open-elements-title {
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  color: #c94040;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.open-elements ul {
+  padding-left: 16px;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* ── GRILLE DE NOTATION ── */
+.grille {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+  margin-top: 16px;
+}
+.grille th {
+  background: #1a1a1a;
+  color: white;
+  padding: 5px 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 8pt;
+  text-align: center;
+  letter-spacing: .5px;
+}
+.grille td {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+.grille tr:nth-child(even) td { background: #f8f8f8; }
+.grille .grille-total td {
+  background: #eee !important;
+  font-weight: bold;
+  border-top: 2px solid #1a1a1a;
+  font-size: 10pt;
+}
+.grille td:first-child { text-align: left; font-weight: normal; }
+.blank-cell {
+  min-width: 50px;
+  border-bottom: 1px solid #999;
+  display: inline-block;
+}
+
+/* ── FOOTER ── */
+.doc-footer {
+  position: fixed;
+  bottom: 10mm;
+  left: 20mm;
+  right: 20mm;
+  border-top: 1px solid #ccc;
+  padding-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Courier New', monospace;
+  font-size: 7.5pt;
+  color: #888;
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: white; }
+  .page { margin: 0; padding: 15mm 18mm; }
+  .no-print { display: none !important; }
+  .page-break { break-before: page; }
+  h2, .section { break-inside: avoid; }
+}
+
+/* ── SCREEN ONLY ── */
+@media screen {
+  body { background: #e5e5e5; }
+  .page {
+    background: white;
+    box-shadow: 0 2px 20px rgba(0,0,0,.15);
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+  .print-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 11pt;
+    cursor: pointer;
+    border-radius: 3px;
+    z-index: 100;
+  }
+  .print-btn:hover { background: #333; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Imprimer / PDF</button>
+
+<div class="page">
+
+  <!-- ══ EN-TÊTE ══ -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <h1>CORRIGÉ — Évaluation UX Design</h1>
+      <p>Introduction à l'UX Design · Bachelor B1 · EEMI · 2025-2026</p>
+    </div>
+    <div class="doc-header-right">
+      <strong>Document réservé à l'enseignant</strong>
+      Durée : 30 min · /20 points<br>
+      Séances 1, 2 et 3
+    </div>
+  </div>
+  <div class="confidentiel">Corrigé — Ne pas diffuser aux étudiants</div>
+
+  <!-- ══ BARÈME RÉCAPITULATIF ══ -->
+  <table class="bareme-table">
+    <thead>
+      <tr><th>Partie</th><th>Type</th><th>Nb</th><th>Barème</th><th>Points</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Partie 1</strong></td><td>QCM — une seule bonne réponse</td><td>14 questions</td><td>0,5 pt / bonne réponse</td><td>7 pts</td></tr>
+      <tr><td><strong>Partie 2</strong></td><td>Associations termes / définitions</td><td>10 associations</td><td>0,5 pt / bonne association</td><td>5 pts</td></tr>
+      <tr><td><strong>Partie 3</strong></td><td>Phrases à compléter</td><td>10 phrases</td><td>0,5 pt / mot correct</td><td>5 pts</td></tr>
+      <tr><td><strong>Partie 4</strong></td><td>Questions ouvertes courtes</td><td>2 questions</td><td>1,5 pt / question (rubrique)</td><td>3 pts</td></tr>
+      <tr class="bareme-total"><td colspan="4"><strong>TOTAL</strong></td><td>20 pts</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════════════════════════════
+       PARTIE 1 — QCM
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num p1">01</div>
+      <div>
+        <div class="section-title">Questions à choix multiples</div>
+      </div>
+      <div class="section-pts">14 questions · 7 pts · 0,5 pt / bonne réponse</div>
+    </div>
+    <div class="examiner-note">
+      La bonne réponse est indiquée en vert pour chaque question. L'ordre des questions et des options étant aléatoire dans l'évaluation numérique, la correction se fait par correspondance du texte, non par position.
+    </div>
+
+    <div class="qcm-grid">
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q01 — 0,5 pt</div>
+        <div class="qcm-item-q">Quelle est la définition la plus précise de l'UX Design ?</div>
+        <div class="qcm-answer">La conception d'expériences utiles, utilisables et désirables pour l'utilisateur</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q02 — 0,5 pt</div>
+        <div class="qcm-item-q">Combien de principes heuristiques Jakob Nielsen a-t-il définis pour évaluer l'utilisabilité ?</div>
+        <div class="qcm-answer">10 principes constituant la grille d'évaluation de référence</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q03 — 0,5 pt</div>
+        <div class="qcm-item-q">Qu'est-ce qu'un Persona en UX Design ?</div>
+        <div class="qcm-answer">Un archétype d'utilisateur fictif fondé sur des données de recherche terrain</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q04 — 0,5 pt</div>
+        <div class="qcm-item-q">Quel outil UX représente le parcours d'un utilisateur de façon chronologique, avec ses émotions et points de contact ?</div>
+        <div class="qcm-answer">L'User Journey Map, visualisation du parcours et des émotions</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q05 — 0,5 pt</div>
+        <div class="qcm-item-q">Qu'est-ce que l'affordance selon Don Norman ?</div>
+        <div class="qcm-answer">La capacité d'un objet à suggérer son utilisation par sa forme ou apparence</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q06 — 0,5 pt</div>
+        <div class="qcm-item-q">Quelle méthode compare deux versions d'une interface pour mesurer laquelle performe le mieux ?</div>
+        <div class="qcm-answer">Le test A/B, expérimentation contrôlée sur deux variantes d'interface</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q07 — 0,5 pt</div>
+        <div class="qcm-item-q">Lors d'un entretien utilisateur, quel type de questions faut-il privilégier ?</div>
+        <div class="qcm-answer">Des questions ouvertes pour encourager l'expression libre sans biais</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q08 — 0,5 pt</div>
+        <div class="qcm-item-q">Qu'est-ce qu'un wireframe ?</div>
+        <div class="qcm-answer">Une maquette schématique en niveaux de gris représentant la structure</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q09 — 0,5 pt</div>
+        <div class="qcm-item-q">Quel sigle désigne les normes internationales d'accessibilité numérique du W3C ?</div>
+        <div class="qcm-answer">WCAG — Web Content Accessibility Guidelines du W3C</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q10 — 0,5 pt</div>
+        <div class="qcm-item-q">Qu'est-ce qu'un dark pattern ?</div>
+        <div class="qcm-answer">Une technique de design trompeuse manipulant les choix de l'utilisateur</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q11 — 0,5 pt</div>
+        <div class="qcm-item-q">Quel concept désigne la cohérence entre la perception d'un système et son fonctionnement réel ?</div>
+        <div class="qcm-answer">Le modèle mental, représentation interne du fonctionnement d'un système</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q12 — 0,5 pt</div>
+        <div class="qcm-item-q">Quelle est la principale différence entre UX Design et UI Design ?</div>
+        <div class="qcm-answer">L'UX porte sur l'expérience globale, l'UI sur l'interface visuelle seule</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q13 — 0,5 pt</div>
+        <div class="qcm-item-q">Qu'est-ce que la carte d'empathie ?</div>
+        <div class="qcm-answer">Un outil visuel capturant ce que pense, voit, dit et fait un utilisateur</div>
+      </div>
+
+      <div class="qcm-item">
+        <div class="qcm-item-num">Q14 — 0,5 pt</div>
+        <div class="qcm-item-q">Quel chercheur a popularisé le terme « User Experience » en travaillant chez Apple ?</div>
+        <div class="qcm-answer">Don Norman, auteur de « The Design of Everyday Things » chez Apple</div>
+      </div>
+
+    </div><!-- /qcm-grid -->
+  </div><!-- /section p1 -->
+
+  <!-- ══════════════════════════════════════════
+       PARTIE 2 — ASSOCIATIONS
+  ══════════════════════════════════════════ -->
+  <div class="section page-break">
+    <div class="section-head">
+      <div class="section-num p2">02</div>
+      <div>
+        <div class="section-title">Termes à associer</div>
+      </div>
+      <div class="section-pts">10 associations · 5 pts · 0,5 pt / bonne réponse</div>
+    </div>
+
+    <table class="assoc-table">
+      <thead>
+        <tr>
+          <th style="width:6%">Déf.</th>
+          <th style="width:26%">Terme correct</th>
+          <th>Définition</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:center;font-weight:bold">1</td>
+          <td><span class="assoc-answer">Design System</span></td>
+          <td class="assoc-def">Bibliothèque centralisée de composants d'interface avec règles d'utilisation pour garantir la cohérence visuelle</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">2</td>
+          <td><span class="assoc-answer">Human-Centered Design</span></td>
+          <td class="assoc-def">Approche de conception qui place les besoins et comportements des utilisateurs au centre de chaque décision</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">3</td>
+          <td><span class="assoc-answer">User Journey Map</span></td>
+          <td class="assoc-def">Représentation visuelle du parcours d'un utilisateur pour accomplir un objectif, incluant émotions et points de friction</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">4</td>
+          <td><span class="assoc-answer">Carte d'empathie</span></td>
+          <td class="assoc-def">Outil visuel structuré en 4 à 6 quadrants (pense, voit, dit, fait, douleurs, gains) pour comprendre l'état mental d'un utilisateur</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">5</td>
+          <td><span class="assoc-answer">UX Design</span></td>
+          <td class="assoc-def">Discipline visant à concevoir des produits utiles, utilisables et désirables pour les utilisateurs</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">6</td>
+          <td><span class="assoc-answer">Affordance</span></td>
+          <td class="assoc-def">Propriété d'un objet ou élément d'interface qui suggère naturellement son utilisation sans instruction</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">7</td>
+          <td><span class="assoc-answer">Dark Pattern</span></td>
+          <td class="assoc-def">Technique de design délibérément conçue pour tromper l'utilisateur — case pré-cochée, désinscription complexe…</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">8</td>
+          <td><span class="assoc-answer">Wireframe</span></td>
+          <td class="assoc-def">Maquette schématique en niveaux de gris représentant la structure et l'organisation d'une page sans éléments graphiques définitifs</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">9</td>
+          <td><span class="assoc-answer">Persona</span></td>
+          <td class="assoc-def">Représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur cible</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">10</td>
+          <td><span class="assoc-answer">Test A/B</span></td>
+          <td class="assoc-def">Méthode d'expérimentation qui compare deux variantes d'une interface pour mesurer laquelle obtient les meilleures performances</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PARTIE 3 — PHRASES À TROU
+  ══════════════════════════════════════════ -->
+  <div class="section page-break">
+    <div class="section-head">
+      <div class="section-num p3">03</div>
+      <div>
+        <div class="section-title">Phrases à compléter</div>
+      </div>
+      <div class="section-pts">10 phrases · 5 pts · 0,5 pt / mot correct</div>
+    </div>
+    <div class="examiner-note">
+      Correction insensible à la casse. Accepter les variantes orthographiques proches (ex. « empathie » / « Empathie »). Le mot <em>complet</em> doit être présent ; une abréviation seule n'est pas acceptée.
+    </div>
+
+    <table class="trou-table">
+      <thead>
+        <tr><th style="width:5%">N°</th><th style="width:18%">Mot attendu</th><th>Phrase complète</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:center;font-weight:bold">1</td>
+          <td><span class="trou-word">Nielsen</span></td>
+          <td class="trou-phrase">Les 10 heuristiques publiées par Jakob <span class="trou-word">Nielsen</span> constituent la grille d'évaluation de référence pour identifier les problèmes d'utilisabilité d'une interface.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">2</td>
+          <td><span class="trou-word">Persona</span></td>
+          <td class="trou-phrase">Un <span class="trou-word">Persona</span> est une représentation fictive mais fondée sur des données réelles d'un archétype d'utilisateur, utilisée pour orienter les décisions de conception.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">3</td>
+          <td><span class="trou-word">Empathie</span></td>
+          <td class="trou-phrase">La carte d'<span class="trou-word">Empathie</span> est un outil visuel structuré en quadrants — « Pense », « Voit », « Dit », « Fait », « Douleurs » et « Gains » — qui capture l'état mental d'un utilisateur.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">4</td>
+          <td><span class="trou-word">wireframe</span></td>
+          <td class="trou-phrase">Un <span class="trou-word">wireframe</span> est une maquette schématique en niveaux de gris représentant la structure d'une page, sans couleurs ni éléments graphiques définitifs.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">5</td>
+          <td><span class="trou-word">WCAG</span></td>
+          <td class="trou-phrase">Les critères d'accessibilité numérique <span class="trou-word">WCAG</span> (Web Content Accessibility Guidelines) définissent les normes internationales pour rendre les interfaces accessibles à tous.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">6</td>
+          <td><span class="trou-word">Don Norman</span></td>
+          <td class="trou-phrase">C'est <span class="trou-word">Don Norman</span> qui a popularisé le terme « User Experience » chez Apple dans les années 1990 et introduit les concepts d'affordance, de feedback et de modèle mental.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">7</td>
+          <td><span class="trou-word">User Journey Map</span></td>
+          <td class="trou-phrase">La <span class="trou-word">User Journey Map</span> cartographie, de façon chronologique, les étapes d'un parcours utilisateur ainsi que ses émotions, points de contact et zones de friction.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">8</td>
+          <td><span class="trou-word">affordance</span></td>
+          <td class="trou-phrase">Une bonne <span class="trou-word">affordance</span> réduit la courbe d'apprentissage : un bouton en relief, par exemple, invite naturellement à cliquer sans qu'aucune instruction ne soit nécessaire.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">9</td>
+          <td><span class="trou-word">dark pattern</span></td>
+          <td class="trou-phrase">Une case pré-cochée pour souscrire à un abonnement payant ou un bouton de désinscription délibérément caché sont des exemples typiques de <span class="trou-word">dark pattern</span>, pratique contraire à l'éthique du design centré utilisateur.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:bold">10</td>
+          <td><span class="trou-word">ouvertes</span></td>
+          <td class="trou-phrase">Lors d'un entretien utilisateur, il est essentiel de poser des questions <span class="trou-word">ouvertes</span> afin de laisser l'interviewé s'exprimer librement, sans orienter ou biaiser ses réponses.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PARTIE 4 — QUESTIONS OUVERTES
+  ══════════════════════════════════════════ -->
+  <div class="section page-break">
+    <div class="section-head">
+      <div class="section-num p4">04</div>
+      <div>
+        <div class="section-title">Questions ouvertes courtes</div>
+      </div>
+      <div class="section-pts">2 questions · 3 pts · 1,5 pt / question</div>
+    </div>
+    <div class="examiner-note">
+      Réponse courte attendue (5 à 8 lignes). Évaluer la précision du vocabulaire, la cohérence de l'argumentation et la présence d'au moins un exemple concret. Ne pas pénaliser les fautes d'orthographe légères si le sens est clair.
+    </div>
+
+    <!-- Q01 -->
+    <div class="open-block">
+      <div class="open-q">
+        <span class="open-q-label">Q01 — 1,5 pt</span>
+        Un chef de projet vous dit : « L'UX c'est juste du graphisme, mon graphiste peut s'en occuper. » Expliquez-lui pourquoi cette affirmation est inexacte. Citez au moins un concept vu en cours.
+      </div>
+
+      <div class="open-rubric">
+        <div class="open-rubric-head">GRILLE D'ÉVALUATION — Q01</div>
+        <div class="rubric-row">
+          <div class="rubric-pts">0,5 pt</div>
+          <div class="rubric-text"><strong>Distinction UX ≠ UI / graphisme.</strong> L'étudiant explique que l'UX Design ne se réduit pas à l'apparence visuelle : il porte sur l'utilisabilité, l'utilité, la désirabilité et l'expérience globale de l'utilisateur avec le produit. Le graphisme (ou UI Design) n'est qu'une composante parmi d'autres.</div>
+        </div>
+        <div class="rubric-row">
+          <div class="rubric-pts">0,5 pt</div>
+          <div class="rubric-text"><strong>Concept ou exemple du cours cité avec précision.</strong> Exemples acceptés : heuristiques de Nielsen, test utilisateur, persona, wireframe, Human-Centered Design, ROI de l'UX, accessibilité (WCAG), affordance, modèle mental…</div>
+        </div>
+        <div class="rubric-row">
+          <div class="rubric-pts">0,5 pt</div>
+          <div class="rubric-text"><strong>Clarté et cohérence de la réponse.</strong> La réponse est structurée, le vocabulaire est approprié et l'argumentation est logique. Une réponse confuse ou hors-sujet même si elle contient des mots-clés ne mérite pas ce point.</div>
+        </div>
+      </div>
+
+      <div class="open-elements">
+        <div class="open-elements-title">Éléments de réponse attendus</div>
+        <ul>
+          <li>L'UX Design englobe la recherche utilisateur, l'architecture d'information, les tests d'utilisabilité, l'accessibilité et la conception d'interactions — pas uniquement le visuel.</li>
+          <li>Un graphiste crée des visuels ; un UX designer comprend les besoins, modélise des parcours, teste des prototypes et itère.</li>
+          <li>Exemple concret : une interface graphiquement belle mais avec une navigation peu intuitive génère de la frustration (heuristique n°6 de Nielsen : reconnaissance plutôt que rappel, ou n°1 : visibilité de l'état du système).</li>
+          <li>Référence possible : les 3 dimensions de l'UX (utilité, utilisabilité, désirabilité) ou le modèle de Don Norman.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q02 -->
+    <div class="open-block" style="margin-top:16px">
+      <div class="open-q">
+        <span class="open-q-label">Q02 — 1,5 pt</span>
+        Vous devez conduire un entretien utilisateur pour comprendre les difficultés rencontrées sur une application mobile. Décrivez comment vous le préparez et le menez : quel type de questions posez-vous, et pourquoi ?
+      </div>
+
+      <div class="open-rubric">
+        <div class="open-rubric-head">GRILLE D'ÉVALUATION — Q02</div>
+        <div class="rubric-row">
+          <div class="rubric-pts">0,5 pt</div>
+          <div class="rubric-text"><strong>Distinction questions ouvertes / fermées et justification.</strong> L'étudiant explique qu'on privilégie les questions ouvertes (« Comment faites-vous pour… ? », « Qu'avez-vous ressenti quand… ? ») car elles permettent à l'utilisateur de s'exprimer librement et révèlent des comportements inattendus, contrairement aux questions fermées (oui/non) qui bornent la réponse.</div>
+        </div>
+        <div class="rubric-row">
+          <div class="rubric-pts">0,5 pt</div>
+          <div class="rubric-text"><strong>Mention d'au moins un biais à éviter ou une bonne pratique.</strong> Exemples acceptés : ne pas orienter les réponses (biais de confirmation, questions suggestives), écoute active, ne pas interrompre, observer les comportements non-verbaux, guide d'entretien, recruter des utilisateurs représentatifs, noter les verbatims, contexte de passation neutre…</div>
+        </div>
+        <div class="rubric-row">
+          <div class="rubric-pts">0,5 pt</div>
+          <div class="rubric-text"><strong>Clarté et cohérence de la réponse.</strong> La réponse est structurée, montre une compréhension de la démarche UX et n'est pas une simple liste de mots-clés sans lien.</div>
+        </div>
+      </div>
+
+      <div class="open-elements">
+        <div class="open-elements-title">Éléments de réponse attendus</div>
+        <ul>
+          <li>Préparation : définir les objectifs de l'entretien, rédiger un guide d'entretien, recruter des utilisateurs représentatifs du persona cible.</li>
+          <li>Déroulement : introduction et mise à l'aise, questions ouvertes et non-directrices, observer les comportements autant qu'écouter les mots.</li>
+          <li>Biais à éviter : ne pas valider ses propres hypothèses, éviter les questions suggestives (« Vous trouvez ça difficile, non ? »), ne pas interrompre.</li>
+          <li>Post-entretien : retranscription des verbatims, identification des patterns récurrents.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       GRILLE DE NOTATION VIERGE
+  ══════════════════════════════════════════ -->
+  <div class="section page-break">
+    <div class="section-head">
+      <div class="section-num" style="color:#1a1a1a">✎</div>
+      <div><div class="section-title">Grille de notation — à remplir par l'enseignant</div></div>
+    </div>
+
+    <table class="grille">
+      <thead>
+        <tr>
+          <th style="text-align:left">Étudiant</th>
+          <th>P1 QCM<br><small>/7</small></th>
+          <th>P2 Assoc.<br><small>/5</small></th>
+          <th>P3 Trous<br><small>/5</small></th>
+          <th>P4 Open<br><small>/3</small></th>
+          <th>Total<br><small>/20</small></th>
+          <th>Obs.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 20 lignes vierges -->
+        <tr><td>1. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>2.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>3.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>4.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>5.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>6.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>7.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>8.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>9.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>10.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>11.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>12.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>13.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>14.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>15.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>16.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>17.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>18.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>19.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>20.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr class="grille-total">
+          <td><strong>Moyennes / Classe</strong></td>
+          <td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /page -->
+
+<div class="doc-footer no-print">
+  <span>EEMI · Introduction à l'UX Design · Bachelor B1 · 2025-2026</span>
+  <span>Document réservé à l'enseignant — Ne pas diffuser</span>
+</div>
+
+</body>
+</html>

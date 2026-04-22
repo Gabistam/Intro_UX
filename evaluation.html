@@ -136,13 +136,59 @@ textarea.ans:focus{border-color:var(--p4)}
 .div-line::after{content:attr(data-p);position:absolute;right:0;top:-9px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);background:var(--bg);padding-left:10px}
 
 /* ── SCORE DISPLAY ── */
-#score-panel{display:none;background:var(--card);border:1px solid var(--border);border-top:3px solid var(--green);padding:28px;text-align:center;margin-top:40px;border-radius:4px}
-.score-val{font-family:'Fraunces',serif;font-size:64px;font-weight:700;color:var(--green);line-height:1}
-.score-max{font-family:'DM Mono',monospace;font-size:14px;color:var(--muted);margin-top:4px}
-.score-detail{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+#score-panel{display:none;margin-top:48px;border-radius:4px}
+
+/* Note provisoire */
+.score-hero{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--green);padding:28px;text-align:center;border-radius:4px;margin-bottom:24px}
+.score-val{font-family:'Fraunces',serif;font-size:72px;font-weight:700;line-height:1}
+.score-max{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);margin-top:6px}
+.score-proviso{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;margin-top:8px;background:rgba(232,201,106,.08);border:1px solid rgba(232,201,106,.2);display:inline-block;padding:4px 12px;border-radius:3px}
+.score-detail{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 0}
 .score-part{background:var(--surface);border:1px solid var(--border);padding:12px;border-radius:4px}
 .score-part-val{font-family:'Fraunces',serif;font-size:22px;font-weight:600;line-height:1}
 .score-part-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Panneaux de correction détaillés */
+.corr-section{background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:16px;overflow:hidden}
+.corr-section-head{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.corr-section-head:hover{background:rgba(255,255,255,.03)}
+.corr-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:3px;flex-shrink:0}
+.cb1{background:var(--p1);color:#fff}.cb2{background:var(--p2);color:#0e0f14}.cb3{background:var(--p3);color:#fff}.cb4{background:var(--p4);color:#fff}
+.corr-section-title{font-size:14px;font-weight:600;flex:1}
+.corr-section-score{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;margin-left:auto}
+.corr-toggle{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:10px;transition:transform .2s}
+.corr-body{padding:16px 18px;display:none}
+.corr-body.open{display:block}
+
+/* Lignes correction associations */
+.corr-assoc-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.corr-assoc-row:last-child{border-bottom:none}
+.corr-def-n{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);min-width:46px;flex-shrink:0;margin-top:2px}
+.corr-given{flex:1;color:var(--text)}
+.corr-arrow{color:var(--muted);font-size:12px;flex-shrink:0;margin-top:2px}
+.corr-expected{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;flex-shrink:0}
+.corr-ok{color:var(--green)}.corr-ko{color:var(--red)}.corr-blank{color:var(--muted)}
+.corr-tick{font-size:13px;flex-shrink:0;margin-top:1px}
+
+/* Lignes correction trous */
+.corr-trou-row{padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.corr-trou-row:last-child{border-bottom:none}
+.corr-trou-meta{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.corr-trou-phrase{font-size:12px;color:var(--muted);line-height:1.5}
+.corr-word-tag{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;padding:1px 7px;border-radius:3px}
+.corr-word-ok{background:rgba(74,201,139,.15);color:var(--green);border:1px solid rgba(74,201,139,.3)}
+.corr-word-ko{background:rgba(240,90,90,.15);color:var(--red);border:1px solid rgba(240,90,90,.3)}
+.corr-word-blank{background:rgba(122,122,150,.1);color:var(--muted);border:1px solid var(--border)}
+.corr-word-correct-hint{font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-left:4px}
+
+/* Pistes questions ouvertes */
+.corr-open-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.4}
+.corr-open-piste{background:var(--surface);border-left:3px solid var(--p4);padding:10px 14px;border-radius:0 4px 4px 0;margin-bottom:10px}
+.corr-open-piste-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--p4);margin-bottom:6px}
+.corr-open-piste ul{padding-left:16px;font-size:12px;color:#b0aec8;line-height:1.75}
+.corr-open-piste ul li{margin-bottom:2px}
+.corr-open-rubric{margin-top:8px;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace}
+.corr-sep{height:1px;background:var(--border);margin:14px 0}
 
 /* ── FAB ── */
 #fab{position:fixed;bottom:28px;right:28px;z-index:300;display:none;flex-direction:column;align-items:flex-end;gap:8px}
@@ -536,30 +582,117 @@ textarea.ans:focus{border-color:var(--p4)}
   </section>
 
   <!-- ═══════════════════════════════════════
-       PANNEAU RÉSULTAT (auto-correction QCM)
+       PANNEAU CORRECTION COMPLET (non imprimable)
   ════════════════════════════════════════ -->
   <div id="score-panel">
-    <div class="score-val" id="score-qcm-val">—</div>
-    <div class="score-max">Points QCM (auto-corrigés) — /7 pts</div>
-    <div class="score-detail">
-      <div class="score-part">
-        <div class="score-part-val" id="sp-correct" style="color:var(--green)">—</div>
-        <div class="score-part-lbl">Bonnes réponses</div>
-      </div>
-      <div class="score-part">
-        <div class="score-part-val" id="sp-wrong" style="color:var(--red)">—</div>
-        <div class="score-part-lbl">Mauvaises réponses</div>
-      </div>
-      <div class="score-part">
-        <div class="score-part-val" id="sp-blank" style="color:var(--muted)">—</div>
-        <div class="score-part-lbl">Sans réponse</div>
-      </div>
-      <div class="score-part">
-        <div class="score-part-val" id="sp-pct" style="color:var(--accent2)">—</div>
-        <div class="score-part-lbl">Taux réussite</div>
+
+    <!-- NOTE PROVISOIRE -->
+    <div class="score-hero">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Résultat de votre composition</div>
+      <div class="score-val" id="score-prov-val">—</div>
+      <div class="score-max" id="score-prov-max">Note provisoire — /17 pts auto-corrigés</div>
+      <div class="score-proviso">⚠ Note provisoire · La Partie 4 (questions ouvertes · 3 pts) sera corrigée par l'enseignant</div>
+      <div class="score-detail">
+        <div class="score-part">
+          <div class="score-part-val" id="sp-p1" style="color:var(--p1)">—</div>
+          <div class="score-part-lbl">Partie 1 QCM<br><small>/7 pts</small></div>
+        </div>
+        <div class="score-part">
+          <div class="score-part-val" id="sp-p2" style="color:var(--p2)">—</div>
+          <div class="score-part-lbl">Partie 2 Assoc.<br><small>/5 pts</small></div>
+        </div>
+        <div class="score-part">
+          <div class="score-part-val" id="sp-p3" style="color:var(--p3)">—</div>
+          <div class="score-part-lbl">Partie 3 Trous<br><small>/5 pts</small></div>
+        </div>
+        <div class="score-part">
+          <div class="score-part-val" style="color:var(--muted)">— /3</div>
+          <div class="score-part-lbl">Partie 4 Ouvertes<br><small>correction enseignant</small></div>
+        </div>
       </div>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:4px">Note : les parties 2, 3 et 4 sont corrigées par l'enseignant. L'export PDF contient l'intégralité de vos réponses.</p>
+
+    <!-- CORRECTION P1 QCM -->
+    <div class="corr-section">
+      <div class="corr-section-head" onclick="toggleCorr('corr-p1')">
+        <span class="corr-badge cb1">Partie 1</span>
+        <span class="corr-section-title">Questions à choix multiples</span>
+        <span class="corr-section-score" id="corr-p1-score" style="color:var(--p1)">— /7</span>
+        <span class="corr-toggle" id="corr-p1-arrow">▼</span>
+      </div>
+      <div class="corr-body" id="corr-p1">
+        <div id="corr-qcm-list"></div>
+      </div>
+    </div>
+
+    <!-- CORRECTION P2 ASSOCIATIONS -->
+    <div class="corr-section">
+      <div class="corr-section-head" onclick="toggleCorr('corr-p2')">
+        <span class="corr-badge cb2">Partie 2</span>
+        <span class="corr-section-title">Termes à associer</span>
+        <span class="corr-section-score" id="corr-p2-score" style="color:var(--p2)">— /5</span>
+        <span class="corr-toggle" id="corr-p2-arrow">▼</span>
+      </div>
+      <div class="corr-body" id="corr-p2">
+        <div id="corr-assoc-list"></div>
+      </div>
+    </div>
+
+    <!-- CORRECTION P3 TROUS -->
+    <div class="corr-section">
+      <div class="corr-section-head" onclick="toggleCorr('corr-p3')">
+        <span class="corr-badge cb3">Partie 3</span>
+        <span class="corr-section-title">Phrases à compléter</span>
+        <span class="corr-section-score" id="corr-p3-score" style="color:var(--p3)">— /5</span>
+        <span class="corr-toggle" id="corr-p3-arrow">▼</span>
+      </div>
+      <div class="corr-body" id="corr-p3">
+        <div id="corr-trou-list"></div>
+      </div>
+    </div>
+
+    <!-- PARTIE 4 PISTES -->
+    <div class="corr-section">
+      <div class="corr-section-head" onclick="toggleCorr('corr-p4')">
+        <span class="corr-badge cb4">Partie 4</span>
+        <span class="corr-section-title">Questions ouvertes — pistes de réponse</span>
+        <span class="corr-section-score" style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">correction enseignant</span>
+        <span class="corr-toggle" id="corr-p4-arrow">▼</span>
+      </div>
+      <div class="corr-body" id="corr-p4">
+
+        <div class="corr-open-q">Q01 — « L'UX c'est juste du graphisme, mon graphiste peut s'en occuper. » Pourquoi est-ce inexact ?</div>
+        <div class="corr-open-piste">
+          <div class="corr-open-piste-title">Pistes de réponse attendues</div>
+          <ul>
+            <li>L'UX Design ne se réduit pas à l'apparence visuelle : il regroupe utilisabilité, utilité et désirabilité.</li>
+            <li>Un UX designer mène de la recherche utilisateur, crée des personas, construit des wireframes et teste des prototypes.</li>
+            <li>Le graphiste (UI Design) travaille sur la charte visuelle ; l'UX designer conçoit le parcours et les interactions.</li>
+            <li>Exemple : une interface belle mais confuse viole les heuristiques de Nielsen (ex. visibilité de l'état, cohérence).</li>
+            <li>Référence possible : modèle de Don Norman, dimensions UX, ou ROI de l'UX (coût d'une mauvaise UX en production).</li>
+          </ul>
+        </div>
+        <div class="corr-open-rubric">Barème indicatif : 0,5 pt distinction UX/graphisme · 0,5 pt concept du cours cité · 0,5 pt clarté &amp; cohérence</div>
+
+        <div class="corr-sep"></div>
+
+        <div class="corr-open-q">Q02 — Entretien utilisateur sur une app mobile : comment le préparez-vous et quelles questions posez-vous ?</div>
+        <div class="corr-open-piste">
+          <div class="corr-open-piste-title">Pistes de réponse attendues</div>
+          <ul>
+            <li>Préparation : définir l'objectif, rédiger un guide d'entretien, recruter des utilisateurs représentatifs.</li>
+            <li>Privilégier les <strong>questions ouvertes</strong> (« Comment… ? », « Qu'avez-vous ressenti… ? ») pour laisser l'utilisateur s'exprimer librement.</li>
+            <li>Éviter les questions suggestives ou binaires qui orientent les réponses (biais de confirmation).</li>
+            <li>Observer les comportements non-verbaux, noter les verbatims, écouter sans interrompre.</li>
+            <li>Après l'entretien : identifier les patterns récurrents et les points de friction.</li>
+          </ul>
+        </div>
+        <div class="corr-open-rubric">Barème indicatif : 0,5 pt questions ouvertes/fermées justifiées · 0,5 pt biais ou bonne pratique · 0,5 pt clarté &amp; cohérence</div>
+
+      </div>
+    </div>
+
+    <p style="font-size:11px;color:var(--faint);text-align:center;margin-top:16px;font-family:'DM Mono',monospace">Ce panneau de correction n'apparaît pas dans l'export PDF</p>
   </div>
 
   <div class="footer">Introduction à l'UX Design · Bachelor  B1 · EEMI 2025-2026<br>Évaluation individuelle à usage pédagogique exclusif</div>
@@ -569,7 +702,7 @@ textarea.ans:focus{border-color:var(--p4)}
 <div id="fab">
   <div id="save-note">💾 Sauvegarde auto active</div>
   <div class="fab-row">
-    <button class="fab-btn alt" onclick="submitEval()">✓ Terminer &amp; corriger</button>
+    <button class="fab-btn alt" onclick="submitEval()">✓ Terminer la composition</button>
     <button class="fab-btn" onclick="exportPDF()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Exporter PDF
@@ -1041,57 +1174,183 @@ function startEval() {
 }
 
 // ══════════════════════════════════════════════════════
-//  TERMINER & AUTO-CORRECTION QCM
+//  TOGGLE SECTIONS DE CORRECTION
+// ══════════════════════════════════════════════════════
+function toggleCorr(id) {
+  const body = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  const isOpen = body.classList.toggle('open');
+  if (arrow) arrow.textContent = isOpen ? '▲' : '▼';
+}
+
+// ══════════════════════════════════════════════════════
+//  TERMINER & CORRECTION COMPLÈTE
 // ══════════════════════════════════════════════════════
 function submitEval() {
-  if (!confirm('Êtes-vous sûr de vouloir terminer et corriger la Partie 1 (QCM) ? Cette action est irréversible pour le QCM.')) return;
+  if (!confirm('Êtes-vous sûr de vouloir terminer ? La correction s\'affichera immédiatement. Cette action est irréversible.')) return;
 
   clearInterval(iv); running = false;
   document.getElementById('t-btn').disabled = true;
+  // Désactiver tous les inputs
+  document.querySelectorAll('.qcm-option, .assoc-select, .ptrou-input, textarea.ans')
+    .forEach(el => { el.style.pointerEvents = 'none'; if (el.tagName === 'SELECT' || el.tagName === 'TEXTAREA') el.disabled = true; });
+  document.querySelectorAll('.word-chip').forEach(c => c.style.pointerEvents = 'none');
 
-  let correct = 0, wrong = 0, blank = 0;
+  // ── PARTIE 1 : QCM ──────────────────────────────
+  let p1correct = 0, p1wrong = 0, p1blank = 0;
+  const qcmListEl = document.getElementById('corr-qcm-list');
+  qcmListEl.innerHTML = '';
 
-  // Correction QCM (comparaison par texte, indépendante de l'ordre affiché)
-  qcmRenderedOrder.forEach(q => {
+  qcmRenderedOrder.forEach((q, idx) => {
     const state = qcmState[q.id];
     const correctText = q.opts.find(o => o.correct).text;
     const chosenText = state ? state.chosenText : null;
     const block = document.getElementById('qcm' + q.id);
-    if (!block) return;
-    const options = block.querySelectorAll('.qcm-option');
 
-    options.forEach(opt => {
-      const labelText = opt.querySelector('label').textContent;
-      opt.style.pointerEvents = 'none';
-      if (labelText === correctText) {
-        opt.style.borderColor = 'var(--green)';
-        opt.style.background = 'rgba(74,201,139,.1)';
-        opt.querySelector('label').style.color = 'var(--green)';
-      } else if (labelText === chosenText && chosenText !== correctText) {
-        opt.style.borderColor = 'var(--red)';
-        opt.style.background = 'rgba(240,90,90,.1)';
-        opt.querySelector('label').style.color = 'var(--red)';
-      }
-    });
+    // Colorier les options dans le formulaire
+    if (block) {
+      block.querySelectorAll('.qcm-option').forEach(opt => {
+        const lbl = opt.querySelector('label').textContent;
+        opt.style.pointerEvents = 'none';
+        if (lbl === correctText) {
+          opt.style.borderColor = 'var(--green)'; opt.style.background = 'rgba(74,201,139,.1)';
+          opt.querySelector('label').style.color = 'var(--green)';
+        } else if (lbl === chosenText && chosenText !== correctText) {
+          opt.style.borderColor = 'var(--red)'; opt.style.background = 'rgba(240,90,90,.1)';
+          opt.querySelector('label').style.color = 'var(--red)';
+        }
+      });
+    }
 
-    if (!chosenText) blank++;
-    else if (chosenText === correctText) correct++;
-    else wrong++;
+    const ok = chosenText === correctText;
+    const empty = !chosenText;
+    if (empty) p1blank++; else if (ok) p1correct++; else p1wrong++;
+
+    // Ligne dans le panneau correction
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px';
+    const icon = empty ? '○' : ok ? '✓' : '✗';
+    const iconColor = empty ? 'var(--muted)' : ok ? 'var(--green)' : 'var(--red)';
+    row.innerHTML = `
+      <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);min-width:38px;flex-shrink:0;margin-top:2px">Q${String(idx+1).padStart(2,'0')}</span>
+      <span style="color:${iconColor};font-size:15px;flex-shrink:0;line-height:1.3">${icon}</span>
+      <div style="flex:1">
+        <div style="color:var(--muted);font-size:12px;margin-bottom:3px">${q.q}</div>
+        ${!ok ? `<div style="font-size:11px;color:var(--green);font-family:'DM Mono',monospace;margin-top:2px">→ ${correctText}</div>` : ''}
+        ${!empty && !ok ? `<div style="font-size:11px;color:var(--red);font-family:'DM Mono',monospace;text-decoration:line-through;opacity:.7">✗ ${chosenText}</div>` : ''}
+      </div>`;
+    qcmListEl.appendChild(row);
   });
 
-  const pts = (correct * 0.5).toFixed(1);
-  const pct = Math.round((correct / 14) * 100);
+  const p1pts = p1correct * 0.5;
+  document.getElementById('corr-p1-score').textContent = p1pts.toFixed(1) + ' /7';
+  document.getElementById('sp-p1').textContent = p1pts.toFixed(1) + ' /7';
+
+  // ── PARTIE 2 : ASSOCIATIONS ──────────────────────
+  const assocDefs = [
+    { id:'ass1', def:'Bibliothèque centralisée de composants d\'interface…' },
+    { id:'ass2', def:'Approche de conception centrée sur les besoins utilisateurs…' },
+    { id:'ass3', def:'Représentation visuelle du parcours chronologique d\'un utilisateur…' },
+    { id:'ass4', def:'Outil en quadrants : Pense, Voit, Dit, Fait, Douleurs, Gains…' },
+    { id:'ass5', def:'Discipline visant à concevoir des produits utiles, utilisables et désirables…' },
+    { id:'ass6', def:'Propriété d\'un objet suggérant naturellement son utilisation…' },
+    { id:'ass7', def:'Technique délibérément trompeuse : case pré-cochée, désinscription complexe…' },
+    { id:'ass8', def:'Maquette schématique en niveaux de gris sans éléments graphiques définitifs…' },
+    { id:'ass9', def:'Représentation fictive fondée sur des données réelles d\'un archétype utilisateur…' },
+    { id:'ass10', def:'Méthode comparant deux variantes d\'interface pour mesurer les performances…' }
+  ];
+
+  let p2correct = 0;
+  const assocListEl = document.getElementById('corr-assoc-list');
+  assocListEl.innerHTML = '';
+
+  assocDefs.forEach((item, i) => {
+    const sel = document.getElementById(item.id);
+    const given = sel ? sel.value : '';
+    const expected = CORRECT.assoc[item.id];
+    const ok = given === expected;
+    const empty = !given;
+    if (ok) p2correct++;
+
+    const icon = empty ? '○' : ok ? '✓' : '✗';
+    const iconColor = empty ? 'var(--muted)' : ok ? 'var(--green)' : 'var(--red)';
+
+    const row = document.createElement('div');
+    row.className = 'corr-assoc-row';
+    row.innerHTML = `
+      <span class="corr-def-n">Déf. ${i+1}</span>
+      <span style="color:${iconColor};font-size:15px;flex-shrink:0;line-height:1.3">${icon}</span>
+      <div style="flex:1;font-size:12px;color:var(--muted)">${item.def}</div>
+      <div style="text-align:right;min-width:160px">
+        ${!empty && !ok ? `<div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--red);text-decoration:line-through;opacity:.7">${given}</div>` : ''}
+        ${!ok ? `<div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green)">→ ${expected}</div>` : `<div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green)">${given}</div>`}
+      </div>`;
+    assocListEl.appendChild(row);
+  });
+
+  const p2pts = p2correct * 0.5;
+  document.getElementById('corr-p2-score').textContent = p2pts.toFixed(1) + ' /5';
+  document.getElementById('sp-p2').textContent = p2pts.toFixed(1) + ' /5';
+
+  // ── PARTIE 3 : TROUS ────────────────────────────
+  const trouDefs = [
+    { id:'trou1', phrase:'Les 10 heuristiques publiées par Jakob [___] constituent la grille d\'évaluation de référence.' },
+    { id:'trou2', phrase:'Un [___] est une représentation fictive mais fondée sur des données réelles d\'un archétype d\'utilisateur.' },
+    { id:'trou3', phrase:'La carte d\'[___] est un outil visuel structuré en quadrants : Pense, Voit, Dit, Fait…' },
+    { id:'trou4', phrase:'Un [___] est une maquette schématique en niveaux de gris représentant la structure d\'une page.' },
+    { id:'trou5', phrase:'Les critères d\'accessibilité [___] définissent les normes internationales pour rendre les interfaces accessibles.' },
+    { id:'trou6', phrase:'C\'est [___] qui a popularisé le terme « User Experience » chez Apple dans les années 1990.' },
+    { id:'trou7', phrase:'La [___] cartographie chronologiquement les étapes d\'un parcours utilisateur et ses émotions.' },
+    { id:'trou8', phrase:'Une bonne [___] réduit la courbe d\'apprentissage : un bouton en relief invite à cliquer naturellement.' },
+    { id:'trou9', phrase:'Une case pré-cochée ou un bouton de désinscription caché sont des exemples de [___].' },
+    { id:'trou10', phrase:'Lors d\'un entretien, poser des questions [___] laisse l\'interviewé s\'exprimer librement sans biais.' }
+  ];
+
+  let p3correct = 0;
+  const trouListEl = document.getElementById('corr-trou-list');
+  trouListEl.innerHTML = '';
+
+  trouDefs.forEach((item, i) => {
+    const inp = document.getElementById(item.id);
+    const given = inp ? inp.value.trim() : '';
+    const expected = CORRECT.trou[item.id];
+    const ok = given.toLowerCase() === expected.toLowerCase();
+    const empty = !given;
+    if (ok) p3correct++;
+
+    const tagClass = empty ? 'corr-word-blank' : ok ? 'corr-word-ok' : 'corr-word-ko';
+    const displayGiven = empty ? '(vide)' : given;
+
+    const row = document.createElement('div');
+    row.className = 'corr-trou-row';
+    row.innerHTML = `
+      <div class="corr-trou-meta">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);min-width:26px">${i+1}.</span>
+        <span class="corr-word-tag ${tagClass}">${displayGiven}</span>
+        ${!ok ? `<span class="corr-word-correct-hint">→ ${expected}</span>` : ''}
+      </div>
+      <div class="corr-trou-phrase">${item.phrase}</div>`;
+    trouListEl.appendChild(row);
+  });
+
+  const p3pts = p3correct * 0.5;
+  document.getElementById('corr-p3-score').textContent = p3pts.toFixed(1) + ' /5';
+  document.getElementById('sp-p3').textContent = p3pts.toFixed(1) + ' /5';
+
+  // ── NOTE PROVISOIRE ──────────────────────────────
+  const provPts = p1pts + p2pts + p3pts;
+  const provEl = document.getElementById('score-prov-val');
+  provEl.textContent = provPts.toFixed(1) + ' /17';
+  provEl.style.color = provPts >= 12 ? 'var(--green)' : provPts >= 8.5 ? 'var(--accent2)' : 'var(--red)';
+
+  // Ouvrir les sections par défaut
+  ['corr-p1','corr-p2','corr-p3','corr-p4'].forEach(id => {
+    document.getElementById(id).classList.add('open');
+    const arrow = document.getElementById(id + '-arrow');
+    if (arrow) arrow.textContent = '▲';
+  });
 
   document.getElementById('score-panel').style.display = 'block';
-  document.getElementById('score-qcm-val').textContent = pts + ' /7';
-  document.getElementById('sp-correct').textContent = correct;
-  document.getElementById('sp-wrong').textContent = wrong;
-  document.getElementById('sp-blank').textContent = blank;
-  document.getElementById('sp-pct').textContent = pct + ' %';
-
-  document.getElementById('score-qcm-val').style.color =
-    pct >= 70 ? 'var(--green)' : pct >= 50 ? 'var(--accent2)' : 'var(--red)';
-
   document.getElementById('score-panel').scrollIntoView({ behavior: 'smooth' });
   save();
 }
